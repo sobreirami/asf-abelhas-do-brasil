@@ -1,6 +1,19 @@
-# Welcome to your Expo app 👋
+# ASF Abelhas Nativas do Brasil 🐝
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo mobile em React Native + Expo que serve como galeria educacional de abelhas sem ferrão (ASF) nativas do Brasil.
+
+## 🚀 Tecnologias
+
+- **React Native** - Framework para desenvolvimento mobile
+- **Expo** (Managed Workflow) - Plataforma de desenvolvimento
+- **Expo Router** - Navegação baseada em arquivos
+- **TypeScript** - Tipagem estática
+- **Firebase Web SDK** - Backend (Firestore + Storage)
+- **FlashList** - Listas de alta performance
+- **Reanimated** - Animações fluidas
+- **Expo Blur** - Efeitos visuais modernos (liquid glass)
+- **Expo Notifications** - Push notifications
+- **AsyncStorage** - Armazenamento local
 
 ## Get started
 

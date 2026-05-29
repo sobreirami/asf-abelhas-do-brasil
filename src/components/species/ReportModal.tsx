@@ -1,0 +1,318 @@
+// Report Modal - Reportar Erros nas Informações
+import {
+  ImpactFeedbackStyle,
+  NotificationFeedbackType,
+  triggerHaptic,
+  triggerNotificationHaptic,
+} from '@/utils/haptics';
+import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
+import React, { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+
+import { BorderRadius, Colors, FontSize, FontWeight, Shadows, Spacing } from '@/constants/theme';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { db } from '@/services/firebase';
+import { addDoc, collection } from 'firebase/firestore';
+
+type ReportType = 'info-incorreta' | 'imagem-errada' | 'outro';
+
+type ReportModalProps = {
+  onClose: () => void;
+  speciesId: string;
+  speciesName: string;
+};
+
+export default function ReportModal({ onClose, speciesId, speciesName }: ReportModalProps) {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
+  const { t } = useLanguage();
+
+  const REPORT_TYPES: { value: ReportType; label: string; icon: keyof typeof Ionicons.glyphMap }[] =
+    [
+      { value: 'info-incorreta', label: t.report.types['info-incorreta'], icon: 'alert-circle' },
+      { value: 'imagem-errada', label: t.report.types['imagem-errada'], icon: 'image' },
+      { value: 'outro', label: t.report.types.outro, icon: 'ellipsis-horizontal' },
+    ];
+
+  const [selectedType, setSelectedType] = useState<ReportType>('info-incorreta');
+  const [description, setDescription] = useState('');
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!description.trim()) {
+      Alert.alert(t.report.attention, t.report.errorMessage);
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      // Salva o report no Firestore
+      const report = {
+        speciesId,
+        speciesName,
+        type: selectedType,
+        description: description.trim(),
+        email: email.trim() || t.report.anonymous,
+        createdAt: new Date(),
+        status: 'pending', // pending, reviewed, resolved
+      };
+
+      await addDoc(collection(db, 'reports'), report);
+
+      await triggerNotificationHaptic(NotificationFeedbackType.Success);
+
+      Alert.alert(t.report.successTitle, t.report.successMessage, [
+        { text: t.common.ok, onPress: handleClose },
+      ]);
+    } catch {
+      Alert.alert(t.common.error, t.report.sendError);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleClose = () => {
+    setDescription('');
+    setEmail('');
+    setSelectedType('info-incorreta');
+    onClose();
+  };
+
+  return (
+    <BlurView intensity={80} tint={colorScheme ?? 'light'} style={styles.container}>
+      <View style={[styles.content, { backgroundColor: colors.background }, Shadows.lg]}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text style={[styles.title, { color: colors.text }]}>{t.report.title}</Text>
+            <Text style={[styles.subtitle, { color: colors.icon }]}>{speciesName}</Text>
+          </View>
+          <Pressable onPress={handleClose} style={styles.closeButton}>
+            <Ionicons name="close" size={28} color={colors.icon} />
+          </Pressable>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Tipo de Report */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.report.typeLabel}</Text>
+            {REPORT_TYPES.map((type) => (
+              <Pressable
+                key={type.value}
+                onPress={async () => {
+                  await triggerHaptic(ImpactFeedbackStyle.Light);
+                  setSelectedType(type.value);
+                }}
+                style={[
+                  styles.typeOption,
+                  {
+                    backgroundColor: selectedType === type.value ? colors.primary : colors.card,
+                    borderColor: selectedType === type.value ? colors.primary : colors.border,
+                  },
+                ]}
+              >
+                <Ionicons
+                  name={type.icon}
+                  size={24}
+                  color={selectedType === type.value ? '#FFFFFF' : colors.icon}
+                />
+                <Text
+                  style={[
+                    styles.typeLabel,
+                    { color: selectedType === type.value ? '#FFFFFF' : colors.text },
+                  ]}
+                >
+                  {type.label}
+                </Text>
+                {selectedType === type.value && (
+                  <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+                )}
+              </Pressable>
+            ))}
+          </View>
+
+          {/* Descrição */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t.report.descriptionLabel}
+            </Text>
+            <TextInput
+              value={description}
+              onChangeText={setDescription}
+              placeholder={t.report.descriptionPlaceholder}
+              placeholderTextColor={colors.icon}
+              multiline
+              numberOfLines={4}
+              maxLength={500}
+              style={[
+                styles.textArea,
+                {
+                  backgroundColor: colors.card,
+                  color: colors.text,
+                  borderColor: colors.border,
+                },
+              ]}
+            />
+            <Text style={[styles.charCount, { color: colors.icon }]}>{description.length}/500</Text>
+          </View>
+
+          {/* Email (Opcional) */}
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.report.emailLabel}</Text>
+            <TextInput
+              value={email}
+              onChangeText={setEmail}
+              placeholder={t.report.emailPlaceholder}
+              placeholderTextColor={colors.icon}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.card,
+                  color: colors.text,
+                  borderColor: colors.border,
+                },
+              ]}
+            />
+            <Text style={[styles.hint, { color: colors.icon }]}>{t.report.emailHint}</Text>
+          </View>
+        </ScrollView>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Pressable
+            onPress={handleClose}
+            style={[styles.cancelButton, { backgroundColor: colors.card }]}
+          >
+            <Text style={[styles.cancelText, { color: colors.text }]}>{t.common.cancel}</Text>
+          </Pressable>
+          <Pressable
+            onPress={handleSubmit}
+            disabled={submitting}
+            style={[
+              styles.submitButton,
+              {
+                backgroundColor: colors.primary,
+                opacity: submitting ? 0.6 : 1,
+              },
+            ]}
+          >
+            <Text style={styles.submitText}>{submitting ? t.report.sending : t.report.submit}</Text>
+          </Pressable>
+        </View>
+      </View>
+    </BlurView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    maxHeight: '90%',
+    borderTopLeftRadius: BorderRadius.xl,
+    borderTopRightRadius: BorderRadius.xl,
+    paddingTop: Spacing.xl,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: Spacing.lg,
+    marginBottom: Spacing.lg,
+  },
+  title: {
+    fontSize: FontSize.xxl,
+    fontWeight: FontWeight.bold,
+  },
+  subtitle: {
+    fontSize: FontSize.md,
+    fontStyle: 'italic',
+    marginTop: Spacing.xs,
+  },
+  closeButton: {
+    padding: Spacing.xs,
+  },
+  section: {
+    paddingHorizontal: Spacing.lg,
+    marginBottom: Spacing.xl,
+  },
+  sectionTitle: {
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.bold,
+    marginBottom: Spacing.md,
+  },
+  typeOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 2,
+    marginBottom: Spacing.sm,
+    gap: Spacing.md,
+  },
+  typeLabel: {
+    flex: 1,
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.medium,
+  },
+  textArea: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    fontSize: FontSize.md,
+    height: 120,
+    textAlignVertical: 'top',
+  },
+  charCount: {
+    fontSize: FontSize.xs,
+    textAlign: 'right',
+    marginTop: Spacing.xs,
+  },
+  input: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    fontSize: FontSize.md,
+  },
+  hint: {
+    fontSize: FontSize.xs,
+    marginTop: Spacing.xs,
+    lineHeight: 16,
+  },
+  footer: {
+    flexDirection: 'row',
+    padding: Spacing.lg,
+    gap: Spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
+  },
+  cancelButton: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+  },
+  cancelText: {
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.bold,
+  },
+  submitButton: {
+    flex: 2,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+  },
+  submitText: {
+    color: '#FFFFFF',
+    fontSize: FontSize.md,
+    fontWeight: FontWeight.bold,
+  },
+});

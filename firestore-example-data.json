@@ -1,0 +1,206 @@
+{
+  "exampleSpecies": [
+    {
+      "id": "mandacaia",
+      "commonName": "Mandaçaia",
+      "scientificName": "Melipona quadrifasciata",
+      "shortDescription": "Abelha de porte médio, muito produtiva e dócil",
+      "longDescription": "A Mandaçaia é uma das abelhas sem ferrão mais conhecidas e criadas no Brasil. Possui corpo robusto com faixas amarelas e pretas bem definidas. É uma espécie muito produtiva, chegando a produzir de 2 a 4 litros de mel por ano. Seu mel é muito apreciado por suas propriedades medicinais e sabor suave. Constrói ninhos em cavidades de árvores e é uma excelente polinizadora de diversas culturas agrícolas.",
+      "regions": ["Sul", "Sudeste", "Centro-Oeste"],
+      "biomes": ["Mata Atlântica", "Cerrado"],
+      "sizeMm": 10,
+      "behavior": "Mansa",
+      "nest": "Cavidade em árvores",
+      "conservationStatus": "Vulnerável",
+      "tags": ["semFerrão", "meliponini", "produtiva", "medicinal"],
+      "favoredPlants": [
+        "Manjericão",
+        "Alecrim",
+        "Café",
+        "Laranjeira",
+        "Jabuticabeira",
+        "Pitangueira"
+      ],
+      "photos": {
+        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fthumb.jpg?alt=media",
+        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fmedia.jpg?alt=media",
+        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Foriginal.jpg?alt=media"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery2.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery3.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Produção de mel e manejo de Melipona quadrifasciata",
+          "url": "https://scholar.google.com/scholar?q=Melipona+quadrifasciata"
+        },
+        {
+          "title": "Polinização por abelhas sem ferrão em culturas agrícolas",
+          "url": "https://scholar.google.com/scholar?q=stingless+bees+pollination"
+        }
+      ]
+    },
+    {
+      "id": "jatai",
+      "commonName": "Jataí",
+      "scientificName": "Tetragonisca angustula",
+      "shortDescription": "Pequena, dócil e ideal para iniciantes na meliponicultura",
+      "longDescription": "A Jataí é uma das menores abelhas sem ferrão do Brasil e também uma das mais populares para criação urbana. Extremamente mansa, raramente ataca mesmo quando manipulada. Constrói ninhos característicos com entrada tubular de cerume. Apesar do tamanho pequeno, é uma polinizadora eficiente de flores pequenas. Seu mel é ácido e muito valorizado por propriedades medicinais.",
+      "regions": ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"],
+      "biomes": ["Mata Atlântica", "Cerrado", "Caatinga", "Amazônia"],
+      "sizeMm": 5,
+      "behavior": "Muito Mansa",
+      "nest": "Cavidades pequenas, entrada tubular",
+      "conservationStatus": "Pouco Preocupante",
+      "tags": ["semFerrão", "pequena", "urbana", "iniciantes"],
+      "favoredPlants": [
+        "Hortelã",
+        "Capim-limão",
+        "Manjericão",
+        "Flor de Mel",
+        "Cambará",
+        "Astrapeia"
+      ],
+      "photos": {
+        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fthumb.jpg?alt=media",
+        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fmedia.jpg?alt=media",
+        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Foriginal.jpg?alt=media"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Tetragonisca angustula: biologia e manejo",
+          "url": "https://scholar.google.com/scholar?q=Tetragonisca+angustula"
+        }
+      ]
+    },
+    {
+      "id": "urucu",
+      "commonName": "Uruçu-Amarela",
+      "scientificName": "Melipona rufiventris",
+      "shortDescription": "Grande produtora de mel, encontrada na Mata Atlântica",
+      "longDescription": "A Uruçu-Amarela é uma abelha de médio porte, robusta, com abdômen amarelado característico. É nativa da Mata Atlântica e constrói ninhos grandes em ocos de árvores. Produz mel de excelente qualidade, claro e saboroso. É uma polinizadora importante de espécies nativas como jabuticaba, pitanga e outras frutíferas. Requer cavidades grandes para nidificação.",
+      "regions": ["Sudeste", "Sul"],
+      "biomes": ["Mata Atlântica"],
+      "sizeMm": 11,
+      "behavior": "Mansa",
+      "nest": "Grandes cavidades em árvores",
+      "conservationStatus": "Vulnerável",
+      "tags": ["semFerrão", "atlântica", "frutíferas", "mel-claro"],
+      "favoredPlants": [
+        "Jabuticabeira",
+        "Pitangueira",
+        "Goiabeira",
+        "Araticum",
+        "Fruto do Sabiá",
+        "Ipê-Amarelo"
+      ],
+      "photos": {
+        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fthumb.jpg?alt=media",
+        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fmedia.jpg?alt=media",
+        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Foriginal.jpg?alt=media"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fgallery2.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fgallery3.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona rufiventris na Mata Atlântica: conservação e manejo",
+          "url": "https://scholar.google.com/scholar?q=Melipona+rufiventris"
+        },
+        {
+          "title": "Polinização de frutíferas nativas por abelhas sem ferrão",
+          "url": "https://scholar.google.com/scholar?q=native+fruit+pollination+stingless+bees"
+        }
+      ]
+    },
+    {
+      "id": "tiuba",
+      "commonName": "Tiúba",
+      "scientificName": "Melipona compressipes",
+      "shortDescription": "Abelha amazônica, excelente produtora de mel",
+      "longDescription": "A Tiúba é uma abelha nativa da Amazônia, de porte médio a grande. Possui corpo robusto e escuro. É conhecida por sua alta produtividade, podendo produzir até 6 litros de mel por ano em condições ideais. Seu mel é escuro, encorpado e muito valorizado. Constrói ninhos grandes em árvores ocas e é importante polinizadora de espécies amazônicas.",
+      "regions": ["Norte"],
+      "biomes": ["Amazônia"],
+      "sizeMm": 12,
+      "behavior": "Mansa",
+      "nest": "Grandes ocos de árvores",
+      "conservationStatus": "Pouco Preocupante",
+      "tags": ["semFerrão", "amazônica", "mel-escuro", "produtiva"],
+      "favoredPlants": ["Açaí", "Cupuaçu", "Castanha-do-Pará", "Andiroba", "Ingá", "Bacaba"],
+      "photos": {
+        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Fthumb.jpg?alt=media",
+        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Fmedia.jpg?alt=media",
+        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Foriginal.jpg?alt=media"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona compressipes: produção de mel na Amazônia",
+          "url": "https://scholar.google.com/scholar?q=Melipona+compressipes"
+        },
+        {
+          "title": "Abelhas sem ferrão e conservação da floresta amazônica",
+          "url": "https://scholar.google.com/scholar?q=stingless+bees+amazon+conservation"
+        }
+      ]
+    },
+    {
+      "id": "mirim",
+      "commonName": "Mirim",
+      "scientificName": "Plebeia droryana",
+      "shortDescription": "Pequena abelha urbana, muito adaptável",
+      "longDescription": "A Mirim é uma pequena abelha sem ferrão, muito comum em áreas urbanas. Constrói ninhos em cavidades pequenas, inclusive em muros e construções. Extremamente mansa e adaptável, é ideal para criação em espaços reduzidos. Seu mel é produzido em pequenas quantidades mas é muito apreciado. É excelente polinizadora de hortas e jardins.",
+      "regions": ["Sudeste", "Sul", "Centro-Oeste"],
+      "biomes": ["Mata Atlântica", "Cerrado"],
+      "sizeMm": 4,
+      "behavior": "Muito Mansa",
+      "nest": "Pequenas cavidades, muros, construções",
+      "conservationStatus": "Pouco Preocupante",
+      "tags": ["semFerrão", "pequena", "urbana", "adaptável"],
+      "favoredPlants": ["Alface", "Tomate", "Pepino", "Morango", "Salsinha", "Cebolinha"],
+      "photos": {
+        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fthumb.jpg?alt=media",
+        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fmedia.jpg?alt=media",
+        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Foriginal.jpg?alt=media"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Plebeia droryana em ambientes urbanos",
+          "url": "https://scholar.google.com/scholar?q=Plebeia+droryana"
+        }
+      ]
+    }
+  ],
+  "instructions": {
+    "step1": "Acesse o Firebase Console",
+    "step2": "Vá para Firestore Database",
+    "step3": "Clique em 'Iniciar coleção'",
+    "step4": "Nome da coleção: 'species'",
+    "step5": "Para cada objeto do array acima, crie um documento usando o campo 'id' como ID do documento",
+    "step6": "Adicione os timestamps usando o tipo 'timestamp' do Firestore",
+    "step7": "Para as fotos, faça upload no Firebase Storage e obtenha as URLs públicas",
+    "imageUrlFormat": "Use o formato HTTPS público: https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fmedia.jpg?alt=media&token=TOKEN",
+    "imageUrlSteps": [
+      "1. Vá em Firebase Storage",
+      "2. Faça upload da imagem",
+      "3. Clique na imagem",
+      "4. Clique em 'Obter URL de download' ou 'Get download URL'",
+      "5. Copie a URL completa que começa com https://firebasestorage.googleapis.com/"
+    ],
+    "note": "IMPORTANTE: Não use URLs com formato gs:// - elas não funcionam no app. Use apenas URLs HTTPS públicas do Firebase Storage"
+  }
+}
