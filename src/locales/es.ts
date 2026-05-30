@@ -42,6 +42,7 @@ export default {
     externalLinkTitle: 'Abrir Enlace Externo',
     externalLinkMessage: '¿Serás redirigido a un sitio externo. Deseas continuar?',
     externalLinkContinue: 'Continuar',
+    imageZoomHint: 'Pellizca para hacer zoom',
   },
 
   // Preferences Screen

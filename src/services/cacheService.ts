@@ -1,4 +1,3 @@
-// Serviço de Cache Offline
 import { Species } from '@/types/species';
 import { storageAdapter } from './storage';
 
@@ -10,52 +9,37 @@ const CACHE_KEYS = {
 
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 horas
 
-/**
- * Salva lista de espécies no cache
- */
 export const cacheSpeciesList = async (species: Species[]): Promise<void> => {
   try {
     await storageAdapter.setItem(CACHE_KEYS.SPECIES_LIST, JSON.stringify(species));
     await storageAdapter.setItem(CACHE_KEYS.LAST_UPDATE, Date.now().toString());
-  } catch (error) {}
+  } catch {}
 };
 
-/**
- * Salva espécies em destaque no cache
- */
 export const cacheFeaturedSpecies = async (species: Species[]): Promise<void> => {
   try {
     await storageAdapter.setItem(CACHE_KEYS.FEATURED_SPECIES, JSON.stringify(species));
-  } catch (error) {}
+  } catch {}
 };
 
-/**
- * Recupera lista de espécies do cache (sempre retorna, mesmo expirado)
- */
 export const getCachedSpeciesList = async (): Promise<Species[] | null> => {
   try {
     const cached = await storageAdapter.getItem(CACHE_KEYS.SPECIES_LIST);
     return cached ? JSON.parse(cached) : null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
 
-/**
- * Recupera espécies em destaque do cache
- */
 export const getCachedFeaturedSpecies = async (): Promise<Species[] | null> => {
   try {
     const cached = await storageAdapter.getItem(CACHE_KEYS.FEATURED_SPECIES);
     return cached ? JSON.parse(cached) : null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
 
-/**
- * Limpa todo o cache
- */
 export const clearAllCache = async (): Promise<void> => {
   try {
     await storageAdapter.multiRemove([
@@ -63,12 +47,9 @@ export const clearAllCache = async (): Promise<void> => {
       CACHE_KEYS.FEATURED_SPECIES,
       CACHE_KEYS.LAST_UPDATE,
     ]);
-  } catch (error) {}
+  } catch {}
 };
 
-/**
- * Verifica se tem cache válido
- */
 export const hasFreshCache = async (): Promise<boolean> => {
   try {
     const lastUpdate = await storageAdapter.getItem(CACHE_KEYS.LAST_UPDATE);

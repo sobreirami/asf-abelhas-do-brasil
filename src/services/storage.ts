@@ -27,7 +27,7 @@ export const storageAdapter = {
    * Remove múltiplos itens do storage
    */
   multiRemove: async (keys: string[]): Promise<void> => {
-    await AsyncStorage.multiRemove(keys);
+    await Promise.all(keys.map((key) => AsyncStorage.removeItem(key)));
   },
 
   /**

@@ -42,6 +42,7 @@ export default {
     externalLinkTitle: 'Open External Link',
     externalLinkMessage: 'You will be redirected to an external site. Do you want to continue?',
     externalLinkContinue: 'Continue',
+    imageZoomHint: 'Pinch to zoom',
   },
 
   // Preferences Screen

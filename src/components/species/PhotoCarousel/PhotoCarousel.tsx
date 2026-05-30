@@ -2,15 +2,20 @@
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import { Image } from 'expo-image';
 import React, { useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable, Text, View } from 'react-native';
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { Colors, Shadows, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { IMAGE_WIDTH, styles } from './styles';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface PhotoCarouselProps {
   photos: string[];
@@ -25,7 +30,7 @@ export default function PhotoCarousel({ photos, delay = 0, onImagePress }: Photo
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(offsetX / IMAGE_WIDTH);
     setCurrentIndex(index);
@@ -65,7 +70,7 @@ export default function PhotoCarousel({ photos, delay = 0, onImagePress }: Photo
         keyExtractor={(item, index) => `photo-${index}`}
         renderItem={({ item }) => (
           <Pressable
-            style={[styles.imageWrapper, Shadows.md]}
+            style={[styles.imageWrapper, Shadows.md, { backgroundColor: colors.card }]}
             onPress={() => handleImagePress(item)}
           >
             <Image

@@ -15,6 +15,7 @@ export const Colors = {
     backgroundSecondary: '#FFFEF5',
     tint: tintColorLight,
     primary: '#F5B800', // Amarelo mel (primária)
+    onPrimary: '#2C3E35', // Texto sobre fundo primary — nunca usar branco sobre amarelo (contraste 1.78)
     secondary: '#6B8E23', // Verde oliva (secundária)
     accent: '#FF9500', // Laranja mel
     success: '#4CAF50',
@@ -26,7 +27,12 @@ export const Colors = {
     border: '#E0E5DE',
     card: '#FFFFFF',
     cardBlur: 'rgba(255, 255, 255, 0.8)', // Para glass effect
+    link: '#0a7ea4',
     shadow: 'rgba(0, 0, 0, 0.1)',
+    overlay: 'rgba(0, 0, 0, 0.5)',
+    onOverlay: '#FFFFFF',
+    skeletonBase: '#E0E5DE',
+    skeletonHighlight: '#F0F0F0',
   },
   dark: {
     text: '#E8EDE7',
@@ -34,6 +40,7 @@ export const Colors = {
     backgroundSecondary: '#252A25',
     tint: tintColorDark,
     primary: '#FFD700', // Amarelo mel (primária)
+    onPrimary: '#1A1F1A', // Texto sobre fundo primary — nunca usar branco sobre dourado (contraste 1.40)
     secondary: '#8FBC8F', // Verde claro (secundária)
     accent: '#FFB84D',
     success: '#66BB6A',
@@ -45,7 +52,12 @@ export const Colors = {
     border: '#3A4A3A',
     card: '#2A2F2A',
     cardBlur: 'rgba(42, 47, 42, 0.8)', // Para glass effect
+    link: '#29ABE2',
     shadow: 'rgba(0, 0, 0, 0.3)',
+    overlay: 'rgba(0, 0, 0, 0.6)',
+    onOverlay: '#FFFFFF',
+    skeletonBase: '#2A2F2A',
+    skeletonHighlight: '#3A4A3A',
   },
 };
 

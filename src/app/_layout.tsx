@@ -2,11 +2,14 @@ import { storageAdapter } from '@/services/storage';
 import {
   DarkTheme,
   DefaultTheme,
+  Stack,
   ThemeProvider as NavigationThemeProvider,
-} from '@react-navigation/native';
-import { Stack, router } from 'expo-router';
+  router,
+} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
+import { NavigationBar } from 'expo-navigation-bar';
+import { ActivityIndicator, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 
@@ -20,6 +23,14 @@ SplashScreen.preventAutoHideAsync();
 export const unstable_settings = {
   initialRouteName: '(tabs)',
 };
+
+export function SuspenseFallback() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+}
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
@@ -89,6 +100,7 @@ function RootLayoutNav() {
         />
       </Stack>
       <StatusBar style="auto" />
+      <NavigationBar style="auto" />
     </NavigationThemeProvider>
   );
 }

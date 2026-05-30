@@ -12,22 +12,29 @@ export const styles = StyleSheet.create({
     position: 'relative',
   },
   heroGradient: {
-    height: 220,
+    height: 280,
     justifyContent: 'center',
     alignItems: 'center',
   },
   heroContent: {
     alignItems: 'center',
   },
+  heroLogoContainer: {
+    width: 100,
+    height: 100,
+    marginBottom: Spacing.sm,
+  },
+  heroLogo: {
+    width: 100,
+    height: 100,
+  },
   heroTitle: {
     fontSize: FontSize.display,
     fontWeight: FontWeight.bold,
-    color: '#FFFFFF',
-    marginTop: Spacing.md,
+    marginTop: Spacing.sm,
   },
   heroSubtitle: {
     fontSize: FontSize.lg,
-    color: '#FFFFFF',
     marginTop: Spacing.xs,
     opacity: 0.9,
   },

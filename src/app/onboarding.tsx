@@ -1,20 +1,29 @@
 import { storageAdapter } from '@/services/storage';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FlatList, Pressable, Text, View, ViewToken } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { styles } from '@/styles/onboarding/onboardingStyles';
+import { styles } from '@/styles/screens/onboardingStyles';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type OnboardingSlide = {
   id: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IoniconsIconName;
+  useLogo?: boolean;
   title: string;
   description: string;
   color: string;
@@ -27,11 +36,17 @@ export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const [skipped, setSkipped] = useState(false);
+  const nextScale = useSharedValue(1);
+  const skipScale = useSharedValue(1);
+
+  const nextAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: nextScale.value }] }));
+  const skipAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: skipScale.value }] }));
 
   const slides: OnboardingSlide[] = [
     {
       id: '1',
       icon: 'information-circle',
+      useLogo: true,
       title: t.onboarding.slide1Title,
       description: t.onboarding.slide1Description,
       color: colors.primary,
@@ -52,11 +67,14 @@ export default function OnboardingScreen() {
     },
   ];
 
-  const handleViewableItemsChanged = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
-    if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-      setCurrentIndex(viewableItems[0].index);
-    }
-  }).current;
+  const handleViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
+        setCurrentIndex(viewableItems[0].index);
+      }
+    },
+    []
+  );
 
   const handleSkip = async () => {
     await triggerHaptic(ImpactFeedbackStyle.Medium);
@@ -75,24 +93,37 @@ export default function OnboardingScreen() {
     }
   };
 
-  const renderSlide = ({ item }: { item: OnboardingSlide }) => (
-    <Animated.View entering={FadeIn} style={styles.slide}>
-      <LinearGradient
-        colors={[item.color, item.color + 'CC']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.gradientBackground}
-      >
-        <View style={styles.slideContent}>
-          <View style={[styles.iconContainer, { backgroundColor: colors.cardBlur }]}>
-            <Ionicons name={item.icon} size={60} color={colors.text} />
-          </View>
+  const renderSlide = useCallback(
+    ({ item }: { item: OnboardingSlide }) => (
+      <Animated.View entering={FadeIn} style={styles.slide}>
+        <LinearGradient
+          colors={[item.color, item.color + 'CC']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientBackground}
+        >
+          <View style={styles.slideContent}>
+            {item.useLogo ? (
+              <View style={styles.logoContainer}>
+                <Image
+                  source={require('../../assets/images/icon-transparent.png')}
+                  style={styles.logoImage}
+                  contentFit="contain"
+                />
+              </View>
+            ) : (
+              <View style={[styles.iconContainer, { backgroundColor: colors.cardBlur }]}>
+                <Ionicons name={item.icon} size={60} color={colors.text} />
+              </View>
+            )}
 
-          <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
-          <Text style={[styles.description, { color: colors.text }]}>{item.description}</Text>
-        </View>
-      </LinearGradient>
-    </Animated.View>
+            <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+            <Text style={[styles.description, { color: colors.text }]}>{item.description}</Text>
+          </View>
+        </LinearGradient>
+      </Animated.View>
+    ),
+    [colors]
   );
 
   return (
@@ -129,29 +160,40 @@ export default function OnboardingScreen() {
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Pressable style={styles.skipButton} onPress={handleSkip}>
+        <AnimatedPressable
+          style={[styles.skipButton, skipAnimatedStyle]}
+          onPress={handleSkip}
+          onPressIn={() => {
+            skipScale.value = withSpring(0.94, { duration: 100 });
+          }}
+          onPressOut={() => {
+            skipScale.value = withSpring(1, { duration: 100 });
+          }}
+        >
           <Text style={[styles.skipText, { color: colors.text, opacity: 0.7 }]}>
             {t.onboarding.skip}
           </Text>
-        </Pressable>
+        </AnimatedPressable>
 
-        {currentIndex === slides.length - 1 ? (
-          <Pressable
-            style={[styles.finishButton, { backgroundColor: slides[currentIndex]?.color }]}
-            onPress={handleNext}
-          >
-            <Text style={[styles.finishText, { color: colors.text }]}>{t.onboarding.start}</Text>
-            <Ionicons name="arrow-forward" size={20} color={colors.text} />
-          </Pressable>
-        ) : (
-          <Pressable
-            style={[styles.nextButton, { backgroundColor: slides[currentIndex]?.color }]}
-            onPress={handleNext}
-          >
-            <Text style={[styles.nextText, { color: colors.text }]}>{t.onboarding.next}</Text>
-            <Ionicons name="arrow-forward" size={16} color={colors.text} />
-          </Pressable>
-        )}
+        <AnimatedPressable
+          style={[
+            currentIndex === slides.length - 1 ? styles.finishButton : styles.nextButton,
+            { backgroundColor: slides[currentIndex]?.color },
+            nextAnimatedStyle,
+          ]}
+          onPress={handleNext}
+          onPressIn={() => {
+            nextScale.value = withSpring(0.94, { duration: 100 });
+          }}
+          onPressOut={() => {
+            nextScale.value = withSpring(1, { duration: 100 });
+          }}
+        >
+          <Text style={[styles.nextText, { color: colors.text }]}>
+            {currentIndex === slides.length - 1 ? t.onboarding.start : t.onboarding.next}
+          </Text>
+          <Ionicons name="arrow-forward" size={16} color={colors.text} />
+        </AnimatedPressable>
       </View>
     </View>
   );

@@ -1,47 +1,43 @@
+import { Colors } from '@/constants/theme';
 import { LanguageCode } from '@/services/languageService';
 import { BlurView } from 'expo-blur';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { styles } from './styles';
+import { createStyles } from './styles';
 
 interface LanguageOptionProps {
   value: LanguageCode;
   label: string;
   isSelected: boolean;
   isDark: boolean;
-  primaryColor: string;
   onPress: (value: LanguageCode) => void;
 }
 
-export function LanguageOption({
-  value,
-  label,
-  isSelected,
-  isDark,
-  primaryColor,
-  onPress,
-}: LanguageOptionProps) {
+export function LanguageOption({ value, label, isSelected, isDark, onPress }: LanguageOptionProps) {
+  const colors = Colors[isDark ? 'dark' : 'light'];
+  const styles = createStyles(colors);
+
   return (
     <TouchableOpacity
       style={styles.optionButton}
       onPress={() => onPress(value)}
       activeOpacity={0.7}
+      accessibilityRole="radio"
+      accessibilityState={{ checked: isSelected }}
+      accessibilityLabel={label}
     >
       <BlurView
         intensity={isDark ? 60 : 80}
         tint={isDark ? 'dark' : 'light'}
         style={[
           styles.optionContent,
-          isSelected && {
-            borderColor: primaryColor,
-            borderWidth: 2,
-          },
+          isSelected && { borderColor: colors.primary, borderWidth: 2 },
         ]}
       >
         <View style={styles.radioOuter}>
-          {isSelected && <View style={[styles.radioInner, { backgroundColor: primaryColor }]} />}
+          {isSelected && <View style={[styles.radioInner, { backgroundColor: colors.primary }]} />}
         </View>
-        <Text style={[styles.optionText, isDark && styles.optionTextDark]}>{label}</Text>
+        <Text style={styles.optionText}>{label}</Text>
       </BlurView>
     </TouchableOpacity>
   );

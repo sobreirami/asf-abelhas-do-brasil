@@ -29,6 +29,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.xl,
   },
+  logoContainer: {
+    width: 140,
+    height: 140,
+    marginBottom: Spacing.xl,
+  },
+  logoImage: {
+    width: 140,
+    height: 140,
+  },
   title: {
     fontSize: FontSize.display,
     fontWeight: FontWeight.bold,
@@ -85,16 +94,15 @@ export const styles = StyleSheet.create({
     fontWeight: FontWeight.bold,
   },
   finishButton: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
   },
   finishText: {
-    fontSize: FontSize.lg,
+    fontSize: FontSize.md,
     fontWeight: FontWeight.bold,
   },
 });

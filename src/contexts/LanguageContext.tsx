@@ -2,7 +2,7 @@ import en from '@/locales/en';
 import es from '@/locales/es';
 import ptBR from '@/locales/pt-BR';
 import { getLanguagePreference, LanguageCode } from '@/services/languageService';
-import React, { createContext, use, useEffect, useState } from 'react';
+import React, { createContext, use, useCallback, useEffect, useState } from 'react';
 import { NativeModules, Platform } from 'react-native';
 
 type Translations = typeof ptBR;
@@ -34,36 +34,26 @@ function getDeviceLanguage(): 'pt-BR' | 'en' | 'es' {
     deviceLanguage = NativeModules.I18nManager?.localeIdentifier || 'pt-BR';
   }
 
-  // Normalizar para nossos idiomas suportados
   if (deviceLanguage.startsWith('pt')) return 'pt-BR';
   if (deviceLanguage.startsWith('en')) return 'en';
   if (deviceLanguage.startsWith('es')) return 'es';
 
-  return 'pt-BR'; // Fallback
+  return 'pt-BR';
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [languagePreference, setLanguagePreferenceState] = useState<LanguageCode>('auto');
-  const [language, setLanguage] = useState<'pt-BR' | 'en' | 'es'>('pt-BR');
+
+  const language: 'pt-BR' | 'en' | 'es' =
+    languagePreference === 'auto' ? getDeviceLanguage() : languagePreference;
 
   useEffect(() => {
-    loadLanguage();
+    getLanguagePreference().then(setLanguagePreferenceState);
   }, []);
 
-  useEffect(() => {
-    const effectiveLanguage =
-      languagePreference === 'auto' ? getDeviceLanguage() : languagePreference;
-    setLanguage(effectiveLanguage as 'pt-BR' | 'en' | 'es');
-  }, [languagePreference]);
-
-  const loadLanguage = async () => {
-    const preference = await getLanguagePreference();
-    setLanguagePreferenceState(preference);
-  };
-
-  const setLanguagePreference = (lang: LanguageCode) => {
+  const setLanguagePreference = useCallback((lang: LanguageCode) => {
     setLanguagePreferenceState(lang);
-  };
+  }, []);
 
   return (
     <LanguageContext

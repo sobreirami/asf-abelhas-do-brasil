@@ -21,8 +21,18 @@ export const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: Spacing.lg,
     marginBottom: Spacing.md,
+  },
+  clearFiltersButton: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+  },
+  clearFiltersText: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.medium,
   },
   filterHeader: {
     flexDirection: 'row',
@@ -41,41 +51,34 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
+    borderWidth: 1,
     gap: Spacing.xs,
   },
   filterButtonText: {
     fontSize: FontSize.sm,
     fontWeight: FontWeight.medium,
   },
-  filterBadge: {
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    borderRadius: BorderRadius.full,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  filterBadgeText: {
-    color: '#FFFFFF',
-    fontSize: FontSize.xs,
-    fontWeight: FontWeight.bold,
-  },
-  activeFiltersContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
+  chipsScroll: {
     marginBottom: Spacing.md,
   },
-  activeFiltersText: {
-    fontSize: FontSize.sm,
+  chipsContent: {
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  clearFiltersButton: {
-    padding: Spacing.xs,
+  filterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+    gap: Spacing.xs,
   },
-  clearFiltersText: {
+  filterChipText: {
     fontSize: FontSize.sm,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.medium,
   },
   footer: {
     padding: Spacing.lg,
@@ -87,7 +90,6 @@ export const styles = StyleSheet.create({
     marginTop: Spacing.lg,
   },
   emptyActionText: {
-    color: '#FFFFFF',
     fontSize: FontSize.md,
     fontWeight: FontWeight.bold,
     textAlign: 'center',

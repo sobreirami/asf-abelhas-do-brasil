@@ -2,7 +2,7 @@
 import { Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { BlurView } from 'expo-blur';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -14,7 +14,7 @@ interface CustomHeaderProps {
   showBackButton?: boolean;
   onBackPress?: () => void;
   rightAction?: {
-    icon: keyof typeof Ionicons.glyphMap;
+    icon: IoniconsIconName;
     onPress: () => void;
   };
 }
@@ -70,7 +70,7 @@ export default function CustomHeader({
             onPress={() => handlePress(rightAction.onPress)}
             style={[styles.iconButton, { backgroundColor: colors.card + '80' }]}
           >
-            <Ionicons name={rightAction.icon as any} size={24} color={colors.text} />
+            <Ionicons name={rightAction.icon} size={24} color={colors.text} />
           </Pressable>
         )}
       </View>

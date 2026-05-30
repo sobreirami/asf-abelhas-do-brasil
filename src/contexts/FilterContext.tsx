@@ -1,4 +1,4 @@
-import React, { createContext, use, useState } from 'react';
+import React, { createContext, Dispatch, SetStateAction, use, useState } from 'react';
 
 export type FilterOptions = {
   searchText?: string;
@@ -11,9 +11,9 @@ export type FilterOptions = {
 
 interface FilterContextType {
   pendingTagFilter: string | null;
-  setPendingTagFilter: (tag: string | null) => void;
+  setPendingTagFilter: Dispatch<SetStateAction<string | null>>;
   activeFilters: FilterOptions;
-  setActiveFilters: (filters: FilterOptions) => void;
+  setActiveFilters: Dispatch<SetStateAction<FilterOptions>>;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -33,10 +33,8 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
 
 export function useFilter() {
   const context = use(FilterContext);
-
   if (context === undefined) {
     throw new Error('useFilter must be used within a FilterProvider');
   }
-
   return context;
 }

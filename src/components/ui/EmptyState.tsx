@@ -1,12 +1,12 @@
 // Componente para estados vazios
 import { Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 interface EmptyStateProps {
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: IoniconsIconName;
   title: string;
   description?: string;
   action?: React.ReactNode;
@@ -23,7 +23,7 @@ export default function EmptyState({
 
   return (
     <View style={styles.container}>
-      <Ionicons name={icon as any} size={80} color={colors.icon} style={styles.icon} />
+      <Ionicons name={icon} size={80} color={colors.icon} style={styles.icon} />
       <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
       {description && (
         <Text style={[styles.description, { color: colors.icon }]}>{description}</Text>

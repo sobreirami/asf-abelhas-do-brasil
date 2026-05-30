@@ -1,4 +1,5 @@
 import { BorderRadius, FontSize, FontWeight, Spacing } from '@/constants/theme';
+// Note: chip and button styles removed — use Chip and Button from @/components/ui
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
@@ -51,6 +52,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.full,
+    borderWidth: 1,
   },
   chipText: {
     fontSize: FontSize.sm,
@@ -61,27 +63,8 @@ export const styles = StyleSheet.create({
     padding: Spacing.lg,
     gap: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
   },
-  clearButton: {
+  footerButton: {
     flex: 1,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
-  clearText: {
-    fontSize: FontSize.md,
-    fontWeight: FontWeight.bold,
-  },
-  applyButton: {
-    flex: 2,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
-  applyText: {
-    color: '#FFFFFF',
-    fontSize: FontSize.md,
-    fontWeight: FontWeight.bold,
   },
 });

@@ -83,27 +83,8 @@ export const styles = StyleSheet.create({
     padding: Spacing.lg,
     gap: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
   },
-  cancelButton: {
+  footerButton: {
     flex: 1,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
-  cancelText: {
-    fontSize: FontSize.md,
-    fontWeight: FontWeight.bold,
-  },
-  submitButton: {
-    flex: 2,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-  },
-  submitText: {
-    color: '#FFFFFF',
-    fontSize: FontSize.md,
-    fontWeight: FontWeight.bold,
   },
 });

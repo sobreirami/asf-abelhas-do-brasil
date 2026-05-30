@@ -61,7 +61,6 @@ export const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
   },
   statusText: {
-    color: '#FFFFFF',
     fontSize: FontSize.xs,
     fontWeight: FontWeight.bold,
   },

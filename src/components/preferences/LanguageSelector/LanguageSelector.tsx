@@ -7,7 +7,6 @@ import { styles } from './styles';
 interface LanguageSelectorProps {
   selectedLanguage: LanguageCode;
   isDark: boolean;
-  primaryColor: string;
   labels: {
     'pt-BR': string;
     en: string;
@@ -20,7 +19,6 @@ interface LanguageSelectorProps {
 export function LanguageSelector({
   selectedLanguage,
   isDark,
-  primaryColor,
   labels,
   onLanguageChange,
 }: LanguageSelectorProps) {
@@ -35,7 +33,6 @@ export function LanguageSelector({
           label={labels[lang]}
           isSelected={selectedLanguage === lang}
           isDark={isDark}
-          primaryColor={primaryColor}
           onPress={onLanguageChange}
         />
       ))}

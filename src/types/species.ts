@@ -1,4 +1,5 @@
-// Tipos para as espécies de abelhas
+import { Timestamp } from 'firebase/firestore';
+
 export interface SpeciesPhotos {
   thumbnail: string;
   media: string;
@@ -17,19 +18,19 @@ export interface Species {
   shortDescription: string;
   longDescription: string;
   regions: string[];
-  biomes: string[]; // Biomas onde a espécie é encontrada (Mata Atlântica, Pantanal, etc.)
+  biomes: string[];
   sizeMm: number;
   behavior: string;
   nest: string;
   conservationStatus: string;
   tags: string[];
-  favoredPlants: string[]; // Plantas que a abelha mais gosta (manjericão, fruto do sabiá, etc.)
+  favoredPlants: string[];
   photos: SpeciesPhotos;
-  photoGallery?: string[]; // URLs de fotos adicionais para o carrossel
-  scientificArticles?: ScientificArticle[]; // Artigos científicos sobre a espécie
-  featured?: boolean; // Flag para espécies em destaque
-  createdAt: any; // Firestore Timestamp
-  updatedAt: any; // Firestore Timestamp
+  photoGallery?: string[];
+  scientificArticles?: ScientificArticle[];
+  featured?: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface SpeciesFilter {
@@ -38,11 +39,10 @@ export interface SpeciesFilter {
   searchTerm?: string;
 }
 
-// Tipo para o Expo Push Token
 export interface PushToken {
   token: string;
   userId?: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   platform: 'ios' | 'android';
 }

@@ -19,7 +19,7 @@ import {
   saveThemePreference,
 } from '@/services/preferencesService';
 import { storageAdapter } from '@/services/storage';
-import { styles } from '@/styles/tabs/preferencesStyles';
+import { createStyles } from '@/styles/screens/tabs/preferencesStyles';
 import Constants from 'expo-constants';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, Text, View } from 'react-native';
@@ -29,6 +29,7 @@ export default function PreferencesScreen() {
   const colorScheme = useDeviceColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = Colors[colorScheme ?? 'light'];
+  const styles = createStyles(colors);
   const { setThemePreference } = useTheme();
   const { t, setLanguagePreference: setLanguagePref } = useLanguage();
 
@@ -36,15 +37,11 @@ export default function PreferencesScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode>('auto');
 
   useEffect(() => {
-    loadPreferences();
+    Promise.all([getThemePreference(), getLanguagePreference()]).then(([theme, lang]) => {
+      setSelectedTheme(theme);
+      setSelectedLanguage(lang);
+    });
   }, []);
-
-  const loadPreferences = async () => {
-    const themePreference = await getThemePreference();
-    const languagePreference = await getLanguagePreference();
-    setSelectedTheme(themePreference);
-    setSelectedLanguage(languagePreference);
-  };
 
   const handleThemeChange = async (newTheme: ThemePreference) => {
     setSelectedTheme(newTheme);
@@ -91,29 +88,22 @@ export default function PreferencesScreen() {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={[styles.container, isDark && styles.containerDark]}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, isDark && styles.titleDark]}>{t.preferences.title}</Text>
-          <Text style={[styles.subtitle, isDark && styles.subtitleDark]}>
-            {t.preferences.subtitle}
-          </Text>
+          <Text style={styles.title}>{t.preferences.title}</Text>
+          <Text style={styles.subtitle}>{t.preferences.subtitle}</Text>
         </View>
 
         {/* Tema */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, isDark && styles.sectionTitleDark]}>
-            {t.preferences.appearance}
-          </Text>
-          <Text style={[styles.sectionDescription, isDark && styles.sectionDescriptionDark]}>
-            {t.preferences.appearanceDescription}
-          </Text>
+          <Text style={styles.sectionTitle}>{t.preferences.appearance}</Text>
+          <Text style={styles.sectionDescription}>{t.preferences.appearanceDescription}</Text>
 
           <ThemeSelector
             selectedTheme={selectedTheme}
             isDark={isDark}
-            primaryColor={colors.primary}
             labels={t.theme}
             onThemeChange={handleThemeChange}
           />
@@ -121,17 +111,12 @@ export default function PreferencesScreen() {
 
         {/* Idioma */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, isDark && styles.sectionTitleDark]}>
-            {t.preferences.language}
-          </Text>
-          <Text style={[styles.sectionDescription, isDark && styles.sectionDescriptionDark]}>
-            {t.preferences.languageDescription}
-          </Text>
+          <Text style={styles.sectionTitle}>{t.preferences.language}</Text>
+          <Text style={styles.sectionDescription}>{t.preferences.languageDescription}</Text>
 
           <LanguageSelector
             selectedLanguage={selectedLanguage}
             isDark={isDark}
-            primaryColor={colors.primary}
             labels={t.language}
             onLanguageChange={handleLanguageChange}
           />
@@ -139,12 +124,8 @@ export default function PreferencesScreen() {
 
         {/* Dados */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, isDark && styles.sectionTitleDark]}>
-            {t.preferences.dataStorage}
-          </Text>
-          <Text style={[styles.sectionDescription, isDark && styles.sectionDescriptionDark]}>
-            {t.preferences.dataStorageDescription}
-          </Text>
+          <Text style={styles.sectionTitle}>{t.preferences.dataStorage}</Text>
+          <Text style={styles.sectionDescription}>{t.preferences.dataStorageDescription}</Text>
 
           <ActionButton
             title={t.preferences.clearCache}
@@ -161,16 +142,12 @@ export default function PreferencesScreen() {
 
         {/* Info */}
         <View style={styles.infoContainer}>
-          <Text style={[styles.infoText, isDark && styles.infoTextDark]}>
-            {t.preferences.offlineInfo}
-          </Text>
+          <Text style={styles.infoText}>{t.preferences.offlineInfo}</Text>
         </View>
 
         {/* Versão */}
         <View style={styles.versionContainer}>
-          <Text style={[styles.versionText, isDark && styles.versionTextDark]}>
-            Versão {Constants.expoConfig?.version || '1.0.0'}
-          </Text>
+          <Text style={styles.versionText}>Versão {Constants.expoConfig?.version || '1.0.0'}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -7,7 +7,6 @@ import { styles } from './styles';
 interface ThemeSelectorProps {
   selectedTheme: ThemePreference;
   isDark: boolean;
-  primaryColor: string;
   labels: {
     light: string;
     dark: string;
@@ -19,7 +18,6 @@ interface ThemeSelectorProps {
 export function ThemeSelector({
   selectedTheme,
   isDark,
-  primaryColor,
   labels,
   onThemeChange,
 }: ThemeSelectorProps) {
@@ -34,7 +32,6 @@ export function ThemeSelector({
           label={labels[theme]}
           isSelected={selectedTheme === theme}
           isDark={isDark}
-          primaryColor={primaryColor}
           onPress={onThemeChange}
         />
       ))}

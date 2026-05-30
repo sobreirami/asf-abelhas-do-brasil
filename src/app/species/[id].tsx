@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
@@ -18,7 +18,8 @@ import {
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import PhotoCarousel from '@/components/species/PhotoCarousel';
-import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import { Chip } from '@/components/ui';
+import { SkeletonSpeciesDetail } from '@/components/ui/SkeletonLoader';
 import { BorderRadius, Colors, FontSize, FontWeight, Shadows, Spacing } from '@/constants/theme';
 import { useFilter } from '@/contexts/FilterContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -42,21 +43,12 @@ export default function SpeciesDetailScreen() {
   const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
-    if (id) {
-      loadSpecies();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!id) return;
+    fetchSpeciesById(id as string)
+      .then((data) => setSpecies(data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [id]);
-
-  const loadSpecies = async () => {
-    try {
-      const data = await fetchSpeciesById(id as string);
-      setSpecies(data);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleShare = async () => {
     if (!species) return;
@@ -67,7 +59,7 @@ export default function SpeciesDetailScreen() {
       await Share.share({
         message: `Conheça ${species.commonName} (${species.scientificName}) - Uma abelha nativa do Brasil!`,
       });
-    } catch (error) {}
+    } catch {}
   };
 
   const handleOpenExternalLink = (url: string) => {
@@ -95,14 +87,10 @@ export default function SpeciesDetailScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <SkeletonLoader height={400} />
-        <View style={styles.content}>
-          <SkeletonLoader width="80%" height={32} />
-          <SkeletonLoader width="60%" height={20} style={{ marginTop: Spacing.sm }} />
-          <SkeletonLoader height={100} style={{ marginTop: Spacing.lg }} />
-        </View>
-      </View>
+      <>
+        <Stack.Screen options={{ title: '', headerShown: true, headerTransparent: true }} />
+        <SkeletonSpeciesDetail />
+      </>
     );
   }
 
@@ -121,6 +109,7 @@ export default function SpeciesDetailScreen() {
     <>
       <Stack.Screen
         options={{
+          title: '',
           headerLeft:
             Platform.OS === 'android'
               ? () => (
@@ -211,20 +200,15 @@ export default function SpeciesDetailScreen() {
 
           <Animated.View entering={FadeInDown.delay(200)} style={styles.tagsContainer}>
             {species.tags.map((tag, index) => (
-              <Pressable
+              <Chip
                 key={index}
-                onPress={async () => {
-                  await triggerHaptic(ImpactFeedbackStyle.Light);
+                label={tag}
+                prefix="#"
+                onPress={() => {
                   setPendingTagFilter(tag);
                   router.back();
                 }}
-                style={[
-                  styles.tag,
-                  { backgroundColor: colors.primary + '20', borderColor: colors.primary },
-                ]}
-              >
-                <Text style={[styles.tagText, { color: colors.primary }]}>#{tag}</Text>
-              </Pressable>
+              />
             ))}
           </Animated.View>
 
@@ -358,13 +342,13 @@ export default function SpeciesDetailScreen() {
         <View style={styles.imageModalContainer}>
           <BlurView intensity={90} tint="dark" style={styles.imageModalBlur}>
             <Pressable
-              style={styles.imageModalCloseButton}
+              style={[styles.imageModalCloseButton, { backgroundColor: colors.overlay }]}
               onPress={async () => {
                 await triggerHaptic(ImpactFeedbackStyle.Light);
                 setImageModalVisible(false);
               }}
             >
-              <Ionicons name="close" size={32} color="#FFFFFF" />
+              <Ionicons name="close" size={32} color={colors.onOverlay} />
             </Pressable>
 
             <Image
@@ -374,7 +358,9 @@ export default function SpeciesDetailScreen() {
               transition={300}
             />
 
-            <Text style={styles.imageModalHint}>Pinça para dar zoom</Text>
+            <Text style={[styles.imageModalHint, { color: colors.onOverlay }]}>
+              {t.species.imageZoomHint}
+            </Text>
           </BlurView>
         </View>
       </Modal>
@@ -389,14 +375,14 @@ function InfoCard({
   value,
   colors,
 }: {
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: IoniconsIconName;
   title: string;
   value: string;
-  colors: any;
+  colors: (typeof Colors)['light'];
 }) {
   return (
     <View style={[styles.infoCard, { backgroundColor: colors.card }, Shadows.sm]}>
-      <Ionicons name={icon as any} size={24} color={colors.primary} />
+      <Ionicons name={icon} size={24} color={colors.primary} />
       <View style={styles.infoContent}>
         <Text style={[styles.infoTitle, { color: colors.icon }]}>{title}</Text>
         <Text selectable style={[styles.infoValue, { color: colors.text }]}>
@@ -461,16 +447,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
     marginBottom: Spacing.lg,
     marginTop: Spacing.lg,
-  },
-  tag: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.full,
-    borderWidth: 1,
-  },
-  tagText: {
-    fontSize: FontSize.sm,
-    fontWeight: FontWeight.medium,
   },
   infoCard: {
     flexDirection: 'row',
@@ -577,7 +553,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -586,7 +561,6 @@ const styles = StyleSheet.create({
     height: '70%',
   },
   imageModalHint: {
-    color: '#FFFFFF',
     fontSize: FontSize.sm,
     marginTop: Spacing.lg,
     opacity: 0.7,

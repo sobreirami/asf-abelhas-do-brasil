@@ -1,5 +1,6 @@
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
@@ -9,7 +10,9 @@ import { ImportanceCard } from '@/components/about/ImportanceCard';
 import { Colors, FontWeight, Shadows } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { styles } from '@/styles/tabs/aboutStyles';
+import { styles } from '@/styles/screens/tabs/aboutStyles';
+
+const LINKEDIN_BLUE = '#0A66C2' as const;
 
 export default function AboutScreen() {
   const colorScheme = useColorScheme();
@@ -35,9 +38,17 @@ export default function AboutScreen() {
           style={styles.heroGradient}
         >
           <Animated.View entering={FadeInDown.delay(100)} style={styles.heroContent}>
-            <Ionicons name="information-circle" size={60} color="#FFFFFF" />
-            <Text style={styles.heroTitle}>{t.about.title}</Text>
-            <Text style={styles.heroSubtitle}>{t.about.subtitle}</Text>
+            <View style={styles.heroLogoContainer}>
+              <Image
+                source={require('../../../assets/images/icon-transparent.png')}
+                style={styles.heroLogo}
+                contentFit="contain"
+              />
+            </View>
+            <Text style={[styles.heroTitle, { color: colors.onOverlay }]}>{t.about.title}</Text>
+            <Text style={[styles.heroSubtitle, { color: colors.onOverlay }]}>
+              {t.about.subtitle}
+            </Text>
           </Animated.View>
         </LinearGradient>
       </View>
@@ -109,7 +120,7 @@ export default function AboutScreen() {
               {t.about.appObjectiveText}
               {'\n\n'}
               <Text style={{ fontWeight: FontWeight.bold }}>{t.about.techStack}</Text>
-              {'\n'}• React Native + Expo SDK 54{'\n'}• TypeScript{'\n'}• Firebase (Firestore +
+              {'\n'}• React Native + Expo SDK 56{'\n'}• TypeScript{'\n'}• Firebase (Firestore +
               Storage){'\n'}• Expo Router (navegação){'\n'}• Reanimated (animações)
             </Text>
           </View>
@@ -129,16 +140,16 @@ export default function AboutScreen() {
                 onPress={() => handleLink('https://github.com')}
                 style={[styles.linkButton, { backgroundColor: colors.primary }]}
               >
-                <Ionicons name="logo-github" size={20} color="#FFFFFF" />
-                <Text style={styles.linkText}>GitHub</Text>
+                <Ionicons name="logo-github" size={20} color={colors.onPrimary} />
+                <Text style={[styles.linkText, { color: colors.onPrimary }]}>GitHub</Text>
               </Pressable>
 
               <Pressable
                 onPress={() => handleLink('https://linkedin.com')}
-                style={[styles.linkButton, { backgroundColor: '#0A66C2' }]}
+                style={[styles.linkButton, { backgroundColor: LINKEDIN_BLUE }]}
               >
-                <Ionicons name="logo-linkedin" size={20} color="#FFFFFF" />
-                <Text style={styles.linkText}>LinkedIn</Text>
+                <Ionicons name="logo-linkedin" size={20} color={colors.onOverlay} />
+                <Text style={[styles.linkText, { color: colors.onOverlay }]}>LinkedIn</Text>
               </Pressable>
             </View>
           </View>

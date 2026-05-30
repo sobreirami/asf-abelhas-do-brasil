@@ -44,11 +44,17 @@ export default function SpeciesCard({ species, onPress, index }: SpeciesCardProp
     return statusMap[status] || colors.icon;
   };
 
+  // Light badge backgrounds (success, warning, icon) need dark text to pass WCAG AA.
+  // All statuses use dark text to be safe (error at xs/semibold also fails AA with white).
+  const getStatusTextColor = (): string => colors.text;
+
   return (
     <AnimatedPressable
       entering={FadeIn.delay(index * 50)}
       style={[styles.container, { backgroundColor: colors.card }, Shadows.md]}
       onPress={handlePress}
+      accessibilityRole="button"
+      accessibilityLabel={`${species.commonName}, ${species.scientificName}`}
     >
       {/* Imagem */}
       <Image
@@ -71,7 +77,7 @@ export default function SpeciesCard({ species, onPress, index }: SpeciesCardProp
       {/* Badge de status de conservação */}
       {species.conservationStatus && (
         <View style={[styles.badge, { backgroundColor: getStatusColor(statusKey) }]}>
-          <Text style={styles.badgeText}>{statusLabel}</Text>
+          <Text style={[styles.badgeText, { color: getStatusTextColor() }]}>{statusLabel}</Text>
         </View>
       )}
     </AnimatedPressable>
@@ -110,7 +116,6 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
   },
   badgeText: {
-    color: '#FFFFFF',
     fontSize: FontSize.xs,
     fontWeight: FontWeight.semibold,
   },

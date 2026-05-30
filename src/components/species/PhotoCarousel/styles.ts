@@ -24,7 +24,6 @@ export const styles = StyleSheet.create({
     height: IMAGE_HEIGHT,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
-    backgroundColor: '#000',
   },
   image: {
     width: '100%',

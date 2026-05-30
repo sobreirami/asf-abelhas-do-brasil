@@ -1,63 +1,146 @@
-# ASF Abelhas Nativas do Brasil 🐝
+# ASF Abelhas do Brasil
 
-Aplicativo mobile em React Native + Expo que serve como galeria educacional de abelhas sem ferrão (ASF) nativas do Brasil.
+Mobile app for the catalog of Brazilian native stingless bees, built for the Associação de Saúde da Família (ASF). Users can browse, search, filter and read detailed profiles of stingless bee species.
 
-## 🚀 Tecnologias
+---
 
-- **React Native** - Framework para desenvolvimento mobile
-- **Expo** (Managed Workflow) - Plataforma de desenvolvimento
-- **Expo Router** - Navegação baseada em arquivos
-- **TypeScript** - Tipagem estática
-- **Firebase Web SDK** - Backend (Firestore + Storage)
-- **FlashList** - Listas de alta performance
-- **Reanimated** - Animações fluidas
-- **Expo Blur** - Efeitos visuais modernos (liquid glass)
-- **Expo Notifications** - Push notifications
-- **AsyncStorage** - Armazenamento local
+## Getting started
 
-## Get started
+### Prerequisites
 
-1. Install dependencies
+- Node.js 20+
+- npm 10+
+- Xcode (iOS, macOS only)
+- Android Studio (Android)
+- Expo CLI: `npm install -g expo-cli`
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Install and run
 
 ```bash
-npm run reset-project
+git clone https://github.com/sobreirami/asf-abelhas-do-brasil.git
+cd asf-abelhas-do-brasil
+
+cp .env.example .env   # fill in Firebase credentials
+
+npm install
+npm start              # Expo Go (quick preview)
+npm run ios            # iOS simulator
+npm run android        # Android emulator
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Architecture
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+src/app/ (Expo Router)
+    ├── (tabs)/             ← NativeTabs: Gallery · About · Preferences
+    ├── species/[id]        ← Species detail (card presentation)
+    ├── filters             ← Advanced filters (transparent modal)
+    ├── report              ← Report error (transparent modal)
+    └── onboarding          ← First-run flow
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+| Layer                | Responsibility                                                        |
+| -------------------- | --------------------------------------------------------------------- |
+| `app/`               | File-based routes (Expo Router) + co-located styles                   |
+| `components/`        | Reusable UI components — folder pattern with `styles.ts` + `index.ts` |
+| `contexts/`          | Global state: `ThemeContext`, `LanguageContext`, `FilterContext`      |
+| `services/`          | Data access: Firebase Firestore + AsyncStorage cache                  |
+| `types/`             | TypeScript domain types (`Species`, `SpeciesFilter`, …)               |
+| `constants/theme.ts` | `Colors`, `Spacing`, `Typography` — single source of truth            |
+| `locales/`           | i18n strings: `pt-BR.ts`, `en.ts`, `es.ts`                            |
 
-## Join the community
+**Stack:** React Native · Expo SDK 56 · Expo Router 56 · Firebase · Reanimated v4 · TypeScript strict
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Data flow
+
+### Species list
+
+```
+HomeScreen (mount)
+  ├── fetchFeaturedSpecies()  → Firestore (featured == true, limit 10) → cache
+  └── fetchSpecies()          → Firestore (paginated, 20/page)         → cache
+
+Filters (client-side, applied in-memory)
+  searchText · behavior · regions · biomes · conservationStatus · tags
+```
+
+### Offline fallback
+
+Online-first: always fetches from Firebase. On error, falls back to AsyncStorage cache. Cache is refreshed on every successful first-page fetch.
+
+---
+
+## Scripts
+
+| Script               | Description                        |
+| -------------------- | ---------------------------------- |
+| `npm start`          | Start Metro bundler                |
+| `npm run ios`        | Build and open on iOS simulator    |
+| `npm run android`    | Build and open on Android emulator |
+| `npm run lint`       | Run ESLint                         |
+| `npm run lint:fix`   | Auto-fix ESLint errors             |
+| `npm run format`     | Format with Prettier               |
+| `npm run type:check` | TypeScript check (`tsc --noEmit`)  |
+
+---
+
+## Environment variables
+
+Credentials are read via `expo-constants` from `app.json → extra`. Copy `.env.example` to `.env` and fill in the Firebase values.
+
+```bash
+FIREBASE_API_KEY=...
+FIREBASE_AUTH_DOMAIN=...
+FIREBASE_PROJECT_ID=...
+FIREBASE_STORAGE_BUCKET=...
+FIREBASE_MESSAGING_SENDER_ID=...
+FIREBASE_APP_ID=...
+```
+
+> **Never commit `.env`** — it is listed in `.gitignore`.
+
+---
+
+## Build and distribution (EAS)
+
+```bash
+# Development build
+eas build --profile development --platform ios
+
+# Production build
+eas build --platform all
+
+# OTA update (no new build required)
+eas update --branch production --message "fix: species detail crash"
+```
+
+Configuration in `eas.json`. Project ID: `a0d5f249-00a0-4622-98ca-e79a4ba16f4c`.
+
+---
+
+## Code conventions
+
+- **Code in English** — variables, functions, types, comments
+- **UI strings in Portuguese** — all user-visible text stays in pt-BR (base language)
+- No hardcoded colors — always `Colors[colorScheme]` from `@/constants/theme`
+- No hardcoded spacing — always `Spacing.*` from `@/constants/theme`
+- No `any` — use `unknown` + type guards, or proper Firebase types (`Timestamp`)
+- New visible text → add key to all 3 locale files (`pt-BR.ts`, `en.ts`, `es.ts`)
+
+---
+
+## Documentation
+
+| Doc                                          | Content                                       |
+| -------------------------------------------- | --------------------------------------------- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Project structure, routing, provider tree     |
+| [docs/SETUP.md](docs/SETUP.md)               | Firebase setup, Firestore schema, EAS         |
+| [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md)     | Species loading, filters, offline, onboarding |
+| [docs/PATTERNS.md](docs/PATTERNS.md)         | TypeScript, components, styles, imports       |
+| [docs/VERSIONING.md](docs/VERSIONING.md)     | Semantic versioning and release cycle         |
+| [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Commit convention and PR guidelines           |
+| [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md) | Known issues and planned improvements         |

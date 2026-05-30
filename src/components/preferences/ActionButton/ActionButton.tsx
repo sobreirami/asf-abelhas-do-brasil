@@ -1,7 +1,8 @@
+import { Colors } from '@/constants/theme';
 import { BlurView } from 'expo-blur';
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { styles } from './styles';
+import { createStyles } from './styles';
 
 interface ActionButtonProps {
   title: string;
@@ -11,20 +12,17 @@ interface ActionButtonProps {
 }
 
 export function ActionButton({ title, onPress, isDark, danger }: ActionButtonProps) {
+  const colors = Colors[isDark ? 'dark' : 'light'];
+  const styles = createStyles(colors);
+
   return (
     <TouchableOpacity style={styles.actionButton} onPress={onPress} activeOpacity={0.7}>
       <BlurView
         intensity={isDark ? 60 : 80}
         tint={isDark ? 'dark' : 'light'}
-        style={[styles.actionButtonContent, danger && { borderColor: '#FF3B30', borderWidth: 1 }]}
+        style={[styles.actionButtonContent, danger && styles.actionButtonDanger]}
       >
-        <Text
-          style={[
-            styles.actionButtonText,
-            isDark && styles.actionButtonTextDark,
-            danger && { color: '#FF3B30' },
-          ]}
-        >
+        <Text style={[styles.actionButtonText, danger && styles.actionButtonTextDanger]}>
           {title}
         </Text>
       </BlurView>

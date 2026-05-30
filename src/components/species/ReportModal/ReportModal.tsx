@@ -5,11 +5,12 @@ import {
   triggerHaptic,
   triggerNotificationHaptic,
 } from '@/utils/haptics';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { BlurView } from 'expo-blur';
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
+import { Button } from '@/components/ui';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -30,12 +31,11 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
   const colors = Colors[colorScheme ?? 'light'];
   const { t } = useLanguage();
 
-  const REPORT_TYPES: { value: ReportType; label: string; icon: keyof typeof Ionicons.glyphMap }[] =
-    [
-      { value: 'info-incorreta', label: t.report.types['info-incorreta'], icon: 'alert-circle' },
-      { value: 'imagem-errada', label: t.report.types['imagem-errada'], icon: 'image' },
-      { value: 'outro', label: t.report.types.outro, icon: 'ellipsis-horizontal' },
-    ];
+  const REPORT_TYPES: { value: ReportType; label: string; icon: IoniconsIconName }[] = [
+    { value: 'info-incorreta', label: t.report.types['info-incorreta'], icon: 'alert-circle' },
+    { value: 'imagem-errada', label: t.report.types['imagem-errada'], icon: 'image' },
+    { value: 'outro', label: t.report.types.outro, icon: 'ellipsis-horizontal' },
+  ];
 
   const [selectedType, setSelectedType] = useState<ReportType>('info-incorreta');
   const [description, setDescription] = useState('');
@@ -69,7 +69,7 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
       Alert.alert(t.report.successTitle, t.report.successMessage, [
         { text: t.common.ok, onPress: handleClose },
       ]);
-    } catch (error) {
+    } catch {
       Alert.alert(t.common.error, t.report.sendError);
     } finally {
       setSubmitting(false);
@@ -92,7 +92,12 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
             <Text style={[styles.title, { color: colors.text }]}>{t.report.title}</Text>
             <Text style={[styles.subtitle, { color: colors.icon }]}>{speciesName}</Text>
           </View>
-          <Pressable onPress={handleClose} style={styles.closeButton}>
+          <Pressable
+            onPress={handleClose}
+            style={styles.closeButton}
+            accessibilityRole="button"
+            accessibilityLabel={t.common.cancel}
+          >
             <Ionicons name="close" size={28} color={colors.icon} />
           </Pressable>
         </View>
@@ -119,18 +124,18 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
                 <Ionicons
                   name={type.icon}
                   size={24}
-                  color={selectedType === type.value ? '#FFFFFF' : colors.icon}
+                  color={selectedType === type.value ? colors.onPrimary : colors.icon}
                 />
                 <Text
                   style={[
                     styles.typeLabel,
-                    { color: selectedType === type.value ? '#FFFFFF' : colors.text },
+                    { color: selectedType === type.value ? colors.onPrimary : colors.text },
                   ]}
                 >
                   {type.label}
                 </Text>
                 {selectedType === type.value && (
-                  <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+                  <Ionicons name="checkmark-circle" size={20} color={colors.onPrimary} />
                 )}
               </Pressable>
             ))}
@@ -185,26 +190,23 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
-          <Pressable
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+          <Button
+            label={t.common.cancel}
             onPress={handleClose}
-            style={[styles.cancelButton, { backgroundColor: colors.card }]}
-          >
-            <Text style={[styles.cancelText, { color: colors.text }]}>{t.common.cancel}</Text>
-          </Pressable>
-          <Pressable
+            variant="secondary"
+            fullWidth
+            style={styles.footerButton}
+          />
+          <Button
+            label={submitting ? t.report.sending : t.report.submit}
             onPress={handleSubmit}
+            variant="primary"
+            fullWidth
+            loading={submitting}
             disabled={submitting}
-            style={[
-              styles.submitButton,
-              {
-                backgroundColor: colors.primary,
-                opacity: submitting ? 0.6 : 1,
-              },
-            ]}
-          >
-            <Text style={styles.submitText}>{submitting ? t.report.sending : t.report.submit}</Text>
-          </Pressable>
+            style={styles.footerButton}
+          />
         </View>
       </View>
     </BlurView>

@@ -1,8 +1,7 @@
-// Skeleton loader para estados de carregamento
-import { BorderRadius, Spacing } from '@/constants/theme';
+import { BorderRadius, Colors, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { DimensionValue, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -12,10 +11,10 @@ import Animated, {
 } from 'react-native-reanimated';
 
 interface SkeletonLoaderProps {
-  width?: number | string;
+  width?: DimensionValue;
   height?: number;
   borderRadius?: number;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export default function SkeletonLoader({
@@ -25,6 +24,7 @@ export default function SkeletonLoader({
   style,
 }: SkeletonLoaderProps) {
   const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
 
   const shimmer = useSharedValue(0);
 
@@ -46,7 +46,7 @@ export default function SkeletonLoader({
           width,
           height,
           borderRadius,
-          backgroundColor: colorScheme === 'dark' ? '#2A2F2A' : '#E0E5DE',
+          backgroundColor: colors.skeletonBase,
         },
         style,
       ]}
@@ -55,12 +55,48 @@ export default function SkeletonLoader({
         style={[
           StyleSheet.absoluteFill,
           {
-            backgroundColor: colorScheme === 'dark' ? '#3A4A3A' : '#F0F0F0',
+            backgroundColor: colors.skeletonHighlight,
             borderRadius,
           },
           animatedStyle,
         ]}
       />
+    </View>
+  );
+}
+
+// Skeleton para tela de detalhe de espécie
+export function SkeletonSpeciesDetail() {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
+
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <SkeletonLoader height={400} borderRadius={0} />
+      <View style={{ padding: Spacing.lg }}>
+        <SkeletonLoader width="70%" height={32} borderRadius={6} />
+        <SkeletonLoader
+          width="50%"
+          height={18}
+          borderRadius={4}
+          style={{ marginTop: Spacing.sm }}
+        />
+        <SkeletonLoader
+          width={120}
+          height={34}
+          borderRadius={8}
+          style={{ marginTop: Spacing.md }}
+        />
+        <View style={{ flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg }}>
+          <SkeletonLoader width={80} height={28} borderRadius={20} />
+          <SkeletonLoader width={100} height={28} borderRadius={20} />
+          <SkeletonLoader width={70} height={28} borderRadius={20} />
+        </View>
+        {[...Array(5)].map((_, i) => (
+          <SkeletonLoader key={i} height={60} borderRadius={8} style={{ marginTop: Spacing.md }} />
+        ))}
+        <SkeletonLoader height={140} borderRadius={12} style={{ marginTop: Spacing.lg }} />
+      </View>
     </View>
   );
 }
