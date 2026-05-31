@@ -7,7 +7,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
 
   return (
@@ -16,11 +16,22 @@ export default function TabLayout() {
       backgroundColor={colors.card}
       indicatorColor="transparent"
       labelStyle={{ color: colors.text }}
-      iconColor={colors.text}
+      iconColor={colors.tabIconDefault}
     >
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Icon sf={{ default: 'house', selected: 'house.fill' }} md="home" />
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'square.grid.2x2', selected: 'square.grid.2x2.fill' }}
+          md="grid_view"
+        />
         <NativeTabs.Trigger.Label>{t.tabs.gallery}</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="conservation">
+        <NativeTabs.Trigger.Icon
+          sf={{ default: 'shield.checkered', selected: 'shield.fill' }}
+          md="shield"
+        />
+        <NativeTabs.Trigger.Label>{t.tabs.conservation}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="about">
@@ -30,16 +41,6 @@ export default function TabLayout() {
         />
         <NativeTabs.Trigger.Label>{t.tabs.about}</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
-
-      <NativeTabs.Trigger name="preferences">
-        <NativeTabs.Trigger.Icon
-          sf={{ default: 'gearshape', selected: 'gearshape.fill' }}
-          md="settings"
-        />
-        <NativeTabs.Trigger.Label>{t.tabs.preferences}</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-
-      <NativeTabs.Trigger name="explore" hidden />
     </NativeTabs>
   );
 }

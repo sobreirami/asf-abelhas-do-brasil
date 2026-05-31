@@ -90,6 +90,14 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: false,
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
+        <Stack.Screen
           name="species/[id]"
           options={{
             headerShown: true,

@@ -2,68 +2,78 @@ import { storageAdapter } from '@/services/storage';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { Image } from 'expo-image';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
-import { FlatList, Pressable, Text, View, ViewToken } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View, ViewToken } from 'react-native';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Colors } from '@/constants/theme';
+import HoneycombPattern from '@/components/ui/HoneycombPattern';
+import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { styles } from '@/styles/screens/onboardingStyles';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type OnboardingSlide = {
   id: string;
   icon: IoniconsIconName;
-  useLogo?: boolean;
+  badge: string;
   title: string;
   description: string;
-  color: string;
 };
 
 export default function OnboardingScreen() {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  const [skipped, setSkipped] = useState(false);
   const nextScale = useSharedValue(1);
   const skipScale = useSharedValue(1);
 
   const nextAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: nextScale.value }] }));
   const skipAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: skipScale.value }] }));
 
+  const onNextPressIn = useCallback(() => {
+    nextScale.value = withSpring(0.96, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+  }, [nextScale]);
+  const onNextPressOut = useCallback(() => {
+    nextScale.value = withSpring(1, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+  }, [nextScale]);
+  const onSkipPressIn = useCallback(() => {
+    skipScale.value = withSpring(0.96, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+  }, [skipScale]);
+  const onSkipPressOut = useCallback(() => {
+    skipScale.value = withSpring(1, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+  }, [skipScale]);
+
   const slides: OnboardingSlide[] = [
     {
       id: '1',
-      icon: 'information-circle',
-      useLogo: true,
+      icon: 'leaf',
+      badge: t.onboarding.badge1,
       title: t.onboarding.slide1Title,
       description: t.onboarding.slide1Description,
-      color: colors.primary,
     },
     {
       id: '2',
-      icon: 'leaf',
+      icon: 'search',
+      badge: t.onboarding.badge2,
       title: t.onboarding.slide2Title,
       description: t.onboarding.slide2Description,
-      color: colors.secondary,
     },
     {
       id: '3',
-      icon: 'heart',
+      icon: 'shield-checkmark',
+      badge: t.onboarding.badge3,
       title: t.onboarding.slide3Title,
       description: t.onboarding.slide3Description,
-      color: colors.accent,
     },
   ];
 
@@ -76,11 +86,14 @@ export default function OnboardingScreen() {
     []
   );
 
-  const handleSkip = async () => {
-    await triggerHaptic(ImpactFeedbackStyle.Medium);
-    setSkipped(true);
+  const finishOnboarding = async () => {
     await storageAdapter.setItem('@onboarding_completed', 'true');
     router.replace('/(tabs)');
+  };
+
+  const handleSkip = async () => {
+    await triggerHaptic(ImpactFeedbackStyle.Medium);
+    await finishOnboarding();
   };
 
   const handleNext = async () => {
@@ -88,46 +101,55 @@ export default function OnboardingScreen() {
     if (currentIndex < slides.length - 1) {
       flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
     } else {
-      await storageAdapter.setItem('@onboarding_completed', 'true');
-      router.replace('/(tabs)');
+      await finishOnboarding();
     }
   };
+
+  const isLast = currentIndex === slides.length - 1;
 
   const renderSlide = useCallback(
     ({ item }: { item: OnboardingSlide }) => (
       <Animated.View entering={FadeIn} style={styles.slide}>
-        <LinearGradient
-          colors={[item.color, item.color + 'CC']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientBackground}
-        >
-          <View style={styles.slideContent}>
-            {item.useLogo ? (
-              <View style={styles.logoContainer}>
-                <Image
-                  source={require('../../assets/images/icon-transparent.png')}
-                  style={styles.logoImage}
-                  contentFit="contain"
-                />
-              </View>
-            ) : (
-              <View style={[styles.iconContainer, { backgroundColor: colors.cardBlur }]}>
-                <Ionicons name={item.icon} size={60} color={colors.text} />
-              </View>
-            )}
+        {/* Mascote grande com glow */}
+        <View style={styles.mascotWrapper}>
+          <View style={[styles.mascotGlow, { backgroundColor: colors.primary + '30' }]} />
+          <Image
+            source={require('../../assets/images/icon-transparent.png')}
+            style={styles.mascotImage}
+            contentFit="contain"
+          />
+        </View>
 
-            <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
-            <Text style={[styles.description, { color: colors.text }]}>{item.description}</Text>
-          </View>
-        </LinearGradient>
+        {/* Badge da etapa */}
+        <View
+          style={[
+            styles.badge,
+            { backgroundColor: colors.primary + '20', borderColor: colors.primary + '4D' },
+          ]}
+        >
+          <Ionicons name={item.icon} size={16} color={colors.primary} />
+          <Text style={[styles.badgeText, { color: colors.primary }]}>{item.badge}</Text>
+        </View>
+
+        {/* Título */}
+        <Text style={[styles.slideTitle, { color: colors.text }]}>{item.title}</Text>
+
+        {/* Descrição */}
+        <Text style={[styles.slideDescription, { color: colors.textMuted }]}>
+          {item.description}
+        </Text>
       </Animated.View>
     ),
     [colors]
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <HoneycombPattern opacity={0.05} color={colors.primary} />
+
+      {/* Glow superior */}
+      <View style={[styles.topGlow, { backgroundColor: colors.primary + '25' }]} />
+
       <FlatList
         ref={flatListRef}
         data={slides}
@@ -138,63 +160,157 @@ export default function OnboardingScreen() {
         scrollEventThrottle={16}
         onViewableItemsChanged={handleViewableItemsChanged}
         viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
-        scrollEnabled={!skipped}
+        showsHorizontalScrollIndicator={false}
+        style={styles.list}
       />
 
-      {/* Pagination */}
-      <View style={styles.pagination}>
+      {/* Indicador de progresso (pílulas) */}
+      <View style={styles.indicators}>
         {slides.map((_, index) => (
           <Animated.View
             key={index}
             style={[
-              styles.paginationDot,
+              styles.indicatorDot,
               {
-                width: index === currentIndex ? 24 : 8,
-                backgroundColor: colors.text,
-                opacity: index === currentIndex ? 0.9 : 0.4,
+                width: index === currentIndex ? 26 : 7,
+                backgroundColor: index === currentIndex ? colors.primary : colors.border,
               },
             ]}
           />
         ))}
       </View>
 
-      {/* Footer */}
+      {/* Ações */}
       <View style={styles.footer}>
         <AnimatedPressable
-          style={[styles.skipButton, skipAnimatedStyle]}
-          onPress={handleSkip}
-          onPressIn={() => {
-            skipScale.value = withSpring(0.94, { duration: 100 });
-          }}
-          onPressOut={() => {
-            skipScale.value = withSpring(1, { duration: 100 });
-          }}
+          style={[styles.primaryBtn, { backgroundColor: colors.primary }, nextAnimatedStyle]}
+          onPress={handleNext}
+          onPressIn={onNextPressIn}
+          onPressOut={onNextPressOut}
+          accessibilityRole="button"
+          accessibilityLabel={isLast ? t.onboarding.start : t.onboarding.next}
         >
-          <Text style={[styles.skipText, { color: colors.text, opacity: 0.7 }]}>
-            {t.onboarding.skip}
+          <Text style={[styles.primaryBtnText, { color: colors.onPrimary }]}>
+            {isLast ? t.onboarding.start : t.onboarding.next}
           </Text>
+          <Ionicons
+            name={isLast ? 'arrow-forward' : 'chevron-forward'}
+            size={20}
+            color={colors.onPrimary}
+          />
         </AnimatedPressable>
 
         <AnimatedPressable
-          style={[
-            currentIndex === slides.length - 1 ? styles.finishButton : styles.nextButton,
-            { backgroundColor: slides[currentIndex]?.color },
-            nextAnimatedStyle,
-          ]}
-          onPress={handleNext}
-          onPressIn={() => {
-            nextScale.value = withSpring(0.94, { duration: 100 });
-          }}
-          onPressOut={() => {
-            nextScale.value = withSpring(1, { duration: 100 });
-          }}
+          style={skipAnimatedStyle}
+          onPress={handleSkip}
+          onPressIn={onSkipPressIn}
+          onPressOut={onSkipPressOut}
+          accessibilityRole="button"
+          accessibilityLabel={isLast ? t.onboarding.notNow : t.onboarding.skip}
         >
-          <Text style={[styles.nextText, { color: colors.text }]}>
-            {currentIndex === slides.length - 1 ? t.onboarding.start : t.onboarding.next}
+          <Text style={[styles.skipText, { color: colors.textFaint }]}>
+            {isLast ? t.onboarding.notNow : t.onboarding.skip}
           </Text>
-          <Ionicons name="arrow-forward" size={16} color={colors.text} />
         </AnimatedPressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  topGlow: {
+    position: 'absolute',
+    top: -90,
+    left: '50%',
+    marginLeft: -180,
+    width: 360,
+    height: 360,
+    borderRadius: 180,
+  },
+  list: { flex: 1 },
+  slide: {
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 34,
+  },
+  mascotWrapper: {
+    position: 'relative',
+    width: 188,
+    height: 188,
+    marginBottom: Spacing.xl,
+  },
+  mascotGlow: {
+    position: 'absolute',
+    inset: -24,
+    borderRadius: 120,
+    top: -24,
+    left: -24,
+    right: -24,
+    bottom: -24,
+  },
+  mascotImage: {
+    width: '100%',
+    height: '100%',
+  },
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm - 1,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+    marginBottom: Spacing.md + 2,
+  },
+  badgeText: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, letterSpacing: 0.3 },
+  slideTitle: {
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    lineHeight: 34,
+    textAlign: 'center',
+    letterSpacing: -0.5,
+    marginBottom: Spacing.md,
+  },
+  slideDescription: {
+    fontSize: FontSize.md,
+    lineHeight: 24,
+    textAlign: 'center',
+    maxWidth: 300,
+  },
+  indicators: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'center',
+    marginBottom: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+  },
+  indicatorDot: {
+    height: 7,
+    borderRadius: 99,
+  },
+  footer: {
+    paddingHorizontal: 28,
+    paddingBottom: 38,
+    gap: Spacing.md,
+    alignItems: 'stretch',
+  },
+  primaryBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    minHeight: 52,
+    borderRadius: 16,
+    paddingHorizontal: Spacing.lg,
+  },
+  primaryBtnText: { fontSize: 17, fontWeight: FontWeight.bold },
+  skipText: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.semibold,
+    textAlign: 'center',
+    paddingVertical: Spacing.xs,
+  },
+});

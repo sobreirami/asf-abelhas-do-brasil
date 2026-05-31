@@ -1,6 +1,7 @@
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -10,7 +11,6 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Share,
   StyleSheet,
   Text,
   View,
@@ -20,7 +20,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import PhotoCarousel from '@/components/species/PhotoCarousel';
 import { Chip } from '@/components/ui';
 import { SkeletonSpeciesDetail } from '@/components/ui/SkeletonLoader';
-import { BorderRadius, Colors, FontSize, FontWeight, Shadows, Spacing } from '@/constants/theme';
+import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useFilter } from '@/contexts/FilterContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -29,33 +29,65 @@ import { Species } from '@/types/species';
 
 import { triggerHaptic, triggerNotificationHaptic } from '@/utils/haptics';
 import { ImpactFeedbackStyle, NotificationFeedbackType } from 'expo-haptics';
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite as checkIsFavorite,
+} from '@/services/favoritesService';
+
+const HEADER_HEIGHT = 320;
+
+const CONSERVATION_COLORS: Record<string, string> = {
+  'least-concern': '#6FCF73',
+  vulnerable: '#FFCB4D',
+  endangered: '#F0726A',
+  'critically-endangered': '#F0726A',
+  'data-deficient': '#9EAB90',
+};
 
 export default function SpeciesDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
-  const { setPendingTagFilter } = useFilter();
+  const { setPendingTagFilter, setActiveFilters } = useFilter();
 
   const [species, setSpecies] = useState<Species | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
 
   useEffect(() => {
     if (!id) return;
     fetchSpeciesById(id as string)
-      .then((data) => setSpecies(data))
+      .then((data) => {
+        setSpecies(data);
+        if (data) {
+          checkIsFavorite(data.id).then(setIsFavorite);
+        }
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
 
+  const handleToggleFavorite = async () => {
+    if (!species) return;
+    await triggerHaptic(ImpactFeedbackStyle.Medium);
+    if (isFavorite) {
+      await removeFavorite(species.id);
+      setIsFavorite(false);
+    } else {
+      await addFavorite(species);
+      setIsFavorite(true);
+    }
+  };
+
   const handleShare = async () => {
     if (!species) return;
-
     await triggerHaptic(ImpactFeedbackStyle.Light);
-
     try {
+      const { Share } = await import('react-native');
       await Share.share({
         message: `Conheça ${species.commonName} (${species.scientificName}) - Uma abelha nativa do Brasil!`,
       });
@@ -103,84 +135,246 @@ export default function SpeciesDetailScreen() {
   }
 
   const conservationKey = species.conservationStatus as keyof typeof t.conservation;
-  const conservationLabel = conservationKey ? t.conservation[conservationKey] : t.common.error;
+  const conservationLabel = conservationKey ? t.conservation[conservationKey] : '';
+  const badgeColor = CONSERVATION_COLORS[species.conservationStatus ?? ''] ?? colors.icon;
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: '',
-          headerLeft:
-            Platform.OS === 'android'
-              ? () => (
-                  <Pressable
-                    onPress={async () => {
-                      await triggerHaptic(ImpactFeedbackStyle.Light);
-                      router.back();
-                    }}
-                    style={{
-                      backgroundColor: colors.card + 'DD',
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginLeft: 8,
-                    }}
-                  >
-                    <Ionicons name="arrow-back" size={22} color={colors.text} />
-                  </Pressable>
-                )
-              : undefined,
-          headerRight: () => (
-            <Pressable
-              onPress={handleShare}
-              style={
-                Platform.OS === 'android'
-                  ? {
-                      backgroundColor: colors.card + 'DD',
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginRight: 8,
-                    }
-                  : { marginRight: 8 }
-              }
-            >
-              <Ionicons name="share-outline" size={22} color={colors.text} />
-            </Pressable>
-          ),
-        }}
-      />
-      <ScrollView
-        style={[styles.container, { backgroundColor: colors.background }]}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: species.photos.original }}
-            style={styles.image}
-            contentFit="cover"
-            transition={300}
-          />
-        </View>
+      <Stack.Screen options={{ title: '', headerShown: false }} />
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {/* Header full-bleed */}
+          <View style={styles.headerContainer}>
+            <Image
+              source={{ uri: species.photos.original }}
+              style={styles.headerImage}
+              contentFit="cover"
+              transition={300}
+            />
+            {/* Gradiente de proteção */}
+            <LinearGradient
+              colors={['transparent', 'rgba(0,0,0,0.72)']}
+              style={styles.headerGradient}
+            />
 
-        {/* Conteúdo */}
-        <View style={styles.content}>
-          <Animated.View entering={FadeInDown.delay(100)}>
-            <Text selectable style={[styles.commonName, { color: colors.text }]}>
+            {/* Botões flutuantes */}
+            <View style={[styles.floatingBtns, { top: Platform.OS === 'ios' ? 56 : 36 }]}>
+              <GlassButton
+                icon="chevron-back"
+                onPress={async () => {
+                  await triggerHaptic(ImpactFeedbackStyle.Light);
+                  router.back();
+                }}
+              />
+              <View style={styles.floatingRight}>
+                <GlassButton
+                  icon={isFavorite ? 'heart' : 'heart-outline'}
+                  active={isFavorite}
+                  onPress={handleToggleFavorite}
+                />
+                <GlassButton icon="share-outline" onPress={handleShare} />
+              </View>
+            </View>
+
+            {/* Nome sobreposto */}
+            <View style={styles.headerNameArea}>
+              {conservationLabel ? (
+                <View style={[styles.consBadge, { backgroundColor: badgeColor }]}>
+                  <View style={styles.consBadgeDot} />
+                  <Text style={styles.consBadgeText}>{conservationLabel}</Text>
+                </View>
+              ) : null}
+              <Text style={styles.headerCommonName}>{species.commonName}</Text>
+              <Text style={styles.headerScientificName}>{species.scientificName}</Text>
+            </View>
+          </View>
+
+          {/* Corpo em sheet arredondado */}
+          <View style={[styles.sheet, { backgroundColor: colors.background }]}>
+            {/* Nome selecionável no body (acessível) */}
+            <Text selectable style={[styles.sheetCommonName, { color: colors.text }]}>
               {species.commonName}
             </Text>
-            <Text selectable style={[styles.scientificName, { color: colors.icon }]}>
+            <Text selectable style={[styles.sheetScientificName, { color: colors.textMuted }]}>
               {species.scientificName}
             </Text>
-          </Animated.View>
+            {/* Resumo */}
+            <Animated.View entering={FadeInDown.delay(100)}>
+              <Text selectable style={[styles.summary, { color: colors.text }]}>
+                {species.shortDescription}
+              </Text>
+            </Animated.View>
 
-          {/* Botão Report */}
-          <Animated.View entering={FadeInDown.delay(150)}>
+            {/* 3 stat tiles */}
+            <Animated.View entering={FadeInDown.delay(150)} style={styles.statRow}>
+              <StatTile
+                icon="resize"
+                label={t.species.size}
+                value={`${species.sizeMm} mm`}
+                colors={colors}
+              />
+              <StatTile
+                icon="happy"
+                label={t.species.behavior}
+                value={species.behavior}
+                colors={colors}
+              />
+              <StatTile
+                icon="home"
+                label={t.species.nestType}
+                value={species.nest.split(',')[0].trim()}
+                colors={colors}
+              />
+            </Animated.View>
+
+            {/* Sobre a espécie */}
+            <Animated.View entering={FadeInDown.delay(200)}>
+              <DetailSection icon="book-outline" title={t.species.aboutTitle} colors={colors}>
+                <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                  {species.longDescription}
+                </Text>
+              </DetailSection>
+            </Animated.View>
+
+            {/* Biomas */}
+            {species.biomes && species.biomes.length > 0 && (
+              <Animated.View entering={FadeInDown.delay(250)}>
+                <DetailSection icon="earth-outline" title={t.species.biomes} colors={colors}>
+                  <View style={styles.chipsWrap}>
+                    {species.biomes.map((b, i) => (
+                      <Chip
+                        key={i}
+                        label={b}
+                        onPress={() => {
+                          setActiveFilters((prev) => ({ ...prev, biomes: [b] }));
+                          router.back();
+                        }}
+                      />
+                    ))}
+                  </View>
+                </DetailSection>
+              </Animated.View>
+            )}
+
+            {/* Onde ocorre */}
+            {species.regions && species.regions.length > 0 && (
+              <Animated.View entering={FadeInDown.delay(300)}>
+                <DetailSection icon="location-outline" title={t.species.regions} colors={colors}>
+                  <View style={styles.chipsWrap}>
+                    {species.regions.map((r, i) => (
+                      <Chip
+                        key={i}
+                        label={r}
+                        onPress={() => {
+                          setActiveFilters((prev) => ({ ...prev, regions: [r] }));
+                          router.back();
+                        }}
+                      />
+                    ))}
+                  </View>
+                </DetailSection>
+              </Animated.View>
+            )}
+
+            {/* Nidificação */}
+            <Animated.View entering={FadeInDown.delay(350)}>
+              <DetailSection icon="construct-outline" title={t.species.nesting} colors={colors}>
+                <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                  {species.nest}
+                </Text>
+              </DetailSection>
+            </Animated.View>
+
+            {/* Plantas favoritas */}
+            {species.favoredPlants && species.favoredPlants.length > 0 && (
+              <Animated.View entering={FadeInDown.delay(400)}>
+                <DetailSection
+                  icon="flower-outline"
+                  title={t.species.favoredPlants}
+                  colors={colors}
+                >
+                  <View style={styles.plantsList}>
+                    {species.favoredPlants.map((plant, i) => (
+                      <View
+                        key={i}
+                        style={[
+                          styles.plantRow,
+                          { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
+                        ]}
+                      >
+                        <View
+                          style={[styles.plantIcon, { backgroundColor: colors.secondary + '28' }]}
+                        >
+                          <Ionicons name="leaf" size={18} color={colors.secondary} />
+                        </View>
+                        <Text selectable style={[styles.plantName, { color: colors.text }]}>
+                          {plant}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </DetailSection>
+              </Animated.View>
+            )}
+
+            {/* Tags */}
+            <Animated.View entering={FadeInDown.delay(450)}>
+              <View style={styles.tagsWrap}>
+                {species.tags.map((tag, i) => (
+                  <Chip
+                    key={i}
+                    label={tag}
+                    prefix="#"
+                    onPress={() => {
+                      setPendingTagFilter(tag);
+                      router.back();
+                    }}
+                  />
+                ))}
+              </View>
+            </Animated.View>
+
+            {/* Carrossel de fotos */}
+            {species.photoGallery && species.photoGallery.length > 0 && (
+              <PhotoCarousel
+                photos={species.photoGallery}
+                delay={500}
+                onImagePress={handleOpenImage}
+              />
+            )}
+
+            {/* Artigos científicos */}
+            {species.scientificArticles && species.scientificArticles.length > 0 && (
+              <Animated.View entering={FadeInDown.delay(550)}>
+                <DetailSection
+                  icon="document-text-outline"
+                  title={t.species.scientificArticles}
+                  colors={colors}
+                >
+                  {species.scientificArticles.map((article, i) => (
+                    <Pressable
+                      key={i}
+                      onPress={() => handleOpenExternalLink(article.url)}
+                      style={[
+                        styles.articleCard,
+                        { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
+                      ]}
+                    >
+                      <Ionicons name="document-text" size={22} color={colors.primary} />
+                      <Text style={[styles.articleTitle, { color: colors.text }]} selectable>
+                        {article.title}
+                      </Text>
+                      <Ionicons name="open-outline" size={18} color={colors.textFaint} />
+                    </Pressable>
+                  ))}
+                </DetailSection>
+              </Animated.View>
+            )}
+
+            {/* Report */}
             <Pressable
               onPress={async () => {
                 await triggerHaptic(ImpactFeedbackStyle.Light);
@@ -189,363 +383,330 @@ export default function SpeciesDetailScreen() {
                   params: { speciesId: species.id, speciesName: species.commonName },
                 });
               }}
-              style={[styles.reportButton, { backgroundColor: colors.card }]}
+              style={[styles.reportBtn, { backgroundColor: colors.surfaceElevated }]}
             >
-              <Ionicons name="alert-circle-outline" size={18} color={colors.icon} />
-              <Text style={[styles.reportText, { color: colors.icon }]}>
+              <Ionicons name="alert-circle-outline" size={18} color={colors.textFaint} />
+              <Text style={[styles.reportText, { color: colors.textFaint }]}>
                 {t.species.reportError}
               </Text>
             </Pressable>
-          </Animated.View>
+          </View>
+        </ScrollView>
 
-          <Animated.View entering={FadeInDown.delay(200)} style={styles.tagsContainer}>
-            {species.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                prefix="#"
-                onPress={() => {
-                  setPendingTagFilter(tag);
-                  router.back();
-                }}
-              />
-            ))}
-          </Animated.View>
-
-          {/* Informações em cards */}
-          <Animated.View entering={FadeInDown.delay(300)}>
-            <InfoCard
-              icon="resize"
-              title={t.species.size}
-              value={`${species.sizeMm} mm`}
-              colors={colors}
-            />
-
-            <InfoCard
-              icon="leaf"
-              title={t.species.behavior}
-              value={species.behavior}
-              colors={colors}
-            />
-
-            <InfoCard icon="home" title={t.species.nestType} value={species.nest} colors={colors} />
-
-            <InfoCard
-              icon="location"
-              title={t.species.regions}
-              value={species.regions.join(', ')}
-              colors={colors}
-            />
-
-            <InfoCard
-              icon="shield-checkmark"
-              title={t.species.conservationStatus}
-              value={conservationLabel}
-              colors={colors}
-            />
-          </Animated.View>
-
-          {/* Descrição */}
-          <Animated.View
-            entering={FadeInDown.delay(400)}
-            style={[styles.descriptionCard, { backgroundColor: colors.card }, Shadows.sm]}
-          >
-            <Text style={[styles.descriptionTitle, { color: colors.text }]}>
-              {t.species.aboutTitle}
-            </Text>
-            <Text style={[styles.descriptionText, { color: colors.text }]}>
-              {species.longDescription}
-            </Text>
-          </Animated.View>
-
-          {/* Biomas */}
-          {species.biomes && species.biomes.length > 0 && (
-            <Animated.View entering={FadeInDown.delay(450)}>
-              <InfoCard
-                icon="earth"
-                title={t.species.biomes}
-                value={species.biomes.join(', ')}
-                colors={colors}
-              />
-            </Animated.View>
-          )}
-
-          {/* Plantas Favoritas */}
-          {species.favoredPlants && species.favoredPlants.length > 0 && (
-            <Animated.View
-              entering={FadeInDown.delay(500)}
-              style={[styles.descriptionCard, { backgroundColor: colors.card }, Shadows.sm]}
-            >
-              <View style={styles.sectionHeader}>
-                <Ionicons name="flower" size={24} color={colors.primary} />
-                <Text style={[styles.descriptionTitle, { color: colors.text }]}>
-                  {t.species.favoredPlants}
-                </Text>
-              </View>
-              <Text style={[styles.sectionSubtitle, { color: colors.icon }]}>
-                {t.species.favoredPlantsDescription}
-              </Text>
-              <View style={styles.plantsList}>
-                {species.favoredPlants.map((plant, index) => (
-                  <View key={index} style={styles.plantItem}>
-                    <Ionicons name="checkmark-circle" size={20} color={colors.secondary} />
-                    <Text selectable style={[styles.plantText, { color: colors.text }]}>
-                      {plant}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </Animated.View>
-          )}
-        </View>
-
-        {/* Carrossel de Fotos */}
-        {species.photoGallery && species.photoGallery.length > 0 && (
-          <PhotoCarousel photos={species.photoGallery} delay={550} onImagePress={handleOpenImage} />
-        )}
-
-        {/* Artigos Científicos */}
-        {species.scientificArticles && species.scientificArticles.length > 0 && (
-          <Animated.View
-            entering={FadeInDown.delay(600)}
-            style={[styles.content, styles.articlesSection]}
-          >
-            <Text style={[styles.articlesTitle, { color: colors.text }]}>
-              {t.species.scientificArticles}
-            </Text>
-            {species.scientificArticles.map((article, index) => (
+        {/* Image Viewer Modal */}
+        <Modal
+          visible={imageModalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setImageModalVisible(false)}
+        >
+          <View style={styles.imageModalContainer}>
+            <BlurView intensity={90} tint="dark" style={styles.imageModalBlur}>
               <Pressable
-                key={index}
-                onPress={() => handleOpenExternalLink(article.url)}
-                style={[styles.articleCard, { backgroundColor: colors.card }, Shadows.sm]}
+                style={[styles.imageModalClose, { backgroundColor: colors.overlay }]}
+                onPress={async () => {
+                  await triggerHaptic(ImpactFeedbackStyle.Light);
+                  setImageModalVisible(false);
+                }}
               >
-                <View style={styles.articleContent}>
-                  <Ionicons name="document-text" size={24} color={colors.primary} />
-                  <Text selectable style={[styles.articleTitle, { color: colors.text }]}>
-                    {article.title}
-                  </Text>
-                </View>
-                <Ionicons name="open-outline" size={20} color={colors.icon} />
+                <Ionicons name="close" size={32} color={colors.onOverlay} />
               </Pressable>
-            ))}
-          </Animated.View>
-        )}
-      </ScrollView>
-
-      {/* Image Viewer Modal */}
-      <Modal
-        visible={imageModalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setImageModalVisible(false)}
-      >
-        <View style={styles.imageModalContainer}>
-          <BlurView intensity={90} tint="dark" style={styles.imageModalBlur}>
-            <Pressable
-              style={[styles.imageModalCloseButton, { backgroundColor: colors.overlay }]}
-              onPress={async () => {
-                await triggerHaptic(ImpactFeedbackStyle.Light);
-                setImageModalVisible(false);
-              }}
-            >
-              <Ionicons name="close" size={32} color={colors.onOverlay} />
-            </Pressable>
-
-            <Image
-              source={{ uri: selectedImage }}
-              style={styles.fullImage}
-              contentFit="contain"
-              transition={300}
-            />
-
-            <Text style={[styles.imageModalHint, { color: colors.onOverlay }]}>
-              {t.species.imageZoomHint}
-            </Text>
-          </BlurView>
-        </View>
-      </Modal>
+              <Image
+                source={{ uri: selectedImage }}
+                style={styles.fullImage}
+                contentFit="contain"
+                transition={300}
+              />
+              <Text style={[styles.imageHint, { color: colors.onOverlay }]}>
+                {t.species.imageZoomHint}
+              </Text>
+            </BlurView>
+          </View>
+        </Modal>
+      </View>
     </>
   );
 }
 
-// Componente de card de informação
-function InfoCard({
+function GlassButton({
   icon,
-  title,
+  onPress,
+  active = false,
+}: {
+  icon: IoniconsIconName;
+  onPress: () => void;
+  active?: boolean;
+}) {
+  return (
+    <Pressable onPress={onPress} style={styles.glassBtn} accessibilityRole="button">
+      <BlurView intensity={60} tint="dark" style={styles.glassBtnBlur}>
+        <Ionicons name={icon} size={21} color={active ? '#F0726A' : '#ffffff'} />
+      </BlurView>
+    </Pressable>
+  );
+}
+
+function StatTile({
+  icon,
+  label,
   value,
   colors,
 }: {
   icon: IoniconsIconName;
-  title: string;
+  label: string;
   value: string;
-  colors: (typeof Colors)['light'];
+  colors: (typeof Colors)['dark'];
 }) {
   return (
-    <View style={[styles.infoCard, { backgroundColor: colors.card }, Shadows.sm]}>
-      <Ionicons name={icon} size={24} color={colors.primary} />
-      <View style={styles.infoContent}>
-        <Text style={[styles.infoTitle, { color: colors.icon }]}>{title}</Text>
-        <Text selectable style={[styles.infoValue, { color: colors.text }]}>
-          {value}
-        </Text>
+    <View
+      style={[
+        styles.statTile,
+        { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
+      ]}
+    >
+      <Ionicons name={icon} size={22} color={colors.primary} />
+      <Text style={[styles.statLabel, { color: colors.textMuted }]}>{label}</Text>
+      <Text style={[styles.statValue, { color: colors.text }]} numberOfLines={2}>
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+function DetailSection({
+  icon,
+  title,
+  children,
+  colors,
+}: {
+  icon: IoniconsIconName;
+  title: string;
+  children: React.ReactNode;
+  colors: (typeof Colors)['dark'];
+}) {
+  return (
+    <View style={styles.section}>
+      <View style={styles.sectionHeader}>
+        <Ionicons name={icon} size={18} color={colors.primary} />
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
       </View>
+      {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 100, // Espaço para a tabbar
-  },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    height: 400,
+  container: { flex: 1 },
+  scrollContent: { paddingBottom: 100 },
+  centered: { justifyContent: 'center', alignItems: 'center' },
+  errorText: { fontSize: FontSize.lg },
+
+  // Header full-bleed
+  headerContainer: {
+    height: HEADER_HEIGHT,
     position: 'relative',
-    marginTop: -100, // Compensa o header transparente
-    paddingTop: 100, // Espaço para o header
   },
-  image: {
+  headerImage: {
     width: '100%',
     height: '100%',
   },
-  content: {
-    padding: Spacing.lg,
+  headerGradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '60%',
   },
-  commonName: {
-    fontSize: FontSize.xxxl,
-    fontWeight: FontWeight.bold,
-    marginBottom: Spacing.xs,
-  },
-  scientificName: {
-    fontSize: FontSize.lg,
-    fontStyle: 'italic',
-    marginBottom: Spacing.md,
-  },
-  reportButton: {
+  floatingBtns: {
+    position: 'absolute',
+    left: 16,
+    right: 16,
     flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-    marginTop: Spacing.md,
-    gap: Spacing.xs,
+    justifyContent: 'space-between',
+    zIndex: 3,
   },
-  reportText: {
-    fontSize: FontSize.sm,
-    fontWeight: FontWeight.medium,
+  floatingRight: { flexDirection: 'row', gap: 10 },
+  glassBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
   },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.sm,
-    marginBottom: Spacing.lg,
-    marginTop: Spacing.lg,
-  },
-  infoCard: {
-    flexDirection: 'row',
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.md,
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  infoContent: {
+  glassBtnBlur: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  infoTitle: {
-    fontSize: FontSize.sm,
-    marginBottom: Spacing.xs / 2,
+  headerNameArea: {
+    position: 'absolute',
+    left: 20,
+    right: 20,
+    bottom: 18,
+    zIndex: 3,
   },
-  infoValue: {
+  consBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: BorderRadius.full,
+    marginBottom: 10,
+  },
+  consBadgeDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#1B1F0E',
+    opacity: 0.7,
+  },
+  consBadgeText: {
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: '#1B1F0E',
+  },
+  headerCommonName: {
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: '#ffffff',
+    lineHeight: 36,
+    textShadowColor: 'rgba(0,0,0,0.55)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 10,
+  },
+  headerScientificName: {
     fontSize: FontSize.md,
-    fontWeight: FontWeight.semibold,
+    fontStyle: 'italic',
+    color: 'rgba(255,255,255,0.9)',
+    marginTop: 3,
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 6,
   },
-  descriptionCard: {
+
+  // Sheet
+  sheet: {
+    marginTop: -18,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
     padding: Spacing.lg,
-    borderRadius: BorderRadius.lg,
-    marginTop: Spacing.md,
+    paddingTop: Spacing.xl,
+  },
+  summary: {
+    fontSize: 16.5,
+    fontWeight: FontWeight.medium,
+    lineHeight: 26,
+    marginBottom: Spacing.lg,
+  },
+
+  // Stats
+  statRow: {
+    flexDirection: 'row',
+    gap: 10,
     marginBottom: Spacing.xl,
   },
-  descriptionTitle: {
-    fontSize: FontSize.xl,
-    fontWeight: FontWeight.bold,
-    marginBottom: Spacing.md,
-  },
-  descriptionText: {
-    fontSize: FontSize.md,
-    lineHeight: 24,
-  },
-  errorText: {
-    fontSize: FontSize.lg,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    marginBottom: Spacing.sm,
-  },
-  sectionSubtitle: {
-    fontSize: FontSize.sm,
-    marginBottom: Spacing.md,
-  },
-  plantsList: {
-    gap: Spacing.sm,
-  },
-  plantItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  plantText: {
-    fontSize: FontSize.md,
+  statTile: {
     flex: 1,
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 15,
+    paddingHorizontal: 8,
+    borderRadius: 16,
+    borderWidth: 1,
   },
-  articlesSection: {
-    marginTop: 0,
-  },
-  articlesTitle: {
-    fontSize: FontSize.xl,
+  statLabel: { fontSize: 11.5, fontWeight: FontWeight.medium, textAlign: 'center' },
+  statValue: {
+    fontSize: 14.5,
     fontWeight: FontWeight.bold,
-    marginBottom: Spacing.md,
+    textAlign: 'center',
+    lineHeight: 18,
   },
+
+  // Sections
+  section: { marginTop: Spacing.lg },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
+  sectionTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
+  bodyText: { fontSize: 15.5, lineHeight: 25 },
+
+  // Chips
+  chipsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
+
+  // Plants
+  plantsList: { gap: 9 },
+  plantRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  plantIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plantName: { fontSize: 15.5, fontWeight: FontWeight.semibold, flex: 1 },
+
+  // Tags
+  tagsWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 7,
+    marginTop: Spacing.xl,
+  },
+
+  // Articles
   articleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.md,
-  },
-  articleContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: Spacing.md,
-    flex: 1,
+    padding: Spacing.md,
+    borderRadius: 14,
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
   },
   articleTitle: {
     fontSize: FontSize.md,
     fontWeight: FontWeight.medium,
     flex: 1,
   },
-  bottomPadding: {
-    height: Spacing.xl,
+
+  // Sheet names (selecionáveis)
+  sheetCommonName: {
+    fontSize: FontSize.xl,
+    fontWeight: FontWeight.bold,
+    color: '#EEF3E6',
+    marginBottom: 2,
   },
-  imageModalContainer: {
-    flex: 1,
+  sheetScientificName: {
+    fontSize: FontSize.sm,
+    fontStyle: 'italic',
+    marginBottom: Spacing.md,
   },
-  imageModalBlur: {
-    flex: 1,
-    justifyContent: 'center',
+
+  // Report
+  reportBtn: {
+    flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'flex-start',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.xl,
+    gap: Spacing.xs,
   },
-  imageModalCloseButton: {
+  reportText: { fontSize: FontSize.sm, fontWeight: FontWeight.medium },
+
+  // Image modal
+  imageModalContainer: { flex: 1 },
+  imageModalBlur: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  imageModalClose: {
     position: 'absolute',
     top: 60,
     right: 20,
@@ -556,13 +717,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  fullImage: {
-    width: '90%',
-    height: '70%',
-  },
-  imageModalHint: {
-    fontSize: FontSize.sm,
-    marginTop: Spacing.lg,
-    opacity: 0.7,
-  },
+  fullImage: { width: '90%', height: '70%' },
+  imageHint: { fontSize: FontSize.sm, marginTop: Spacing.lg, opacity: 0.7 },
 });

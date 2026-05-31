@@ -2,6 +2,8 @@ export default {
   // Tabs
   tabs: {
     gallery: 'Galería',
+    biomes: 'Biomas',
+    conservation: 'Conservación',
     about: 'Acerca de',
     preferences: 'Preferencias',
   },
@@ -9,14 +11,19 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Abejas Nativas de Brasil',
-    featuredSpecies: 'Especies Destacadas',
+    heroGreeting: 'Hola, explorador 🐝',
+    featuredSpecies: 'Destacadas',
     allSpecies: 'Todas las Especies',
     filters: 'Filtros',
     clearFilters: 'Limpiar todos',
     activeFilters: 'Filtros activos',
     noSpeciesFound: 'No se encontraron especies',
-    noSpeciesDescription: 'Intente ajustar los filtros o límpielos para ver todas las especies.',
+    noSpeciesDescription:
+      'Intente ajustar la búsqueda o limpie los filtros para ver todas las especies.',
     offline: 'Modo Sin Conexión - Datos en caché',
+    all: 'Todos',
+    viewBiomes: 'Ver biomas',
+    searchPlaceholder: 'Buscar especie, bioma…',
   },
 
   // Species Detail
@@ -83,9 +90,75 @@ export default {
     slide3Title: 'Sobre el Proyecto',
     slide3Description:
       'App desarrollada con React Native + Expo como portafolio educacional sobre la fauna brasileña.',
+    badge1: 'BIENVENIDO',
+    badge2: 'EXPLORA',
+    badge3: 'PRESERVA',
     skip: 'Saltar',
-    next: 'Siguiente',
-    start: 'Comenzar',
+    next: 'Continuar',
+    start: 'Explorar la Galería',
+    notNow: 'Ahora no',
+  },
+
+  // Conservation Tab
+  conservationTab: {
+    title: 'Conservación',
+    subtitle: 'Protección de las abejas nativas',
+    heroLabel: 'especies amenazadas',
+    heroOf: 'de',
+    heroSub: 'ya necesitan atención urgente',
+    safe: 'especies están protegidas',
+    distributionTitle: 'Distribución por Estado',
+    viewInGallery: 'Ver en galería',
+    speciesSingular: '1 especie',
+    speciesPlural: 'especies',
+    loadingError: 'No se pudieron cargar los datos',
+  },
+
+  // Settings Screen
+  settings: {
+    title: 'Configuración',
+    generalSection: 'General',
+    language: 'Idioma',
+    showScientificNames: 'Nombres Científicos',
+    showScientificNamesDesc: 'Mostrar en cursiva en tarjetas y detalles',
+    appearanceSection: 'Apariencia',
+    accentColor: 'Color de Acento',
+    accentMel: 'Miel',
+    accentOliva: 'Oliva',
+    accentLaranja: 'Naranja',
+    textSize: 'Tamaño del Texto',
+    textSizeSmall: 'Pequeño',
+    textSizeNormal: 'Normal',
+    textSizeLarge: 'Grande',
+    dataSection: 'Datos',
+    clearCache: 'Limpiar Caché',
+    clearCacheDesc: 'Eliminar datos descargados de la app',
+    clearCacheConfirmTitle: 'Limpiar Caché',
+    clearCacheConfirmMsg:
+      'Esto elimina los datos en caché. La app buscará todo de nuevo con internet.',
+    clearCacheSuccess: '¡Caché limpiado!',
+    aboutSection: 'Sobre la App',
+    version: 'Versión',
+    repository: 'Repositorio',
+    credits: 'Créditos',
+  },
+
+  // Biomes
+  biomes: {
+    title: 'Biomas',
+    subtitle: 'Cada bioma alberga abejas únicas. Toca para ver las especies que viven allí.',
+    speciesSingular: 'especie',
+    speciesPlural: 'especies',
+    mataAtlantica: 'Mata Atlántica',
+    mataAtlanticaBlurb:
+      'Bosque húmedo costero, punto caliente de biodiversidad y hogar de la mayoría de las abejas nativas.',
+    cerrado: 'Cerrado',
+    cerradoBlurb:
+      'Sabana brasileña de clima estacional, rica en flores y esencial para la polinización.',
+    amazonia: 'Amazonia',
+    amazoniaBlurb: 'El bosque tropical más grande del mundo, con enorme diversidad de meliponinos.',
+    caatinga: 'Caatinga',
+    caatingaBlurb: 'Bioma exclusivamente brasileño, semiárido, donde reina la abeja Jandaíra.',
   },
 
   // About Screen

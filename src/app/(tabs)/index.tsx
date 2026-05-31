@@ -8,24 +8,36 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, Pressable, RefreshControl, ScrollView, Text, View } from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
 
 import FeaturedCarousel from '@/components/home/FeaturedCarousel';
 import SpeciesCard from '@/components/SpeciesCard';
+import HoneycombPattern from '@/components/ui/HoneycombPattern';
 import EmptyState from '@/components/ui/EmptyState';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
-import { Colors, Spacing } from '@/constants/theme';
+import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { FilterOptions, useFilter } from '@/contexts/FilterContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { fetchFeaturedSpecies, fetchSpecies } from '@/services/speciesService';
-import { styles } from '@/styles/screens/tabs/homeStyles';
 import { Species } from '@/types/species';
+
+const BIOME_CHIPS = ['Mata Atlântica', 'Cerrado', 'Amazônia', 'Caatinga'];
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
   const { pendingTagFilter, setPendingTagFilter, activeFilters, setActiveFilters } = useFilter();
   const params = useLocalSearchParams<{ tag?: string }>();
@@ -37,8 +49,12 @@ export default function HomeScreen() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [searchText, setSearchText] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [activeBiome, setActiveBiome] = useState<string | null>(null);
 
-  // Aplica filtro de tag ao voltar de espécie
   useFocusEffect(
     useCallback(() => {
       if (pendingTagFilter) {
@@ -48,20 +64,24 @@ export default function HomeScreen() {
         setActiveFilters((prev) => ({ ...prev, tags: [params.tag as string] }));
         router.setParams({ tag: undefined });
       }
-    }, [pendingTagFilter, params.tag, setPendingTagFilter, setActiveFilters])
+      // Sync biome chip with activeFilters when returning from Biomes tab
+      if (activeFilters.biomes && activeFilters.biomes.length === 1) {
+        setActiveBiome(activeFilters.biomes[0]);
+      } else if (!activeFilters.biomes || activeFilters.biomes.length === 0) {
+        setActiveBiome(null);
+      }
+    }, [pendingTagFilter, params.tag, setPendingTagFilter, setActiveFilters, activeFilters.biomes])
   );
 
   const loadInitialData = useCallback(async () => {
     try {
       setLoading(true);
-
       try {
         const featured = await fetchFeaturedSpecies();
         setFeaturedSpecies(featured);
       } catch {
         setFeaturedSpecies([]);
       }
-
       const result = await fetchSpecies();
       setSpecies(result.species);
       setLastDoc(result.lastVisible);
@@ -78,13 +98,16 @@ export default function HomeScreen() {
   const filteredSpecies = useMemo(() => {
     let filtered = [...species];
 
-    if (activeFilters.searchText) {
-      const searchLower = activeFilters.searchText.toLowerCase();
+    const search = searchText.trim().toLowerCase();
+    if (search) {
       filtered = filtered.filter(
         (s) =>
-          s.commonName.toLowerCase().includes(searchLower) ||
-          s.scientificName.toLowerCase().includes(searchLower)
+          s.commonName.toLowerCase().includes(search) ||
+          s.scientificName.toLowerCase().includes(search)
       );
+    }
+    if (activeBiome) {
+      filtered = filtered.filter((s) => s.biomes?.includes(activeBiome));
     }
     if (activeFilters.behavior) {
       filtered = filtered.filter((s) => s.behavior === activeFilters.behavior);
@@ -94,7 +117,7 @@ export default function HomeScreen() {
         activeFilters.regions!.some((region) => s.regions.includes(region))
       );
     }
-    if (activeFilters.biomes && activeFilters.biomes.length > 0) {
+    if (activeFilters.biomes && activeFilters.biomes.length > 0 && !activeBiome) {
       filtered = filtered.filter((s) =>
         activeFilters.biomes!.some((biome) => s.biomes?.includes(biome))
       );
@@ -107,7 +130,7 @@ export default function HomeScreen() {
     }
 
     return filtered;
-  }, [species, activeFilters]);
+  }, [species, activeFilters, searchText, activeBiome]);
 
   const loadMoreSpecies = useCallback(async () => {
     if (loadingMore || !hasMore || !lastDoc) return;
@@ -128,166 +151,203 @@ export default function HomeScreen() {
     setRefreshing(false);
   }, [loadInitialData]);
 
+  const handleSearchChange = useCallback((text: string) => {
+    setSearchInput(text);
+    if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+    searchDebounceRef.current = setTimeout(() => setSearchText(text), 200);
+  }, []);
+
   const clearFilters = useCallback(async () => {
     await triggerNotificationHaptic(NotificationFeedbackType.Warning);
     setActiveFilters({});
+    setSearchText('');
+    setSearchInput('');
+    setActiveBiome(null);
   }, [setActiveFilters]);
 
-  const hasActiveFilters = Object.keys(activeFilters).some(
-    (key) => activeFilters[key as keyof FilterOptions] !== undefined
-  );
+  const hasActiveFilters =
+    !!searchInput.trim() ||
+    !!activeBiome ||
+    Object.keys(activeFilters).some(
+      (key) => activeFilters[key as keyof FilterOptions] !== undefined
+    );
 
-  const activeFilterChips = useCallback((): {
-    key: string;
-    label: string;
-    onRemove: () => void;
-  }[] => {
-    const chips: { key: string; label: string; onRemove: () => void }[] = [];
+  const activeFilterCount = [
+    activeFilters.behavior,
+    activeFilters.regions?.length,
+    activeFilters.biomes?.length,
+    activeFilters.conservationStatus,
+    activeFilters.tags?.length,
+  ].filter(Boolean).length;
 
-    if (activeFilters.searchText) {
-      chips.push({
-        key: 'searchText',
-        label: `"${activeFilters.searchText}"`,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const next = { ...prev };
-            delete next.searchText;
-            return next;
-          }),
-      });
-    }
-    if (activeFilters.behavior) {
-      chips.push({
-        key: 'behavior',
-        label: activeFilters.behavior,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const next = { ...prev };
-            delete next.behavior;
-            return next;
-          }),
-      });
-    }
-    if (activeFilters.conservationStatus) {
-      chips.push({
-        key: 'conservationStatus',
-        label: activeFilters.conservationStatus,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const next = { ...prev };
-            delete next.conservationStatus;
-            return next;
-          }),
-      });
-    }
-    activeFilters.regions?.forEach((region) => {
-      chips.push({
-        key: `region-${region}`,
-        label: region,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const regions = prev.regions?.filter((r) => r !== region);
-            return { ...prev, regions: regions?.length ? regions : undefined };
-          }),
-      });
-    });
-    activeFilters.biomes?.forEach((biome) => {
-      chips.push({
-        key: `biome-${biome}`,
-        label: biome,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const biomes = prev.biomes?.filter((b) => b !== biome);
-            return { ...prev, biomes: biomes?.length ? biomes : undefined };
-          }),
-      });
-    });
-    activeFilters.tags?.forEach((tag) => {
-      chips.push({
-        key: `tag-${tag}`,
-        label: `#${tag}`,
-        onRemove: () =>
-          setActiveFilters((prev) => {
-            const tags = prev.tags?.filter((tg) => tg !== tag);
-            return { ...prev, tags: tags?.length ? tags : undefined };
-          }),
-      });
-    });
-
-    return chips;
-  }, [activeFilters, setActiveFilters]);
+  const toggleBiome = useCallback(async (biome: string) => {
+    await triggerHaptic(ImpactFeedbackStyle.Light);
+    setActiveBiome((prev) => (prev === biome ? null : biome));
+  }, []);
 
   const renderHeader = useCallback(() => {
-    const chips = activeFilterChips();
+    const showFeatured = !searchText.trim() && !activeBiome && !hasActiveFilters;
+    const resultsLabel =
+      searchText || activeBiome || hasActiveFilters
+        ? `${filteredSpecies.length} resultado${filteredSpecies.length === 1 ? '' : 's'}`
+        : t.home.allSpecies;
+
     return (
       <>
-        {featuredSpecies.length > 0 && <FeaturedCarousel species={featuredSpecies} />}
-        <View style={styles.headerContainer}>
+        {/* Hero */}
+        <View style={styles.hero}>
+          <HoneycombPattern opacity={0.05} color={colors.primary} />
+          <View style={[styles.heroGlow, { backgroundColor: colors.primary + '18' }]} />
+          <View style={styles.heroRow}>
+            <View style={styles.heroText}>
+              <Text style={[styles.heroGreeting, { color: colors.textMuted }]}>
+                {t.home.heroGreeting}
+              </Text>
+              <Text style={[styles.heroTitle, { color: colors.text }]}>{t.home.title}</Text>
+            </View>
+            <Image
+              source={require('../../../assets/images/icon-transparent.png')}
+              style={styles.mascot}
+              contentFit="contain"
+            />
+          </View>
+        </View>
+
+        {/* Barra de busca sticky */}
+        <View style={[styles.searchRow, { backgroundColor: colors.background }]}>
+          <View
+            style={[
+              styles.searchBox,
+              {
+                backgroundColor: colors.card,
+                borderColor: searchFocused ? colors.primary : colors.border,
+              },
+            ]}
+          >
+            <Ionicons name="search" size={20} color={colors.textMuted} />
+            <TextInput
+              value={searchInput}
+              onChangeText={handleSearchChange}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              placeholder={t.home.searchPlaceholder}
+              placeholderTextColor={colors.textFaint}
+              style={[styles.searchInput, { color: colors.text }]}
+              returnKeyType="search"
+            />
+            {searchInput ? (
+              <Pressable
+                onPress={() => {
+                  setSearchInput('');
+                  setSearchText('');
+                }}
+              >
+                <Ionicons name="close-circle" size={20} color={colors.textFaint} />
+              </Pressable>
+            ) : null}
+          </View>
           <Pressable
             onPress={async () => {
               await triggerHaptic(ImpactFeedbackStyle.Light);
               router.push('/filters');
             }}
             style={[
-              styles.filterButton,
+              styles.filterBtn,
               {
-                backgroundColor: hasActiveFilters ? colors.primary + '15' : colors.card,
-                borderColor: hasActiveFilters ? colors.primary : colors.border,
+                backgroundColor: activeFilterCount > 0 ? colors.primary : colors.card,
+                borderColor: activeFilterCount > 0 ? colors.primary : colors.border,
               },
             ]}
+            accessibilityLabel={t.home.filters}
+            accessibilityRole="button"
           >
             <Ionicons
-              name="filter"
-              size={20}
-              color={hasActiveFilters ? colors.primary : colors.icon}
+              name="options"
+              size={22}
+              color={activeFilterCount > 0 ? colors.onPrimary : colors.text}
             />
-            <Text
-              style={[
-                styles.filterButtonText,
-                { color: hasActiveFilters ? colors.primary : colors.icon },
-              ]}
-            >
-              {t.home.filters}
-            </Text>
+            {activeFilterCount > 0 && (
+              <View style={[styles.filterBadge, { backgroundColor: colors.accent }]}>
+                <Text style={[styles.filterBadgeText, { color: colors.onPrimary }]}>
+                  {activeFilterCount}
+                </Text>
+              </View>
+            )}
           </Pressable>
+        </View>
 
+        {/* Chips de bioma */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.biomesRow}
+          style={styles.biomesScroll}
+        >
+          <BiomeChip
+            label={t.home.all}
+            selected={activeBiome === null}
+            onPress={() => {
+              void triggerHaptic(ImpactFeedbackStyle.Light);
+              setActiveBiome(null);
+            }}
+            colors={colors}
+          />
+          {BIOME_CHIPS.map((b) => (
+            <BiomeChip
+              key={b}
+              label={b}
+              selected={activeBiome === b}
+              onPress={() => toggleBiome(b)}
+              colors={colors}
+            />
+          ))}
+        </ScrollView>
+
+        {/* Destaques */}
+        {showFeatured && featuredSpecies.length > 0 && (
+          <View style={styles.featured}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                {t.home.featuredSpecies}
+              </Text>
+              <Pressable onPress={() => router.navigate('/biomes' as never)}>
+                <Text style={[styles.sectionAction, { color: colors.primary }]}>
+                  {t.home.viewBiomes}
+                </Text>
+              </Pressable>
+            </View>
+            <FeaturedCarousel species={featuredSpecies} />
+          </View>
+        )}
+
+        {/* Título da grade */}
+        <View style={[styles.sectionHeader, styles.gridHeader]}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{resultsLabel}</Text>
           {hasActiveFilters && (
-            <Pressable onPress={clearFilters} style={styles.clearFiltersButton}>
-              <Text style={[styles.clearFiltersText, { color: colors.primary }]}>
+            <Pressable onPress={clearFilters}>
+              <Text style={[styles.sectionAction, { color: colors.primary }]}>
                 {t.home.clearFilters}
               </Text>
             </Pressable>
           )}
         </View>
-
-        {chips.length > 0 && (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.chipsScroll}
-            contentContainerStyle={styles.chipsContent}
-          >
-            {chips.map((chip) => (
-              <Pressable
-                key={chip.key}
-                onPress={async () => {
-                  await triggerHaptic(ImpactFeedbackStyle.Light);
-                  chip.onRemove();
-                }}
-                style={[
-                  styles.filterChip,
-                  { borderColor: colors.border, backgroundColor: colors.card },
-                ]}
-              >
-                <Text style={[styles.filterChipText, { color: colors.text }]}>{chip.label}</Text>
-                <Ionicons name="close" size={14} color={colors.icon} />
-              </Pressable>
-            ))}
-          </ScrollView>
-        )}
       </>
     );
-  }, [featuredSpecies, hasActiveFilters, activeFilterChips, colors, t, clearFilters]);
+  }, [
+    featuredSpecies,
+    hasActiveFilters,
+    activeFilterCount,
+    activeBiome,
+    searchText,
+    searchInput,
+    searchFocused,
+    filteredSpecies.length,
+    colors,
+    t,
+    clearFilters,
+    toggleBiome,
+    handleSearchChange,
+  ]);
 
   const renderHeaderRef = useRef(renderHeader);
   useLayoutEffect(() => {
@@ -295,13 +355,35 @@ export default function HomeScreen() {
   });
   const stableHeader = useCallback(() => renderHeaderRef.current(), []);
 
+  // Grade de 2 colunas: agrupar os items em pares
+  const pairedSpecies = useMemo(() => {
+    const pairs: [Species, Species | null][] = [];
+    for (let i = 0; i < filteredSpecies.length; i += 2) {
+      pairs.push([filteredSpecies[i], filteredSpecies[i + 1] ?? null]);
+    }
+    return pairs;
+  }, [filteredSpecies]);
+
   const renderItem = useCallback(
-    ({ item, index }: { item: Species; index: number }) => (
-      <SpeciesCard
-        species={item}
-        index={index}
-        onPress={() => router.push(`/species/${item.id}`)}
-      />
+    ({ item, index }: { item: [Species, Species | null]; index: number }) => (
+      <View style={styles.gridRow}>
+        <View style={styles.gridCell}>
+          <SpeciesCard
+            species={item[0]}
+            index={index * 2}
+            onPress={() => router.push(`/species/${item[0].id}`)}
+          />
+        </View>
+        <View style={styles.gridCell}>
+          {item[1] ? (
+            <SpeciesCard
+              species={item[1]}
+              index={index * 2 + 1}
+              onPress={() => router.push(`/species/${item[1]!.id}`)}
+            />
+          ) : null}
+        </View>
+      </View>
     ),
     []
   );
@@ -310,7 +392,7 @@ export default function HomeScreen() {
     if (!loadingMore) return null;
     return (
       <View style={styles.footer}>
-        <SkeletonLoader height={180} />
+        <SkeletonLoader height={140} />
       </View>
     );
   }, [loadingMore]);
@@ -326,9 +408,9 @@ export default function HomeScreen() {
           hasActiveFilters ? (
             <Pressable
               onPress={clearFilters}
-              style={[styles.emptyActionButton, { backgroundColor: colors.primary }]}
+              style={[styles.emptyBtn, { backgroundColor: colors.primary }]}
             >
-              <Text style={[styles.emptyActionText, { color: colors.onPrimary }]}>
+              <Text style={[styles.emptyBtnText, { color: colors.onPrimary }]}>
                 {t.home.clearFilters}
               </Text>
             </Pressable>
@@ -345,15 +427,21 @@ export default function HomeScreen() {
     >
       {loading ? (
         <View style={styles.loadingContainer}>
-          <SkeletonLoader height={280} style={{ marginBottom: Spacing.xl }} />
-          <SkeletonLoader height={180} />
-          <SkeletonLoader height={180} />
+          <SkeletonLoader height={200} style={{ marginBottom: Spacing.lg }} />
+          <View style={styles.gridRow}>
+            <View style={styles.gridCell}>
+              <SkeletonLoader height={190} />
+            </View>
+            <View style={styles.gridCell}>
+              <SkeletonLoader height={190} />
+            </View>
+          </View>
         </View>
       ) : (
         <FlatList
-          data={filteredSpecies}
+          data={pairedSpecies}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(_, i) => String(i)}
           ListHeaderComponent={stableHeader}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmpty}
@@ -374,3 +462,163 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
+
+function BiomeChip({
+  label,
+  selected,
+  onPress,
+  colors,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+  colors: (typeof Colors)['dark'];
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={[
+        styles.biomeChip,
+        {
+          backgroundColor: selected ? colors.primary : 'transparent',
+          borderColor: selected ? colors.primary : colors.border,
+        },
+      ]}
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+    >
+      <Text style={[styles.biomeChipText, { color: selected ? colors.onPrimary : colors.text }]}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  listContent: { paddingBottom: 100 },
+  loadingContainer: { padding: Spacing.lg, gap: Spacing.lg },
+
+  // Hero
+  hero: {
+    position: 'relative',
+    overflow: 'hidden',
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.lg,
+  },
+  heroGlow: {
+    position: 'absolute',
+    top: -60,
+    right: -20,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+  },
+  heroRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    position: 'relative',
+  },
+  heroText: { flex: 1, marginRight: Spacing.sm },
+  heroGreeting: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold, marginBottom: 4 },
+  heroTitle: {
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    lineHeight: 32,
+    letterSpacing: -0.5,
+    maxWidth: 230,
+  },
+  mascot: { width: 70, height: 70, marginTop: 4 },
+
+  // Search
+  searchRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    position: 'relative',
+    zIndex: 5,
+  },
+  searchBox: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    height: 50,
+    paddingHorizontal: Spacing.md,
+    borderRadius: 15,
+    borderWidth: 1,
+  },
+  searchInput: { flex: 1, fontSize: FontSize.md, minWidth: 0 },
+  filterBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 15,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  filterBadge: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+  },
+  filterBadgeText: { fontSize: FontSize.xs, fontWeight: FontWeight.bold },
+
+  // Biome chips
+  biomesScroll: { marginTop: Spacing.sm },
+  biomesRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+    paddingBottom: Spacing.xs,
+  },
+  biomeChip: {
+    flexShrink: 0,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm + 1,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+  },
+  biomeChipText: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
+
+  // Featured
+  featured: { marginTop: Spacing.md },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    paddingHorizontal: Spacing.lg,
+    marginBottom: Spacing.sm,
+  },
+  gridHeader: { marginTop: Spacing.lg },
+  sectionTitle: { fontSize: FontSize.xl + 1, fontWeight: FontWeight.bold, letterSpacing: -0.3 },
+  sectionAction: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
+
+  // Grid
+  gridRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    marginBottom: Spacing.sm,
+  },
+  gridCell: { flex: 1 },
+
+  footer: { padding: Spacing.lg },
+  emptyBtn: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.lg,
+  },
+  emptyBtnText: { fontSize: FontSize.md, fontWeight: FontWeight.bold, textAlign: 'center' },
+});

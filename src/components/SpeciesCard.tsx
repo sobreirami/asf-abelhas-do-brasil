@@ -1,10 +1,8 @@
-// Card de espécie para a galeria
 import { BorderRadius, Colors, FontSize, FontWeight, Shadows, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Species } from '@/types/species';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
-import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -16,11 +14,19 @@ interface SpeciesCardProps {
   index: number;
 }
 
+const CONSERVATION_COLORS: Record<string, string> = {
+  'least-concern': '#6FCF73',
+  vulnerable: '#FFCB4D',
+  endangered: '#F0726A',
+  'critically-endangered': '#F0726A',
+  'data-deficient': '#9EAB90',
+};
+
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export default function SpeciesCard({ species, onPress, index }: SpeciesCardProps) {
+function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
   const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? 'light'];
+  const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
 
   const handlePress = async () => {
@@ -30,93 +36,112 @@ export default function SpeciesCard({ species, onPress, index }: SpeciesCardProp
 
   const statusKey = species.conservationStatus ?? '';
   const statusLabel = statusKey
-    ? (t.conservation[statusKey as keyof typeof t.conservation] ?? t.common.error)
+    ? (t.conservation[statusKey as keyof typeof t.conservation] ?? '')
     : '';
-
-  const getStatusColor = (status: string): string => {
-    const statusMap: Record<string, string> = {
-      'least-concern': colors.success,
-      vulnerable: colors.warning,
-      endangered: colors.error,
-      'critically-endangered': colors.error,
-      'data-deficient': colors.icon,
-    };
-    return statusMap[status] || colors.icon;
-  };
-
-  // Light badge backgrounds (success, warning, icon) need dark text to pass WCAG AA.
-  // All statuses use dark text to be safe (error at xs/semibold also fails AA with white).
-  const getStatusTextColor = (): string => colors.text;
+  const badgeColor = CONSERVATION_COLORS[statusKey] ?? colors.icon;
 
   return (
     <AnimatedPressable
-      entering={FadeIn.delay(index * 50)}
+      entering={FadeIn.delay(index * 40)}
       style={[styles.container, { backgroundColor: colors.card }, Shadows.md]}
       onPress={handlePress}
       accessibilityRole="button"
       accessibilityLabel={`${species.commonName}, ${species.scientificName}`}
     >
-      {/* Imagem */}
-      <Image
-        source={{ uri: species.photos.thumbnail }}
-        style={styles.image}
-        contentFit="cover"
-        transition={300}
-      />
+      {/* Foto full-bleed */}
+      <View style={styles.imageWrapper}>
+        <Image
+          source={{ uri: species.photos.thumbnail }}
+          style={styles.image}
+          contentFit="cover"
+          transition={300}
+        />
+        {/* Badge de conservação no canto superior esquerdo */}
+        {statusLabel ? (
+          <View style={[styles.badge, { backgroundColor: badgeColor }]}>
+            <View style={[styles.badgeDot, { backgroundColor: '#1B1F0E' }]} />
+            <Text style={styles.badgeText}>{statusLabel}</Text>
+          </View>
+        ) : null}
+      </View>
 
-      {/* Info overlay com blur effect */}
-      <BlurView intensity={80} tint={colorScheme ?? 'light'} style={styles.infoContainer}>
+      {/* Barra inferior */}
+      <View style={[styles.infoBar, { borderTopColor: colors.border + '60' }]}>
         <Text style={[styles.commonName, { color: colors.text }]} numberOfLines={1}>
           {species.commonName}
         </Text>
-        <Text style={[styles.scientificName, { color: colors.icon }]} numberOfLines={1}>
+        <Text style={[styles.scientificName, { color: colors.textMuted }]} numberOfLines={1}>
           {species.scientificName}
         </Text>
-      </BlurView>
-
-      {/* Badge de status de conservação */}
-      {species.conservationStatus && (
-        <View style={[styles.badge, { backgroundColor: getStatusColor(statusKey) }]}>
-          <Text style={[styles.badgeText, { color: getStatusTextColor() }]}>{statusLabel}</Text>
-        </View>
-      )}
+        <Text style={[styles.meta, { color: colors.textFaint }]} numberOfLines={1}>
+          {species.sizeMm} mm · {species.behavior}
+        </Text>
+      </View>
     </AnimatedPressable>
   );
 }
 
+const SpeciesCard = React.memo(
+  SpeciesCardBase,
+  (prev, next) =>
+    prev.species.id === next.species.id &&
+    prev.onPress === next.onPress &&
+    prev.index === next.index
+);
+export default SpeciesCard;
+
 const styles = StyleSheet.create({
   container: {
-    borderRadius: BorderRadius.lg,
+    borderRadius: 20,
     overflow: 'hidden',
-    marginBottom: Spacing.md,
+  },
+  imageWrapper: {
+    position: 'relative',
   },
   image: {
     width: '100%',
-    height: 200,
-  },
-  infoContainer: {
-    padding: Spacing.md,
-    overflow: 'hidden',
-  },
-  commonName: {
-    fontSize: FontSize.lg,
-    fontWeight: FontWeight.bold,
-    marginBottom: Spacing.xs,
-  },
-  scientificName: {
-    fontSize: FontSize.sm,
-    fontStyle: 'italic',
+    height: 124,
   },
   badge: {
     position: 'absolute',
-    top: Spacing.sm,
-    right: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
+    top: 9,
+    left: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.full,
+  },
+  badgeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    opacity: 0.7,
   },
   badgeText: {
-    fontSize: FontSize.xs,
+    fontSize: 11,
+    fontWeight: FontWeight.bold,
+    color: '#1B1F0E',
+  },
+  infoBar: {
+    padding: Spacing.sm + 3,
+    paddingTop: Spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  commonName: {
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    marginBottom: 2,
+  },
+  scientificName: {
+    fontSize: FontSize.xs + 0.5,
+    fontStyle: 'italic',
+    marginBottom: Spacing.xs,
+  },
+  meta: {
+    fontSize: FontSize.xs + 0.5,
     fontWeight: FontWeight.semibold,
+    marginTop: Spacing.xs,
   },
 });

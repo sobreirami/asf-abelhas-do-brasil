@@ -2,6 +2,8 @@ export default {
   // Tabs
   tabs: {
     gallery: 'Galeria',
+    biomes: 'Biomas',
+    conservation: 'Conservação',
     about: 'Sobre',
     preferences: 'Preferências',
   },
@@ -9,14 +11,18 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Abelhas Nativas do Brasil',
-    featuredSpecies: 'Espécies em Destaque',
+    heroGreeting: 'Olá, explorador 🐝',
+    featuredSpecies: 'Em Destaque',
     allSpecies: 'Todas as Espécies',
     filters: 'Filtros',
     clearFilters: 'Limpar todos',
     activeFilters: 'Filtros ativos',
     noSpeciesFound: 'Nenhuma espécie encontrada',
-    noSpeciesDescription: 'Tente ajustar os filtros ou limpe-os para ver todas as espécies.',
+    noSpeciesDescription: 'Tente ajustar a busca ou limpe os filtros para ver todas as espécies.',
     offline: 'Modo Offline - Dados em cache',
+    all: 'Todos',
+    viewBiomes: 'Ver biomas',
+    searchPlaceholder: 'Buscar espécie, bioma…',
   },
 
   // Species Detail
@@ -74,18 +80,84 @@ export default {
 
   // Onboarding
   onboarding: {
-    slide1Title: 'Abelhas Nativas do Brasil',
+    slide1Title: 'Conheça as abelhas\nsem ferrão do Brasil',
     slide1Description:
-      'Descubra a biodiversidade das abelhas sem ferrão brasileiras. Explore fotos, características e regiões de ocorrência.',
-    slide2Title: 'Conservação é Essencial',
+      'Um guia visual das abelhas nativas — as polinizadoras silenciosas que sustentam nossas florestas e plantações.',
+    slide2Title: 'Busque, filtre\ne descubra',
     slide2Description:
-      'As abelhas sem ferrão são polinizadores vitais para nossos ecossistemas. Conheça seu status de conservação e como ajudar.',
-    slide3Title: 'Sobre o Projeto',
+      'Explore por bioma, região e tamanho. Veja características, ninhos e plantas favoritas de cada espécie.',
+    slide3Title: 'Ajude a\nproteger',
     slide3Description:
-      'App desenvolvido com React Native + Expo como portfólio educacional sobre a fauna brasileira.',
+      'Entenda o status de conservação de cada espécie e por que cuidar delas é cuidar de toda a biodiversidade.',
+    badge1: 'BEM-VINDO',
+    badge2: 'EXPLORE',
+    badge3: 'PRESERVE',
     skip: 'Pular',
-    next: 'Próximo',
-    start: 'Começar',
+    next: 'Continuar',
+    start: 'Explorar a Galeria',
+    notNow: 'Agora não',
+  },
+
+  // Conservation Tab
+  conservationTab: {
+    title: 'Conservação',
+    subtitle: 'Proteção das abelhas nativas',
+    heroLabel: 'espécies ameaçadas',
+    heroOf: 'de',
+    heroSub: 'já precisam de atenção urgente',
+    safe: 'espécies estão protegidas',
+    distributionTitle: 'Distribuição por Status',
+    viewInGallery: 'Ver na galeria',
+    speciesSingular: '1 espécie',
+    speciesPlural: 'espécies',
+    loadingError: 'Não foi possível carregar os dados',
+  },
+
+  // Settings Screen
+  settings: {
+    title: 'Configurações',
+    generalSection: 'Geral',
+    language: 'Idioma',
+    showScientificNames: 'Nomes Científicos',
+    showScientificNamesDesc: 'Exibir em itálico nos cards e detalhes',
+    appearanceSection: 'Aparência',
+    accentColor: 'Cor de Destaque',
+    accentMel: 'Mel',
+    accentOliva: 'Oliva',
+    accentLaranja: 'Laranja',
+    textSize: 'Tamanho do Texto',
+    textSizeSmall: 'Pequeno',
+    textSizeNormal: 'Normal',
+    textSizeLarge: 'Grande',
+    dataSection: 'Dados',
+    clearCache: 'Limpar Cache',
+    clearCacheDesc: 'Remove dados baixados do app',
+    clearCacheConfirmTitle: 'Limpar Cache',
+    clearCacheConfirmMsg:
+      'Isso remove os dados em cache. O app vai buscar tudo novamente com internet.',
+    clearCacheSuccess: 'Cache limpo!',
+    aboutSection: 'Sobre o App',
+    version: 'Versão',
+    repository: 'Repositório',
+    credits: 'Créditos',
+  },
+
+  // Biomes
+  biomes: {
+    title: 'Biomas',
+    subtitle: 'Cada bioma abriga abelhas únicas. Toque para ver as espécies que vivem nele.',
+    speciesSingular: 'espécie',
+    speciesPlural: 'espécies',
+    mataAtlantica: 'Mata Atlântica',
+    mataAtlanticaBlurb:
+      'Floresta úmida costeira, hotspot de biodiversidade e lar da maioria das abelhas nativas.',
+    cerrado: 'Cerrado',
+    cerradoBlurb:
+      'Savana brasileira de clima sazonal, rica em flores e essencial para a polinização.',
+    amazonia: 'Amazônia',
+    amazoniaBlurb: 'Maior floresta tropical do mundo, com enorme diversidade de meliponíneos.',
+    caatinga: 'Caatinga',
+    caatingaBlurb: 'Bioma exclusivamente brasileiro, semiárido, onde reina a Jandaíra do sertão.',
   },
 
   // About Screen

@@ -2,6 +2,8 @@ export default {
   // Tabs
   tabs: {
     gallery: 'Gallery',
+    biomes: 'Biomes',
+    conservation: 'Conservation',
     about: 'About',
     preferences: 'Preferences',
   },
@@ -9,14 +11,18 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Native Bees of Brazil',
-    featuredSpecies: 'Featured Species',
+    heroGreeting: 'Hello, explorer 🐝',
+    featuredSpecies: 'Featured',
     allSpecies: 'All Species',
     filters: 'Filters',
     clearFilters: 'Clear all',
     activeFilters: 'Active filters',
     noSpeciesFound: 'No species found',
-    noSpeciesDescription: 'Try adjusting the filters or clear them to see all species.',
+    noSpeciesDescription: 'Try adjusting the search or clear filters to see all species.',
     offline: 'Offline Mode - Cached data',
+    all: 'All',
+    viewBiomes: 'View biomes',
+    searchPlaceholder: 'Search species, biome…',
   },
 
   // Species Detail
@@ -74,18 +80,84 @@ export default {
 
   // Onboarding
   onboarding: {
-    slide1Title: 'Native Bees of Brazil',
+    slide1Title: 'Discover Brazilian\nStingless Bees',
     slide1Description:
-      'Discover the biodiversity of Brazilian stingless bees. Explore photos, characteristics and regions of occurrence.',
-    slide2Title: 'Conservation is Essential',
+      'A visual guide to native bees — the silent pollinators that sustain our forests and crops.',
+    slide2Title: 'Search, Filter\nand Discover',
     slide2Description:
-      'Stingless bees are vital pollinators for our ecosystems. Learn about their conservation status and how to help.',
-    slide3Title: 'About the Project',
+      'Explore by biome, region, and size. See characteristics, nests, and favorite plants of each species.',
+    slide3Title: 'Help\nProtect Them',
     slide3Description:
-      'App developed with React Native + Expo as an educational portfolio about Brazilian fauna.',
+      'Understand the conservation status of each species and why caring for them means caring for all biodiversity.',
+    badge1: 'WELCOME',
+    badge2: 'EXPLORE',
+    badge3: 'PRESERVE',
     skip: 'Skip',
-    next: 'Next',
-    start: 'Get Started',
+    next: 'Continue',
+    start: 'Explore the Gallery',
+    notNow: 'Not now',
+  },
+
+  // Conservation Tab
+  conservationTab: {
+    title: 'Conservation',
+    subtitle: 'Protection of native bees',
+    heroLabel: 'threatened species',
+    heroOf: 'of',
+    heroSub: 'already need urgent attention',
+    safe: 'species are protected',
+    distributionTitle: 'Status Distribution',
+    viewInGallery: 'View in gallery',
+    speciesSingular: '1 species',
+    speciesPlural: 'species',
+    loadingError: 'Could not load data',
+  },
+
+  // Settings Screen
+  settings: {
+    title: 'Settings',
+    generalSection: 'General',
+    language: 'Language',
+    showScientificNames: 'Scientific Names',
+    showScientificNamesDesc: 'Show in italic on cards and details',
+    appearanceSection: 'Appearance',
+    accentColor: 'Accent Color',
+    accentMel: 'Honey',
+    accentOliva: 'Olive',
+    accentLaranja: 'Orange',
+    textSize: 'Text Size',
+    textSizeSmall: 'Small',
+    textSizeNormal: 'Normal',
+    textSizeLarge: 'Large',
+    dataSection: 'Data',
+    clearCache: 'Clear Cache',
+    clearCacheDesc: 'Remove downloaded app data',
+    clearCacheConfirmTitle: 'Clear Cache',
+    clearCacheConfirmMsg:
+      'This removes cached data. The app will fetch everything again with internet.',
+    clearCacheSuccess: 'Cache cleared!',
+    aboutSection: 'About the App',
+    version: 'Version',
+    repository: 'Repository',
+    credits: 'Credits',
+  },
+
+  // Biomes
+  biomes: {
+    title: 'Biomes',
+    subtitle: 'Each biome is home to unique bees. Tap to see the species that live there.',
+    speciesSingular: 'species',
+    speciesPlural: 'species',
+    mataAtlantica: 'Atlantic Forest',
+    mataAtlanticaBlurb: 'Coastal rainforest, biodiversity hotspot and home to most native bees.',
+    cerrado: 'Cerrado',
+    cerradoBlurb:
+      'Brazilian savanna with seasonal climate, rich in flowers and essential for pollination.',
+    amazonia: 'Amazon',
+    amazoniaBlurb:
+      'The largest tropical forest in the world, with enormous diversity of meliponines.',
+    caatinga: 'Caatinga',
+    caatingaBlurb: 'Exclusively Brazilian biome, semi-arid, where the Jandaíra bee reigns.',
   },
 
   // About Screen

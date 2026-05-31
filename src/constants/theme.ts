@@ -33,31 +33,37 @@ export const Colors = {
     onOverlay: '#FFFFFF',
     skeletonBase: '#E0E5DE',
     skeletonHighlight: '#F0F0F0',
+    surfaceElevated: '#F5F5EE',
+    textMuted: '#5F7161',
+    textFaint: '#8B9A8F',
   },
   dark: {
-    text: '#E8EDE7',
-    background: '#1A1F1A',
-    backgroundSecondary: '#252A25',
+    text: '#EEF3E6',
+    background: '#11150E',
+    backgroundSecondary: '#1A1F15',
     tint: tintColorDark,
-    primary: '#FFD700', // Amarelo mel (primária)
-    onPrimary: '#1A1F1A', // Texto sobre fundo primary — nunca usar branco sobre dourado (contraste 1.40)
-    secondary: '#8FBC8F', // Verde claro (secundária)
-    accent: '#FFB84D',
-    success: '#66BB6A',
-    warning: '#FFD54F',
-    error: '#EF5350',
-    icon: '#A8B5A8',
-    tabIconDefault: '#6B7A6B',
-    tabIconSelected: tintColorDark,
-    border: '#3A4A3A',
-    card: '#2A2F2A',
-    cardBlur: 'rgba(42, 47, 42, 0.8)', // Para glass effect
-    link: '#29ABE2',
-    shadow: 'rgba(0, 0, 0, 0.3)',
-    overlay: 'rgba(0, 0, 0, 0.6)',
+    primary: '#FFC53D', // Mel dourado
+    onPrimary: '#1B1F0E', // Texto sobre fundo primary — nunca usar branco sobre mel (contraste ~10)
+    secondary: '#A8CE6C', // Verde oliva claro
+    accent: '#FF9F45',
+    success: '#6FCF73',
+    warning: '#FFCB4D',
+    error: '#F0726A',
+    icon: '#9EAB90',
+    tabIconDefault: '#6F7C63',
+    tabIconSelected: '#FFC53D',
+    border: '#333D2A',
+    card: '#1A1F15',
+    surfaceElevated: '#232A1C',
+    cardBlur: 'rgba(26, 31, 21, 0.85)', // Para glass effect
+    link: '#A8CE6C',
+    shadow: 'rgba(0, 0, 0, 0.4)',
+    overlay: 'rgba(0, 0, 0, 0.65)',
     onOverlay: '#FFFFFF',
-    skeletonBase: '#2A2F2A',
-    skeletonHighlight: '#3A4A3A',
+    skeletonBase: '#1A1F15',
+    skeletonHighlight: '#232A1C',
+    textMuted: '#9EAB90',
+    textFaint: '#6F7C63',
   },
 };
 
