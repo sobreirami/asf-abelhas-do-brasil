@@ -5,9 +5,9 @@ config(); // carrega .env → process.env
 /** @type {import('expo/config').ExpoConfig} */
 module.exports = {
   expo: {
-    name: 'asf-abelhas-do-brasil',
+    name: 'AbelhasDoBrasil',
     slug: 'asf-abelhas-do-brasil',
-    version: '1.0.0',
+    version: '1.0.0-rc1',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'asfabelhasdobrasil',
@@ -15,12 +15,15 @@ module.exports = {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.sobreirami.asfabelhasdobrasil',
+      icon: './assets/images/icon.png',
     },
     android: {
       adaptiveIcon: {
+        foregroundImage: './assets/images/adaptive-icon-foreground.png',
+        backgroundImage: './assets/images/adaptive-icon-background.png',
         backgroundColor: '#F5B800',
-        foregroundImage: './assets/images/icon.png',
       },
+      primaryColor: '#F5B800',
       predictiveBackGestureEnabled: false,
       package: 'com.sobreirami.asfabelhasdobrasil',
     },
@@ -28,9 +31,14 @@ module.exports = {
       [
         'expo-splash-screen',
         {
-          image: './assets/images/splash.png',
-          resizeMode: 'cover',
+          image: './assets/images/splash-icon-light.png',
+          imageWidth: 250,
+          resizeMode: 'contain',
           backgroundColor: '#F5B800',
+          dark: {
+            image: './assets/images/splash-icon-dark.png',
+            backgroundColor: '#141814',
+          },
         },
       ],
       ['expo-status-bar', { style: 'auto' }],
