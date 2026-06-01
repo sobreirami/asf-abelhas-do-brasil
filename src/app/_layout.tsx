@@ -17,6 +17,7 @@ import { FilterProvider } from '@/contexts/FilterContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { AnimatedSplash } from '@/components/AnimatedSplash';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,6 +36,7 @@ export function SuspenseFallback() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -109,6 +111,7 @@ function RootLayoutNav() {
       </Stack>
       <StatusBar style="auto" />
       <NavigationBar style="auto" />
+      {!splashDone && <AnimatedSplash onDone={() => setSplashDone(true)} />}
     </NavigationThemeProvider>
   );
 }
