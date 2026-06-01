@@ -24,6 +24,7 @@ export function AnimatedSplash({ onDone }: AnimatedSplashProps) {
         source={scheme === 'dark' ? dark : light}
         autoPlay
         loop={false}
+        speed={0.625}
         resizeMode="cover"
         style={StyleSheet.absoluteFill}
         onAnimationFinish={() => {

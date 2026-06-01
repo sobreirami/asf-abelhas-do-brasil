@@ -31,12 +31,11 @@ module.exports = {
       [
         'expo-splash-screen',
         {
-          image: './assets/images/splash-icon-light.png',
-          imageWidth: 250,
-          resizeMode: 'contain',
+          image: './assets/splash/splash-bg-light.png',
+          resizeMode: 'cover',
           backgroundColor: '#F5B800',
           dark: {
-            image: './assets/images/splash-icon-dark.png',
+            image: './assets/splash/splash-bg-dark.png',
             backgroundColor: '#141814',
           },
         },
