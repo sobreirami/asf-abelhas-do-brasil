@@ -9,6 +9,7 @@ import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ioni
 import { BlurView } from 'expo-blur';
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui';
 import { Colors, Shadows } from '@/constants/theme';
@@ -30,6 +31,7 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const { t } = useLanguage();
+  const insets = useSafeAreaInsets();
 
   const REPORT_TYPES: { value: ReportType; label: string; icon: IoniconsIconName }[] = [
     { value: 'info-incorreta', label: t.report.types['info-incorreta'], icon: 'alert-circle' },
@@ -190,7 +192,12 @@ export default function ReportModal({ onClose, speciesId, speciesName }: ReportM
         </ScrollView>
 
         {/* Footer */}
-        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+        <View
+          style={[
+            styles.footer,
+            { borderTopColor: colors.border, paddingBottom: insets.bottom + 8 },
+          ]}
+        >
           <Button
             label={t.common.cancel}
             onPress={handleClose}

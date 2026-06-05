@@ -1,4 +1,4 @@
-import { BorderRadius, Colors, Spacing } from '@/constants/theme';
+import { BorderRadius, Colors, Shadows, Spacing } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import React, { useEffect } from 'react';
 import { DimensionValue, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
@@ -9,6 +9,9 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+
+const CAROUSEL_CARD_WIDTH = 256;
+const CAROUSEL_CARD_HEIGHT = 168;
 
 interface SkeletonLoaderProps {
   width?: DimensionValue;
@@ -65,54 +68,59 @@ export default function SkeletonLoader({
   );
 }
 
-// Skeleton para tela de detalhe de espécie
+export function SkeletonFeaturedCarousel() {
+  return (
+    <View style={skeletonCarouselStyles.row}>
+      <SkeletonLoader width={CAROUSEL_CARD_WIDTH} height={CAROUSEL_CARD_HEIGHT} borderRadius={22} />
+      <SkeletonLoader width={CAROUSEL_CARD_WIDTH} height={CAROUSEL_CARD_HEIGHT} borderRadius={22} />
+    </View>
+  );
+}
+
 export function SkeletonSpeciesDetail() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <SkeletonLoader height={400} borderRadius={0} />
+      <SkeletonLoader height={320} borderRadius={0} />
       <View style={{ padding: Spacing.lg }}>
-        <SkeletonLoader width="70%" height={32} borderRadius={6} />
-        <SkeletonLoader
-          width="50%"
-          height={18}
-          borderRadius={4}
-          style={{ marginTop: Spacing.sm }}
-        />
-        <SkeletonLoader
-          width={120}
-          height={34}
-          borderRadius={8}
-          style={{ marginTop: Spacing.md }}
-        />
-        <View style={{ flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg }}>
-          <SkeletonLoader width={80} height={28} borderRadius={20} />
-          <SkeletonLoader width={100} height={28} borderRadius={20} />
-          <SkeletonLoader width={70} height={28} borderRadius={20} />
+        <SkeletonLoader width="70%" height={28} borderRadius={6} />
+        <SkeletonLoader width="50%" height={16} borderRadius={4} style={{ marginTop: 6 }} />
+        <SkeletonLoader height={64} borderRadius={8} style={{ marginTop: Spacing.md }} />
+        <View style={{ flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.md }}>
+          <SkeletonLoader height={72} borderRadius={BorderRadius.md} style={{ flex: 1 }} />
+          <SkeletonLoader height={72} borderRadius={BorderRadius.md} style={{ flex: 1 }} />
+          <SkeletonLoader height={72} borderRadius={BorderRadius.md} style={{ flex: 1 }} />
         </View>
-        {[...Array(5)].map((_, i) => (
-          <SkeletonLoader key={i} height={60} borderRadius={8} style={{ marginTop: Spacing.md }} />
+        {[...Array(3)].map((_, i) => (
+          <SkeletonLoader
+            key={i}
+            height={80}
+            borderRadius={BorderRadius.md}
+            style={{ marginTop: Spacing.md }}
+          />
         ))}
-        <SkeletonLoader height={140} borderRadius={12} style={{ marginTop: Spacing.lg }} />
       </View>
     </View>
   );
 }
 
-// Skeleton para card de espécie
 export function SkeletonSpeciesCard() {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
+
   return (
-    <View style={styles.cardContainer}>
-      <SkeletonLoader height={200} />
-      <View style={styles.infoSkeleton}>
-        <SkeletonLoader width="60%" height={20} borderRadius={4} />
+    <View style={[skeletonCardStyles.container, { backgroundColor: colors.card }, Shadows.md]}>
+      <SkeletonLoader height={124} borderRadius={0} />
+      <View style={skeletonCardStyles.infoBar}>
+        <SkeletonLoader width="65%" height={17} borderRadius={4} />
+        <SkeletonLoader width="50%" height={13} borderRadius={4} style={{ marginTop: 4 }} />
         <SkeletonLoader
-          width="80%"
-          height={16}
+          width="45%"
+          height={13}
           borderRadius={4}
-          style={{ marginTop: Spacing.sm }}
+          style={{ marginTop: Spacing.xs }}
         />
       </View>
     </View>
@@ -123,10 +131,24 @@ const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
   },
-  cardContainer: {
-    marginBottom: Spacing.md,
+});
+
+const skeletonCarouselStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    gap: 13,
+    paddingBottom: 6,
   },
-  infoSkeleton: {
-    padding: Spacing.md,
+});
+
+const skeletonCardStyles = StyleSheet.create({
+  container: {
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  infoBar: {
+    padding: Spacing.sm + 3,
+    paddingTop: Spacing.sm,
   },
 });

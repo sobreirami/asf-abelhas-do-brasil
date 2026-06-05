@@ -3,6 +3,7 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { BlurView } from 'expo-blur';
 import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Chip } from '@/components/ui';
 import { Colors, Shadows } from '@/constants/theme';
@@ -25,6 +26,7 @@ export default function AdvancedFilterModal({
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const { t } = useLanguage();
+  const insets = useSafeAreaInsets();
 
   const BEHAVIORS = [t.filters.solitary, t.filters.social, 'Semi-social'];
   const REGIONS = ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'];
@@ -204,7 +206,12 @@ export default function AdvancedFilterModal({
           </View>
         </ScrollView>
 
-        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+        <View
+          style={[
+            styles.footer,
+            { borderTopColor: colors.border, paddingBottom: insets.bottom + 8 },
+          ]}
+        >
           <Button
             label={t.filters.clear}
             onPress={handleClear}

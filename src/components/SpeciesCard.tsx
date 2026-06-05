@@ -4,7 +4,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Species } from '@/types/species';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
@@ -34,6 +34,8 @@ function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
     onPress(species);
   };
 
+  const [thumbnailError, setThumbnailError] = useState(false);
+
   const statusKey = species.conservationStatus ?? '';
   const statusLabel = statusKey
     ? (t.conservation[statusKey as keyof typeof t.conservation] ?? '')
@@ -42,7 +44,7 @@ function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
 
   return (
     <AnimatedPressable
-      entering={FadeIn.delay(index * 40)}
+      entering={FadeIn.delay(Math.min(index, 6) * 40)}
       style={[styles.container, { backgroundColor: colors.card }, Shadows.md]}
       onPress={handlePress}
       accessibilityRole="button"
@@ -51,16 +53,31 @@ function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
       {/* Foto full-bleed */}
       <View style={styles.imageWrapper}>
         <Image
-          source={{ uri: species.photos.thumbnail }}
+          source={
+            species.photos?.thumbnail && !thumbnailError
+              ? { uri: species.photos.thumbnail }
+              : require('../../assets/images/bee-default.png')
+          }
           style={styles.image}
           contentFit="cover"
           transition={300}
+
+          onError={() => setThumbnailError(true)}
         />
         {/* Badge de conservação no canto superior esquerdo */}
         {statusLabel ? (
           <View style={[styles.badge, { backgroundColor: badgeColor }]}>
             <View style={[styles.badgeDot, { backgroundColor: '#1B1F0E' }]} />
             <Text style={styles.badgeText}>{statusLabel}</Text>
+          </View>
+        ) : null}
+
+        {/* Crédito da foto — canto inferior direito */}
+        {species.iNaturalistPhotos?.[0]?.photographerName ? (
+          <View style={styles.photoCredit}>
+            <Text style={styles.photoCreditText} numberOfLines={1}>
+              {`© ${species.iNaturalistPhotos[0].photographerName}`}
+            </Text>
           </View>
         ) : null}
       </View>
@@ -83,10 +100,7 @@ function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
 
 const SpeciesCard = React.memo(
   SpeciesCardBase,
-  (prev, next) =>
-    prev.species.id === next.species.id &&
-    prev.onPress === next.onPress &&
-    prev.index === next.index
+  (prev, next) => prev.species.id === next.species.id && prev.index === next.index
 );
 export default SpeciesCard;
 
@@ -123,6 +137,20 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: FontWeight.bold,
     color: '#1B1F0E',
+  },
+  photoCredit: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 3,
+    backgroundColor: 'rgba(0,0,0,0.38)',
+  },
+  photoCreditText: {
+    fontSize: 9,
+    color: 'rgba(255,255,255,0.85)',
+    textAlign: 'right',
   },
   infoBar: {
     padding: Spacing.sm + 3,
