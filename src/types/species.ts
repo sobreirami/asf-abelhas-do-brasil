@@ -6,6 +6,18 @@ export interface SpeciesPhotos {
   original: string;
 }
 
+export interface PhotoCredit {
+  url: string;
+  urlLarge: string;
+  attribution: string;
+  photographerName: string;
+  photographerLogin: string;
+  licenseCode: string;
+  licenseUrl: string;
+  iNaturalistPhotoId: number;
+  observationId: number;
+}
+
 export interface ScientificArticle {
   title: string;
   url: string;
@@ -27,7 +39,10 @@ export interface Species {
   favoredPlants: string[];
   photos: SpeciesPhotos;
   photoGallery?: string[];
+  iNaturalistPhotos?: PhotoCredit[];
   scientificArticles?: ScientificArticle[];
+  rationalBox?: string;
+  trapNest?: string;
   featured?: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;

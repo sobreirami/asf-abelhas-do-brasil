@@ -8,7 +8,7 @@
       "3. Para cada objeto abaixo, crie um documento usando o 'id' como ID do documento",
       "4. Campos booleanos (ex: featured) devem ser criados com tipo 'boolean', não string",
       "5. Para as fotos, faça upload no Firebase Storage e substitua as URLs de exemplo",
-      "6. ATENÇÃO: Não use espaços nos nomes dos campos — 'featured ' (com espaço) ≠ 'featured'"
+      "6. ATENÇÃO: Não use espaços nos nomes dos campos, 'featured ' (com espaço) ≠ 'featured'"
     ],
     "conservationStatusValues": [
       "least-concern",
