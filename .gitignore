@@ -87,3 +87,6 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cliandroid/local.properties
+
+# Firebase Admin SDK - never commit
+serviceAccountKey.json
