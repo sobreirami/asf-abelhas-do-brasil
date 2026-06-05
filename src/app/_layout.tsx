@@ -51,8 +51,6 @@ function RootLayoutNav() {
         }
       } finally {
         setIsReady(true);
-
-        await SplashScreen.hideAsync();
       }
     };
 

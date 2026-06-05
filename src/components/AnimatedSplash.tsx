@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
+import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 const light = require('../../assets/splash/lottie-light.json');
@@ -11,6 +12,10 @@ type AnimatedSplashProps = { onDone: () => void };
 export function AnimatedSplash({ onDone }: AnimatedSplashProps) {
   const scheme = useColorScheme();
   const [fade] = useState(() => new Animated.Value(1));
+
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
 
   return (
     <Animated.View
