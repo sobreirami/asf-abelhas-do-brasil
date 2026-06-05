@@ -41,4 +41,23 @@ export const styles = StyleSheet.create({
     height: 8,
     borderRadius: BorderRadius.full,
   },
+  creditContainer: {
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.sm,
+  },
+  creditText: {
+    fontSize: FontSize.xs,
+    opacity: 0.6,
+    lineHeight: 16,
+  },
+  inatLink: {
+    marginTop: Spacing.xs,
+    alignSelf: 'flex-start',
+    minHeight: 44,
+    justifyContent: 'center',
+  },
+  inatLinkText: {
+    fontSize: FontSize.sm,
+    fontWeight: FontWeight.medium,
+  },
 });

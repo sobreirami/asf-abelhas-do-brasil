@@ -1,21 +1,18 @@
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import {
-  Alert,
-  Linking,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, {
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import PhotoCarousel from '@/components/species/PhotoCarousel';
 import { Chip } from '@/components/ui';
@@ -29,11 +26,6 @@ import { Species } from '@/types/species';
 
 import { triggerHaptic, triggerNotificationHaptic } from '@/utils/haptics';
 import { ImpactFeedbackStyle, NotificationFeedbackType } from 'expo-haptics';
-import {
-  addFavorite,
-  removeFavorite,
-  isFavorite as checkIsFavorite,
-} from '@/services/favoritesService';
 
 const HEADER_HEIGHT = 320;
 
@@ -51,37 +43,23 @@ export default function SpeciesDetailScreen() {
   const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
   const { setPendingTagFilter, setActiveFilters } = useFilter();
+  const insets = useSafeAreaInsets();
 
   const [species, setSpecies] = useState<Species | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [headerImageError, setHeaderImageError] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     fetchSpeciesById(id as string)
       .then((data) => {
         setSpecies(data);
-        if (data) {
-          checkIsFavorite(data.id).then(setIsFavorite);
-        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
-
-  const handleToggleFavorite = async () => {
-    if (!species) return;
-    await triggerHaptic(ImpactFeedbackStyle.Medium);
-    if (isFavorite) {
-      await removeFavorite(species.id);
-      setIsFavorite(false);
-    } else {
-      await addFavorite(species);
-      setIsFavorite(true);
-    }
-  };
 
   const handleShare = async () => {
     if (!species) return;
@@ -149,35 +127,21 @@ export default function SpeciesDetailScreen() {
           {/* Header full-bleed */}
           <View style={styles.headerContainer}>
             <Image
-              source={{ uri: species.photos.original }}
+              source={
+                species.photos?.original && !headerImageError
+                  ? { uri: species.photos.original }
+                  : require('../../../assets/images/bee-default.png')
+              }
               style={styles.headerImage}
               contentFit="cover"
               transition={300}
+              onError={() => setHeaderImageError(true)}
             />
             {/* Gradiente de proteção */}
             <LinearGradient
               colors={['transparent', 'rgba(0,0,0,0.72)']}
               style={styles.headerGradient}
             />
-
-            {/* Botões flutuantes */}
-            <View style={[styles.floatingBtns, { top: Platform.OS === 'ios' ? 56 : 36 }]}>
-              <GlassButton
-                icon="chevron-back"
-                onPress={async () => {
-                  await triggerHaptic(ImpactFeedbackStyle.Light);
-                  router.back();
-                }}
-              />
-              <View style={styles.floatingRight}>
-                <GlassButton
-                  icon={isFavorite ? 'heart' : 'heart-outline'}
-                  active={isFavorite}
-                  onPress={handleToggleFavorite}
-                />
-                <GlassButton icon="share-outline" onPress={handleShare} />
-              </View>
-            </View>
 
             {/* Nome sobreposto */}
             <View style={styles.headerNameArea}>
@@ -288,6 +252,28 @@ export default function SpeciesDetailScreen() {
               </DetailSection>
             </Animated.View>
 
+            {/* Caixa Racional */}
+            {species.rationalBox ? (
+              <Animated.View entering={FadeInDown.delay(375)}>
+                <DetailSection icon="cube-outline" title={t.species.rationalBox} colors={colors}>
+                  <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                    {species.rationalBox}
+                  </Text>
+                </DetailSection>
+              </Animated.View>
+            ) : null}
+
+            {/* Ninho Isca */}
+            {species.trapNest ? (
+              <Animated.View entering={FadeInDown.delay(390)}>
+                <DetailSection icon="magnet-outline" title={t.species.trapNest} colors={colors}>
+                  <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                    {species.trapNest}
+                  </Text>
+                </DetailSection>
+              </Animated.View>
+            ) : null}
+
             {/* Plantas favoritas */}
             {species.favoredPlants && species.favoredPlants.length > 0 && (
               <Animated.View entering={FadeInDown.delay(400)}>
@@ -337,14 +323,23 @@ export default function SpeciesDetailScreen() {
               </View>
             </Animated.View>
 
-            {/* Carrossel de fotos */}
-            {species.photoGallery && species.photoGallery.length > 0 && (
-              <PhotoCarousel
-                photos={species.photoGallery}
-                delay={500}
-                onImagePress={handleOpenImage}
-              />
-            )}
+            {/* Carrossel de fotos — prefere iNaturalist (com créditos), cai em photoGallery */}
+            {(() => {
+              const inatPhotos = (species.iNaturalistPhotos ?? []).filter((p) => !!p.url);
+              const galleryPhotos = (species.photoGallery ?? []).filter((url) => !!url);
+              const hasInat = inatPhotos.length > 0;
+              const hasGallery = galleryPhotos.length > 0;
+              if (!hasInat && !hasGallery) return null;
+              return (
+                <PhotoCarousel
+                  photos={hasInat ? inatPhotos.map((p) => p.url) : galleryPhotos}
+                  credits={hasInat ? inatPhotos : undefined}
+                  delay={500}
+                  onImagePress={handleOpenImage}
+                  onExternalLinkPress={handleOpenExternalLink}
+                />
+              );
+            })()}
 
             {/* Artigos científicos */}
             {species.scientificArticles && species.scientificArticles.length > 0 && (
@@ -393,6 +388,20 @@ export default function SpeciesDetailScreen() {
           </View>
         </ScrollView>
 
+        {/* Botões flutuantes fixos (fora do scroll) */}
+        <View style={[styles.floatingBtns, { top: insets.top + 12 }]}>
+          <GlassButton
+            icon="chevron-back"
+            onPress={async () => {
+              await triggerHaptic(ImpactFeedbackStyle.Light);
+              router.back();
+            }}
+          />
+          <View style={styles.floatingRight}>
+            <GlassButton icon="share-outline" onPress={handleShare} />
+          </View>
+        </View>
+
         {/* Image Viewer Modal */}
         <Modal
           visible={imageModalVisible}
@@ -400,10 +409,13 @@ export default function SpeciesDetailScreen() {
           animationType="fade"
           onRequestClose={() => setImageModalVisible(false)}
         >
-          <View style={styles.imageModalContainer}>
+          <GestureHandlerRootView style={styles.imageModalContainer}>
             <BlurView intensity={90} tint="dark" style={styles.imageModalBlur}>
               <Pressable
-                style={[styles.imageModalClose, { backgroundColor: colors.overlay }]}
+                style={[
+                  styles.imageModalClose,
+                  { backgroundColor: colors.overlay, top: insets.top + 16 },
+                ]}
                 onPress={async () => {
                   await triggerHaptic(ImpactFeedbackStyle.Light);
                   setImageModalVisible(false);
@@ -411,20 +423,92 @@ export default function SpeciesDetailScreen() {
               >
                 <Ionicons name="close" size={32} color={colors.onOverlay} />
               </Pressable>
-              <Image
-                source={{ uri: selectedImage }}
-                style={styles.fullImage}
-                contentFit="contain"
-                transition={300}
-              />
+              <ZoomableImage uri={selectedImage} placeholderColor={colors.skeletonBase} />
               <Text style={[styles.imageHint, { color: colors.onOverlay }]}>
                 {t.species.imageZoomHint}
               </Text>
             </BlurView>
-          </View>
+          </GestureHandlerRootView>
         </Modal>
       </View>
     </>
+  );
+}
+
+function ZoomableImage({ uri, placeholderColor }: { uri: string; placeholderColor: string }) {
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const savedTranslateX = useSharedValue(0);
+  const savedTranslateY = useSharedValue(0);
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = Math.max(1, Math.min(savedScale.value * e.scale, 5));
+    })
+    .onEnd(() => {
+      savedScale.value = scale.value;
+      if (scale.value <= 1) {
+        scale.value = withSpring(1);
+        translateX.value = withSpring(0);
+        translateY.value = withSpring(0);
+        savedScale.value = 1;
+        savedTranslateX.value = 0;
+        savedTranslateY.value = 0;
+      }
+    });
+
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      if (scale.value > 1) {
+        translateX.value = savedTranslateX.value + e.translationX;
+        translateY.value = savedTranslateY.value + e.translationY;
+      }
+    })
+    .onEnd(() => {
+      savedTranslateX.value = translateX.value;
+      savedTranslateY.value = translateY.value;
+    });
+
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      if (scale.value > 1) {
+        scale.value = withSpring(1);
+        translateX.value = withSpring(0);
+        translateY.value = withSpring(0);
+        savedScale.value = 1;
+        savedTranslateX.value = 0;
+        savedTranslateY.value = 0;
+      } else {
+        scale.value = withSpring(2.5);
+        savedScale.value = 2.5;
+      }
+    });
+
+  const composed = Gesture.Simultaneous(pinchGesture, panGesture, doubleTapGesture);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { scale: scale.value },
+    ],
+  }));
+
+  return (
+    <GestureDetector gesture={composed}>
+      <Animated.View style={[styles.fullImage, animatedStyle]}>
+        <Image
+          source={{ uri }}
+          style={{ width: '100%', height: '100%' }}
+          contentFit="contain"
+          transition={300}
+          placeholder={placeholderColor}
+        />
+      </Animated.View>
+    </GestureDetector>
   );
 }
 
@@ -523,7 +607,7 @@ const styles = StyleSheet.create({
     right: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    zIndex: 3,
+    zIndex: 100,
   },
   floatingRight: { flexDirection: 'row', gap: 10 },
   glassBtn: {
@@ -708,7 +792,7 @@ const styles = StyleSheet.create({
   imageModalBlur: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   imageModalClose: {
     position: 'absolute',
-    top: 60,
+    top: 16,
     right: 20,
     zIndex: 10,
     width: 48,
@@ -717,6 +801,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  fullImage: { width: '90%', height: '70%' },
+  fullImage: { width: '90%', height: '70%', overflow: 'hidden' },
   imageHint: { fontSize: FontSize.sm, marginTop: Spacing.lg, opacity: 0.7 },
 });

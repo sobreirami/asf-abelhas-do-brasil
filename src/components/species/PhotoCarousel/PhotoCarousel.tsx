@@ -1,7 +1,6 @@
-// Componente de carrossel de fotos
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import { Image } from 'expo-image';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import {
   FlatList,
   NativeScrollEvent,
@@ -15,15 +14,24 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Colors, Shadows, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { PhotoCredit } from '@/types/species';
 import { IMAGE_WIDTH, styles } from './styles';
 
 interface PhotoCarouselProps {
   photos: string[];
+  credits?: PhotoCredit[];
   delay?: number;
   onImagePress?: (imageUrl: string) => void;
+  onExternalLinkPress?: (url: string) => void;
 }
 
-export default function PhotoCarousel({ photos, delay = 0, onImagePress }: PhotoCarouselProps) {
+export default function PhotoCarousel({
+  photos,
+  credits,
+  delay = 0,
+  onImagePress,
+  onExternalLinkPress,
+}: PhotoCarouselProps) {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const { t } = useLanguage();
@@ -48,9 +56,17 @@ export default function PhotoCarousel({ photos, delay = 0, onImagePress }: Photo
     }
   };
 
-  if (!photos || photos.length === 0) {
+  const [failedIndexes, setFailedIndexes] = useState<Set<number>>(new Set());
+
+  const handleImageError = useCallback((index: number) => {
+    setFailedIndexes((prev) => new Set(prev).add(index));
+  }, []);
+
+  if (!photos || photos.length === 0 || failedIndexes.size === photos.length) {
     return null;
   }
+
+  const currentCredit = credits?.[currentIndex];
 
   return (
     <Animated.View entering={FadeInDown.delay(delay)} style={styles.container}>
@@ -68,16 +84,21 @@ export default function PhotoCarousel({ photos, delay = 0, onImagePress }: Photo
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
         keyExtractor={(item, index) => `photo-${index}`}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <Pressable
             style={[styles.imageWrapper, Shadows.md, { backgroundColor: colors.card }]}
             onPress={() => handleImagePress(item)}
           >
             <Image
-              source={{ uri: item }}
+              source={
+                failedIndexes.has(index)
+                  ? require('../../../../assets/images/bee-default.png')
+                  : { uri: item }
+              }
               style={styles.image}
               contentFit="cover"
               transition={300}
+              onError={() => handleImageError(index)}
             />
           </Pressable>
         )}
@@ -98,6 +119,31 @@ export default function PhotoCarousel({ photos, delay = 0, onImagePress }: Photo
           />
         ))}
       </View>
+
+      {/* Crédito da foto atual + link iNaturalist */}
+      {currentCredit ? (
+        <View style={styles.creditContainer}>
+          <Text style={[styles.creditText, { color: colors.icon }]}>
+            {`© ${currentCredit.photographerName}`}
+            {currentCredit.licenseCode ? ` · ${currentCredit.licenseCode.toUpperCase()}` : ''}
+            {' · iNaturalist'}
+          </Text>
+          {currentCredit.observationId ? (
+            <Pressable
+              onPress={() =>
+                onExternalLinkPress?.(
+                  `https://www.inaturalist.org/observations/${currentCredit.observationId}`
+                )
+              }
+              style={styles.inatLink}
+            >
+              <Text style={[styles.inatLinkText, { color: colors.secondary }]}>
+                {t.gallery.viewOnINaturalist} ↗
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
     </Animated.View>
   );
 }
