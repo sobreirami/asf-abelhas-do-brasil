@@ -2,13 +2,11 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import HoneycombPattern from '@/components/ui/HoneycombPattern';
 import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
-
 import { useFilter } from '@/contexts/FilterContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -34,15 +32,73 @@ const STATUS_COLORS: Record<StatusKey, string> = {
   'least-concern': '#6FCF73',
 };
 
-const STATUS_ICONS: Record<StatusKey, string> = {
-  'critically-endangered': 'alert-circle',
-  endangered: 'warning',
-  vulnerable: 'alert',
-  'data-deficient': 'help-circle',
-  'least-concern': 'shield-checkmark',
+const STATUS_LABELS: Record<StatusKey, string> = {
+  'critically-endangered': 'Criticamente em Perigo',
+  endangered: 'Em Perigo',
+  vulnerable: 'Vulnerável',
+  'data-deficient': 'Dados Insuficientes',
+  'least-concern': 'Pouco Preocupante',
 };
 
-const THREATENED_STATUSES = new Set(['critically-endangered', 'endangered', 'vulnerable']);
+const THREATENED_STATUSES = new Set<string>(['critically-endangered', 'endangered', 'vulnerable']);
+
+function consColor(status: string): string {
+  return STATUS_COLORS[status as StatusKey] ?? '#9EAB90';
+}
+
+function ConsSpeciesRow({
+  species,
+  colors,
+  onPress,
+}: {
+  species: Species;
+  colors: (typeof Colors)['dark'];
+  onPress: () => void;
+}) {
+  const [thumbnailError, setThumbnailError] = useState(false);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.speciesRow,
+        { backgroundColor: colors.card, borderColor: colors.border },
+        pressed && { opacity: 0.85, transform: [{ scale: 0.98 }] },
+      ]}
+      accessibilityRole="button"
+      accessibilityLabel={`${species.commonName}, ${species.scientificName}`}
+    >
+      <View style={styles.speciesThumb}>
+        <Image
+          source={
+            species.photos?.thumbnail && !thumbnailError
+              ? { uri: species.photos.thumbnail }
+              : require('../../../assets/images/bee-default.png')
+          }
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={200}
+          onError={() => setThumbnailError(true)}
+        />
+        <View
+          style={[
+            styles.speciesStatusDot,
+            { backgroundColor: consColor(species.conservationStatus) },
+          ]}
+        />
+      </View>
+      <View style={styles.speciesInfo}>
+        <Text style={[styles.speciesName, { color: colors.text }]} numberOfLines={1}>
+          {species.commonName}
+        </Text>
+        <Text style={[styles.speciesSci, { color: colors.textMuted }]} numberOfLines={1}>
+          {species.scientificName}
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={18} color={colors.textFaint} />
+    </Pressable>
+  );
+}
 
 export default function ConservationScreen() {
   const colorScheme = useColorScheme();
@@ -83,9 +139,13 @@ export default function ConservationScreen() {
     return map;
   }, [allSpecies]);
 
+  const presentStatuses = useMemo(
+    () => STATUS_ORDER.filter((k) => grouped[k] && grouped[k].length > 0),
+    [grouped]
+  );
+
   const threatenedCount = useMemo(
-    () =>
-      allSpecies.filter((s) => THREATENED_STATUSES.has(s.conservationStatus as StatusKey)).length,
+    () => allSpecies.filter((s) => THREATENED_STATUSES.has(s.conservationStatus ?? '')).length,
     [allSpecies]
   );
 
@@ -97,8 +157,133 @@ export default function ConservationScreen() {
     [setActiveFilters]
   );
 
-  const conservationLabel = (key: string) =>
-    t.conservation[key as keyof typeof t.conservation] ?? key;
+  const sections = useMemo(
+    () => presentStatuses.map((status) => ({ status, data: grouped[status] })),
+    [presentStatuses, grouped]
+  );
+
+  const listHeader = useMemo(
+    () => (
+      <>
+        <View style={styles.hero}>
+          <HoneycombPattern opacity={0.05} color={colors.primary} />
+          <Text style={[styles.heroTitle, { color: colors.text }]}>Conservação</Text>
+          <Text style={[styles.heroSubtitle, { color: colors.textMuted }]}>
+            Como estão as abelhas nativas — e por que cada espécie importa.
+          </Text>
+        </View>
+
+        <View style={styles.panelWrap}>
+          <View
+            style={[
+              styles.threatPanel,
+              { backgroundColor: colors.error + '1C', borderColor: colors.error + '42' },
+            ]}
+          >
+            <View style={styles.threatTop}>
+              <View style={[styles.threatIconWrap, { backgroundColor: colors.error + '2E' }]}>
+                <Ionicons name="warning-outline" size={24} color={colors.error} />
+              </View>
+              <View style={styles.threatText}>
+                <Text style={[styles.threatTitle, { color: colors.text }]}>
+                  {threatenedCount} de {allSpecies.length} espécies já estão ameaçadas
+                </Text>
+                <Text style={[styles.threatBody, { color: colors.textMuted }]}>
+                  Desmatamento, agrotóxicos e perda de habitat pressionam as populações. Conhecer é
+                  o primeiro passo para proteger.
+                </Text>
+              </View>
+            </View>
+
+            {allSpecies.length > 0 && (
+              <>
+                <View style={styles.distBar}>
+                  {presentStatuses.map((k) => (
+                    <View
+                      key={k}
+                      style={[
+                        styles.distSegment,
+                        { flex: grouped[k].length, backgroundColor: STATUS_COLORS[k] },
+                      ]}
+                    />
+                  ))}
+                </View>
+                <View style={styles.distLegend}>
+                  {presentStatuses.map((k) => (
+                    <View key={k} style={styles.legendItem}>
+                      <View style={[styles.legendDot, { backgroundColor: STATUS_COLORS[k] }]} />
+                      <Text style={[styles.legendLabel, { color: colors.textMuted }]}>
+                        {STATUS_LABELS[k]}
+                      </Text>
+                      <Text style={[styles.legendCount, { color: colors.textFaint }]}>
+                        {grouped[k].length}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.groupsTopSpacer} />
+      </>
+    ),
+    [colors, grouped, presentStatuses, allSpecies.length, threatenedCount]
+  );
+
+  const listFooter = useMemo(
+    () => (
+      <View
+        style={[styles.closingNote, { backgroundColor: colors.card, borderColor: colors.border }]}
+      >
+        <Ionicons name="shield-checkmark" size={22} color={colors.success} />
+        <Text style={[styles.closingText, { color: colors.textMuted }]}>
+          Os status seguem critérios da IUCN. Criar abelhas sem ferrão com responsabilidade ajuda a
+          preservar cada espécie.
+        </Text>
+      </View>
+    ),
+    [colors]
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: { status: StatusKey; data: Species[] } }) => {
+      const color = STATUS_COLORS[section.status];
+      return (
+        <View style={[styles.groupHeader, { backgroundColor: colors.background }]}>
+          <View style={styles.groupHeaderLeft}>
+            <View style={[styles.groupDot, { backgroundColor: color }]} />
+            <Text style={[styles.groupLabel, { color: colors.text }]}>
+              {STATUS_LABELS[section.status]}
+            </Text>
+            <Text style={[styles.groupCount, { color: colors.textFaint }]}>
+              {section.data.length}
+            </Text>
+          </View>
+          <Pressable onPress={() => handleViewInGallery(section.status)} accessibilityRole="button">
+            <Text style={[styles.galleryLink, { color: colors.primary }]}>Ver na galeria</Text>
+          </Pressable>
+        </View>
+      );
+    },
+    [colors, handleViewInGallery]
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: Species }) => (
+      <View style={styles.rowWrap}>
+        <ConsSpeciesRow
+          species={item}
+          colors={colors}
+          onPress={() => router.push(`/species/${item.id}`)}
+        />
+      </View>
+    ),
+    [colors]
+  );
+
+  const renderSectionSeparator = useCallback(() => <View style={styles.sectionSeparator} />, []);
 
   if (loading) {
     return (
@@ -118,179 +303,23 @@ export default function ConservationScreen() {
       edges={['top']}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Hero */}
-        <View style={styles.hero}>
-          <HoneycombPattern opacity={0.05} color={colors.primary} />
-          <View style={[styles.heroGlow, { backgroundColor: colors.error + '18' }]} />
-          <Text style={[styles.heroTitle, { color: colors.text }]}>{t.conservationTab.title}</Text>
-          <Text style={[styles.heroSubtitle, { color: colors.textMuted }]}>
-            {t.conservationTab.subtitle}
-          </Text>
-        </View>
-
-        {/* Painel de ameaça */}
-        <Animated.View entering={FadeInDown.delay(100)} style={styles.heroPanelWrap}>
-          <View
-            style={[
-              styles.heroPanel,
-              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-            ]}
-          >
-            <View style={[styles.heroPanelLeft, { borderRightColor: colors.border }]}>
-              <Text style={[styles.heroBigNum, { color: colors.error }]}>{threatenedCount}</Text>
-              <Text style={[styles.heroPanelLabel, { color: colors.textMuted }]}>
-                {t.conservationTab.heroOf} {allSpecies.length}
-              </Text>
-              <Text style={[styles.heroPanelSub, { color: colors.textFaint }]}>
-                {t.conservationTab.heroLabel}
-              </Text>
-            </View>
-            <View style={styles.heroPanelRight}>
-              <Text style={[styles.heroBigNum, { color: colors.success }]}>
-                {allSpecies.length - threatenedCount}
-              </Text>
-              <Text style={[styles.heroPanelLabel, { color: colors.textMuted }]}>
-                {t.conservationTab.safe}
-              </Text>
-            </View>
-          </View>
-        </Animated.View>
-
-        {/* Barra de distribuição */}
-        {allSpecies.length > 0 && (
-          <Animated.View entering={FadeInDown.delay(180)} style={styles.distributionWrap}>
-            <Text style={[styles.sectionLabel, { color: colors.text }]}>
-              {t.conservationTab.distributionTitle}
-            </Text>
-            <View style={styles.distributionBar}>
-              {STATUS_ORDER.map((status) => {
-                const count = grouped[status]?.length ?? 0;
-                if (count === 0) return null;
-                const flex = count / allSpecies.length;
-                return (
-                  <View
-                    key={status}
-                    style={[
-                      styles.distributionSegment,
-                      { flex, backgroundColor: STATUS_COLORS[status] },
-                    ]}
-                  />
-                );
-              })}
-            </View>
-            <View style={styles.distributionLegend}>
-              {STATUS_ORDER.map((status) => {
-                const count = grouped[status]?.length ?? 0;
-                if (count === 0) return null;
-                return (
-                  <View key={status} style={styles.legendItem}>
-                    <View style={[styles.legendDot, { backgroundColor: STATUS_COLORS[status] }]} />
-                    <Text style={[styles.legendText, { color: colors.textFaint }]}>
-                      {conservationLabel(status)} ({count})
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          </Animated.View>
-        )}
-
-        {/* Seções por status */}
-        {STATUS_ORDER.map((status, sIdx) => {
-          const items = grouped[status];
-          if (!items || items.length === 0) return null;
-          const color = STATUS_COLORS[status];
-          const icon = STATUS_ICONS[status];
-          const label = conservationLabel(status);
-          const countLabel =
-            items.length === 1
-              ? t.conservationTab.speciesSingular
-              : `${items.length} ${t.conservationTab.speciesPlural}`;
-
-          return (
-            <Animated.View key={status} entering={FadeInDown.delay(260 + sIdx * 80)}>
-              {/* Cabeçalho da seção */}
-              <View style={styles.statusHeader}>
-                <View style={[styles.statusBadge, { backgroundColor: color + '22' }]}>
-                  <Ionicons name={icon as never} size={16} color={color} />
-                  <Text style={[styles.statusLabel, { color }]}>{label}</Text>
-                </View>
-                <Text style={[styles.statusCount, { color: colors.textFaint }]}>{countLabel}</Text>
-              </View>
-
-              {/* Cards de espécies */}
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.speciesRow}
-              >
-                {items.map((sp) => (
-                  <ConservationSpeciesCard
-                    key={sp.id}
-                    species={sp}
-                    statusColor={color}
-                    colors={colors}
-                    onPress={() => router.push(`/species/${sp.id}`)}
-                  />
-                ))}
-              </ScrollView>
-
-              {/* Botão ver na galeria */}
-              <Pressable
-                onPress={() => handleViewInGallery(status)}
-                style={[styles.viewGalleryBtn, { borderColor: color + '60' }]}
-                accessibilityRole="button"
-              >
-                <Ionicons name="grid-outline" size={16} color={color} />
-                <Text style={[styles.viewGalleryText, { color }]}>
-                  {t.conservationTab.viewInGallery}
-                </Text>
-              </Pressable>
-            </Animated.View>
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-function ConservationSpeciesCard({
-  species,
-  statusColor,
-  colors,
-  onPress,
-}: {
-  species: Species;
-  statusColor: string;
-  colors: (typeof Colors)['dark'];
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.speciesCard,
-        { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-      ]}
-      accessibilityRole="button"
-      accessibilityLabel={`${species.commonName}, ${species.scientificName}`}
-    >
-      <Image
-        source={{ uri: species.photos.thumbnail }}
-        style={styles.speciesCardImage}
-        contentFit="cover"
-        transition={200}
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        SectionSeparatorComponent={renderSectionSeparator}
+        ListHeaderComponent={listHeader}
+        ListFooterComponent={listFooter}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+        removeClippedSubviews
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        stickySectionHeadersEnabled={false}
       />
-      <View style={[styles.speciesCardBar, { borderTopColor: statusColor + '40' }]}>
-        <Text style={[styles.speciesCardName, { color: colors.text }]} numberOfLines={1}>
-          {species.commonName}
-        </Text>
-        <Text style={[styles.speciesCardSci, { color: colors.textMuted }]} numberOfLines={1}>
-          {species.scientificName}
-        </Text>
-      </View>
-    </Pressable>
+    </SafeAreaView>
   );
 }
 
@@ -303,135 +332,121 @@ const styles = StyleSheet.create({
   hero: {
     position: 'relative',
     overflow: 'hidden',
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.xl,
-  },
-  heroGlow: {
-    position: 'absolute',
-    top: -60,
-    right: -20,
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    paddingHorizontal: 20,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   heroTitle: {
-    fontSize: FontSize.xxxl,
+    fontSize: 30,
     fontWeight: FontWeight.bold,
     letterSpacing: -0.5,
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
     position: 'relative',
   },
   heroSubtitle: {
-    fontSize: FontSize.md,
-    lineHeight: 24,
+    fontSize: 15,
+    lineHeight: 22,
     maxWidth: 300,
     position: 'relative',
   },
 
-  heroPanelWrap: { paddingHorizontal: Spacing.lg, marginBottom: Spacing.lg },
-  heroPanel: {
-    flexDirection: 'row',
-    borderRadius: BorderRadius.lg,
+  panelWrap: { paddingHorizontal: 20, paddingTop: 16 },
+  threatPanel: {
+    borderRadius: 22,
+    padding: 18,
     borderWidth: 1,
-    overflow: 'hidden',
   },
-  heroPanelLeft: {
-    flex: 1,
-    padding: Spacing.lg,
-    borderRightWidth: 1,
+  threatTop: { flexDirection: 'row', gap: 13, alignItems: 'flex-start' },
+  threatIconWrap: {
+    width: 46,
+    height: 46,
+    borderRadius: 13,
+    flexShrink: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  heroPanelRight: {
-    flex: 1,
-    padding: Spacing.lg,
-  },
-  heroBigNum: {
-    fontSize: FontSize.display,
+  threatText: { flex: 1, minWidth: 0 },
+  threatTitle: {
+    fontSize: 17,
     fontWeight: FontWeight.bold,
-    lineHeight: 44,
+    lineHeight: 22,
+    marginBottom: 4,
   },
-  heroPanelLabel: {
-    fontSize: FontSize.sm,
-    fontWeight: FontWeight.medium,
-    marginTop: 2,
-  },
-  heroPanelSub: {
-    fontSize: FontSize.xs,
-    marginTop: 2,
-    lineHeight: 16,
-  },
+  threatBody: { fontSize: 13.5, lineHeight: 20 },
 
-  distributionWrap: { paddingHorizontal: Spacing.lg, marginBottom: Spacing.xl },
-  sectionLabel: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, marginBottom: Spacing.sm },
-  distributionBar: {
+  distBar: {
     flexDirection: 'row',
     height: 12,
     borderRadius: BorderRadius.full,
     overflow: 'hidden',
-    marginBottom: Spacing.sm,
+    marginTop: 16,
+    gap: 2,
   },
-  distributionSegment: { height: '100%' },
-  distributionLegend: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
-  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  legendDot: { width: 8, height: 8, borderRadius: 4 },
-  legendText: { fontSize: FontSize.xs },
+  distSegment: { height: '100%' },
+  distLegend: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, rowGap: 6, marginTop: 12 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  legendDot: { width: 9, height: 9, borderRadius: BorderRadius.full },
+  legendLabel: { fontSize: 12.5, fontWeight: FontWeight.semibold },
+  legendCount: { fontSize: 12.5, fontWeight: FontWeight.bold },
 
-  statusHeader: {
+  groupsTopSpacer: { height: 22 },
+  sectionSeparator: { height: 22 },
+  rowWrap: { paddingHorizontal: 20, marginBottom: 9 },
+  groupHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.sm,
-    marginTop: Spacing.md,
+    marginBottom: 11,
+    paddingHorizontal: 20,
+    paddingTop: 4,
   },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: BorderRadius.full,
-  },
-  statusLabel: { fontSize: FontSize.sm, fontWeight: FontWeight.bold },
-  statusCount: { fontSize: FontSize.sm },
+  groupHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 9, flex: 1, minWidth: 0 },
+  groupDot: { width: 11, height: 11, borderRadius: BorderRadius.full, flexShrink: 0 },
+  groupLabel: { fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: -0.2 },
+  groupCount: { fontSize: 13, fontWeight: FontWeight.bold },
+  galleryLink: { fontSize: 13.5, fontWeight: FontWeight.semibold, flexShrink: 0 },
 
   speciesRow: {
-    paddingHorizontal: Spacing.lg,
-    gap: Spacing.sm,
-    paddingBottom: Spacing.xs,
-  },
-  speciesCard: {
-    width: 140,
-    borderRadius: BorderRadius.lg,
-    overflow: 'hidden',
-    borderWidth: 1,
-  },
-  speciesCardImage: { width: '100%', height: 100 },
-  speciesCardBar: {
-    padding: Spacing.sm,
-    borderTopWidth: 2,
-  },
-  speciesCardName: {
-    fontSize: FontSize.sm,
-    fontWeight: FontWeight.bold,
-    marginBottom: 2,
-  },
-  speciesCardSci: {
-    fontSize: FontSize.xs,
-    fontStyle: 'italic',
-  },
-
-  viewGalleryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    alignSelf: 'flex-start',
-    marginHorizontal: Spacing.lg,
-    marginTop: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.full,
+    gap: 13,
+    padding: 10,
+    paddingHorizontal: 12,
+    borderRadius: 15,
     borderWidth: 1,
   },
-  viewGalleryText: { fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
+  speciesThumb: {
+    width: 46,
+    height: 46,
+    borderRadius: 13,
+    overflow: 'hidden',
+    flexShrink: 0,
+    backgroundColor: '#2D3624',
+    position: 'relative',
+  },
+  speciesStatusDot: {
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
+    width: 9,
+    height: 9,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1.5,
+    borderColor: 'rgba(0,0,0,0.35)',
+  },
+  speciesInfo: { flex: 1, minWidth: 0 },
+  speciesName: { fontSize: 16, fontWeight: FontWeight.bold },
+  speciesSci: { fontSize: 12.5, fontStyle: 'italic', marginTop: 1 },
+
+  closingNote: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderRadius: 18,
+    padding: 16,
+    margin: 20,
+    marginTop: 8,
+    borderWidth: 1,
+  },
+  closingText: { flex: 1, fontSize: 13.5, lineHeight: 20 },
 });
