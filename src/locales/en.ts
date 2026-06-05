@@ -11,7 +11,7 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Native Bees of Brazil',
-    heroGreeting: 'Hello, explorer 🐝',
+    heroGreeting: 'Hello, meliponiculturist 🐝',
     featuredSpecies: 'Featured',
     allSpecies: 'All Species',
     filters: 'Filters',
@@ -49,6 +49,8 @@ export default {
     externalLinkMessage: 'You will be redirected to an external site. Do you want to continue?',
     externalLinkContinue: 'Continue',
     imageZoomHint: 'Pinch to zoom',
+    rationalBox: 'Rational Box',
+    trapNest: 'Trap Nest',
   },
 
   // Preferences Screen
@@ -82,7 +84,7 @@ export default {
   onboarding: {
     slide1Title: 'Discover Brazilian\nStingless Bees',
     slide1Description:
-      'A visual guide to native bees — the silent pollinators that sustain our forests and crops.',
+      'A visual guide to native bees, the silent pollinators that sustain our forests and crops.',
     slide2Title: 'Search, Filter\nand Discover',
     slide2Description:
       'Explore by biome, region, and size. See characteristics, nests, and favorite plants of each species.',
@@ -117,7 +119,12 @@ export default {
   settings: {
     title: 'Settings',
     generalSection: 'General',
+    contentSection: 'Content',
     language: 'Language',
+    offlineStorage: 'Offline Storage',
+    rateApp: 'Rate the app',
+    termsOfUse: 'Terms of Use',
+    privacyPolicy: 'Privacy Policy',
     showScientificNames: 'Scientific Names',
     showScientificNamesDesc: 'Show in italic on cards and details',
     appearanceSection: 'Appearance',
@@ -227,6 +234,7 @@ export default {
   // Photo Gallery
   gallery: {
     title: 'Photo Gallery',
+    viewOnINaturalist: 'View on iNaturalist',
   },
 
   // Behaviors

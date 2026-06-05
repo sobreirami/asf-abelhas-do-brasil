@@ -11,7 +11,7 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Abelhas Nativas do Brasil',
-    heroGreeting: 'Olá, explorador 🐝',
+    heroGreeting: 'Olá, meliponicultor 🐝',
     featuredSpecies: 'Em Destaque',
     allSpecies: 'Todas as Espécies',
     filters: 'Filtros',
@@ -49,6 +49,8 @@ export default {
     externalLinkMessage: 'Você será redirecionado para um site externo. Deseja continuar?',
     externalLinkContinue: 'Continuar',
     imageZoomHint: 'Pinça para dar zoom',
+    rationalBox: 'Caixa Racional',
+    trapNest: 'Ninho Isca',
   },
 
   // Preferences Screen
@@ -82,7 +84,7 @@ export default {
   onboarding: {
     slide1Title: 'Conheça as abelhas\nsem ferrão do Brasil',
     slide1Description:
-      'Um guia visual das abelhas nativas — as polinizadoras silenciosas que sustentam nossas florestas e plantações.',
+      'Um guia visual das abelhas nativas, as polinizadoras silenciosas que sustentam nossas florestas e plantações.',
     slide2Title: 'Busque, filtre\ne descubra',
     slide2Description:
       'Explore por bioma, região e tamanho. Veja características, ninhos e plantas favoritas de cada espécie.',
@@ -117,7 +119,12 @@ export default {
   settings: {
     title: 'Configurações',
     generalSection: 'Geral',
+    contentSection: 'Conteúdo',
     language: 'Idioma',
+    offlineStorage: 'Armazenamento offline',
+    rateApp: 'Avaliar o app',
+    termsOfUse: 'Termos de uso',
+    privacyPolicy: 'Política de privacidade',
     showScientificNames: 'Nomes Científicos',
     showScientificNamesDesc: 'Exibir em itálico nos cards e detalhes',
     appearanceSection: 'Aparência',
@@ -230,6 +237,7 @@ export default {
   // Photo Gallery
   gallery: {
     title: 'Galeria de Fotos',
+    viewOnINaturalist: 'Ver no iNaturalist',
   },
 
   // Behaviors

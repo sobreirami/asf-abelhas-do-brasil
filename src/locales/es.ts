@@ -11,7 +11,7 @@ export default {
   // Home/Gallery Screen
   home: {
     title: 'Abejas Nativas de Brasil',
-    heroGreeting: 'Hola, explorador 🐝',
+    heroGreeting: 'Hola, meliponicultor 🐝',
     featuredSpecies: 'Destacadas',
     allSpecies: 'Todas las Especies',
     filters: 'Filtros',
@@ -50,6 +50,8 @@ export default {
     externalLinkMessage: '¿Serás redirigido a un sitio externo. Deseas continuar?',
     externalLinkContinue: 'Continuar',
     imageZoomHint: 'Pellizca para hacer zoom',
+    rationalBox: 'Caja Racional',
+    trapNest: 'Nido Trampa',
   },
 
   // Preferences Screen
@@ -118,7 +120,12 @@ export default {
   settings: {
     title: 'Configuración',
     generalSection: 'General',
+    contentSection: 'Contenido',
     language: 'Idioma',
+    offlineStorage: 'Almacenamiento sin conexión',
+    rateApp: 'Calificar la app',
+    termsOfUse: 'Términos de uso',
+    privacyPolicy: 'Política de privacidad',
     showScientificNames: 'Nombres Científicos',
     showScientificNamesDesc: 'Mostrar en cursiva en tarjetas y detalles',
     appearanceSection: 'Apariencia',
@@ -232,6 +239,7 @@ export default {
   // Photo Gallery
   gallery: {
     title: 'Galería de Fotos',
+    viewOnINaturalist: 'Ver en iNaturalist',
   },
 
   // Behaviors
