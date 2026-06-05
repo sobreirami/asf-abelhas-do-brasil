@@ -1,0 +1,3104 @@
+{
+  "instructions": {
+    "collectionName": "species",
+    "documentId": "Use o campo 'id' de cada objeto como ID do documento no Firestore",
+    "steps": [
+      "1. Acesse console.firebase.google.com → seu projeto → Firestore Database",
+      "2. Clique em 'Iniciar coleção' e nomeie como 'species'",
+      "3. Para cada objeto abaixo, crie um documento usando o 'id' como ID do documento",
+      "4. Campos booleanos (ex: featured) devem ser criados com tipo 'boolean', não string",
+      "5. Para as fotos, faça upload no Firebase Storage e substitua as URLs de exemplo",
+      "6. ATENÇÃO: Não use espaços nos nomes dos campos, 'featured ' (com espaço) ≠ 'featured'",
+      "7. createdAt e updatedAt devem ser criados como tipo Timestamp no Firestore console"
+    ],
+    "conservationStatusValues": [
+      "least-concern",
+      "vulnerable",
+      "endangered",
+      "critically-endangered",
+      "extinct-in-wild",
+      "extinct"
+    ],
+    "behaviorValues": [
+      "Muito Mansa",
+      "Mansa",
+      "Agressiva"
+    ],
+    "tagVocabulary": {
+      "tipo": [
+        "semFerrão",
+        "comFerrão",
+        "solitária",
+        "social",
+        "meliponini",
+        "mamangava",
+        "euglossini"
+      ],
+      "tamanho": [
+        "pequena",
+        "média",
+        "grande"
+      ],
+      "comportamento": [
+        "dócil",
+        "agressiva",
+        "kleptoparasita"
+      ],
+      "habitat": [
+        "urbana",
+        "floresta",
+        "cerradão",
+        "nidificacaoSolo",
+        "nidificacaoMadeira",
+        "termitera"
+      ],
+      "valor": [
+        "meliponicultura",
+        "iniciantes",
+        "mel-medicinal",
+        "mel-ácido",
+        "mel-claro",
+        "polinizadora",
+        "orquídeas"
+      ],
+      "conservacao": [
+        "ameaçada",
+        "endêmica"
+      ],
+      "bioma": [
+        "amazônia",
+        "cerrado",
+        "caatinga",
+        "mataAtlântica",
+        "pampa",
+        "pantanal"
+      ]
+    },
+    "imageUrlNote": "Use URLs HTTPS públicas do Firebase Storage (começando com https://firebasestorage.googleapis.com/). Nunca use o formato gs://"
+  },
+  "species": [
+    {
+      "id": "jatai",
+      "commonName": "Jataí",
+      "scientificName": "Tetragonisca angustula",
+      "shortDescription": "A mais popular para criação urbana, dócil, pequena e polinizadora eficiente",
+      "longDescription": "A Jataí é uma das menores e mais conhecidas abelhas sem ferrão do Brasil. Distribui-se por praticamente todos os biomas do país, o que a torna uma espécie extremamente adaptável. Sua entrada tubular de cerume é um dos traços mais reconhecíveis entre as meliponas. Apesar do tamanho diminuto, é uma polinizadora eficiente de flores pequenas, como as do maracujá-doce e do morango. Seu mel é levemente ácido e muito valorizado por propriedades antimicrobianas. Pode ser criada em caixas pequenas, sendo a espécie ideal para iniciantes na meliponicultura urbana ou rural.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Mata Atlântica",
+        "Cerrado",
+        "Caatinga"
+      ],
+      "sizeMm": 5,
+      "behavior": "Muito Mansa",
+      "nest": "Cavidades pequenas; entrada tubular de cerume",
+      "conservationStatus": "least-concern",
+      "featured": true,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "urbana",
+        "meliponicultura",
+        "iniciantes",
+        "mel-ácido",
+        "polinizadora"
+      ],
+      "favoredPlants": [
+        "Maracujazeiro",
+        "Morangueiro",
+        "Manjericão",
+        "Jabuticabeira"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Tetragonisca angustula: biologia, manejo e conservação",
+          "url": "https://scholar.google.com/scholar?q=Tetragonisca+angustula+biology"
+        },
+        {
+          "title": "Propriedades antimicrobianas do mel de Jataí",
+          "url": "https://scholar.google.com/scholar?q=Tetragonisca+angustula+honey+antimicrobial"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 155397688,
+          "observationId": 93735785
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/151637508/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/151637508/large.jpg",
+          "attribution": "(c) Grete Pasch, some rights reserved (CC BY)",
+          "photographerName": "Grete Pasch",
+          "photographerLogin": "gpasch",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 151637508,
+          "observationId": 91651137
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/23623301/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/23623301/large.jpeg",
+          "attribution": "(c) Alex Rebelo, some rights reserved (CC BY-NC)",
+          "photographerName": "Alex Rebelo",
+          "photographerLogin": "alexanderr",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 23623301,
+          "observationId": 15804788
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/255035322/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/255035322/large.jpeg",
+          "attribution": "(c) yuleidy_00, some rights reserved (CC BY-NC)",
+          "photographerName": "yuleidy_00",
+          "photographerLogin": "yuleidy_00",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 255035322,
+          "observationId": 148133931
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/155349314/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/155349314/large.jpg",
+          "attribution": "(c) Federico Figueroa Cabezas, some rights reserved (CC BY)",
+          "photographerName": "Federico Figueroa Cabezas",
+          "photographerLogin": "fedecrc",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 155349314,
+          "observationId": 93707882
+        }
+      ],
+      "rationalBox": "INPA / PNN, câmara de cria 10×10×4 cm"
+    },
+    {
+      "id": "mandacaia",
+      "commonName": "Mandaçaia",
+      "scientificName": "Melipona quadrifasciata",
+      "shortDescription": "Robusta, produtiva e com mel de sabor suave, destaque da meliponicultura nacional",
+      "longDescription": "A Mandaçaia é uma das abelhas sem ferrão mais estudadas e criadas no Brasil. Seu corpo robusto com quatro faixas amarelas nítidas sobre o abdômen a torna facilmente reconhecível. Nativa da Mata Atlântica e do Cerrado, constrói ninhos em ocos de árvores de médio porte. É uma das espécies mais produtivas do gênero Melipona, chegando a produzir de 2 a 4 litros de mel por ano em condições adequadas de manejo. Seu mel claro e de sabor suave é muito apreciado e apresenta propriedades medicinais documentadas. Polinizadora importante de jabuticabeira, laranjeira e outras frutíferas de interesse agrícola. Está ameaçada pela fragmentação da Mata Atlântica.",
+      "regions": [
+        "Sudeste",
+        "Sul",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Cerrado"
+      ],
+      "sizeMm": 10,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores de médio porte",
+      "conservationStatus": "vulnerable",
+      "featured": true,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-medicinal",
+        "mel-claro",
+        "polinizadora",
+        "mataAtlântica",
+        "ameaçada"
+      ],
+      "favoredPlants": [
+        "Jabuticabeira",
+        "Laranjeira",
+        "Cafezeiro",
+        "Pitangueira"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/114437915/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/114437915/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/114437915/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona quadrifasciata: manejo e produção de mel",
+          "url": "https://scholar.google.com/scholar?q=Melipona+quadrifasciata+honey+production"
+        },
+        {
+          "title": "Conservação da Mandaçaia na Mata Atlântica",
+          "url": "https://scholar.google.com/scholar?q=Melipona+quadrifasciata+conservation+Atlantic+Forest"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/114437915/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/114437915/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 114437915,
+          "observationId": 70399113
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/101971259/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/101971259/large.jpeg",
+          "attribution": "(c) Rodrigo Antônio Castro-Souza, some rights reserved (CC BY-NC)",
+          "photographerName": "Rodrigo Antônio Castro-Souza",
+          "photographerLogin": "pirilo",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 101971259,
+          "observationId": 63530092
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/117402025/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/117402025/large.jpeg",
+          "attribution": "(c) Lucas Rubio, some rights reserved (CC BY)",
+          "photographerName": "Lucas Rubio",
+          "photographerLogin": "lrubio7",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 117402025,
+          "observationId": 19250355
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/526190481/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/526190481/large.jpg",
+          "attribution": "(c) amwendt, some rights reserved (CC BY-NC)",
+          "photographerName": "amwendt",
+          "photographerLogin": "amwendt",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 526190481,
+          "observationId": 292414728
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/167279625/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/167279625/large.jpg",
+          "attribution": "(c) jbio, some rights reserved (CC BY-NC)",
+          "photographerName": "jbio",
+          "photographerLogin": "jbio",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 167279625,
+          "observationId": 100243094
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 15×15×6 cm"
+    },
+    {
+      "id": "urucu-nordestina",
+      "commonName": "Uruçu-Nordestina",
+      "scientificName": "Melipona scutellaris",
+      "shortDescription": "Símbolo da meliponicultura nordestina, produtora de mel renomado e endêmica da Caatinga e Mata Atlântica do NE",
+      "longDescription": "A Uruçu-Nordestina é a abelha sem ferrão mais emblemática do Nordeste brasileiro. Seu mel amarelo-âmbar é considerado um dos mais saborosos e medicinais do país, com uso popular milenar em comunidades tradicionais. De porte médio-grande, possui abdomên com faixas amarelas e é facilmente reconhecível pelo escutelo largo e amarelado. Nidifica em ocos de árvores nativas como o angico e o baraúna. É uma espécie social com colônias grandes e bem estruturadas. Altamente ameaçada pelo desmatamento da Caatinga e da Mata Atlântica nordestina, é alvo de programas de conservação e criação racional em estados como Bahia, Pernambuco e Paraíba.",
+      "regions": [
+        "Nordeste"
+      ],
+      "biomes": [
+        "Caatinga",
+        "Mata Atlântica"
+      ],
+      "sizeMm": 11,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores nativas como angico e baraúna",
+      "conservationStatus": "vulnerable",
+      "featured": true,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-medicinal",
+        "polinizadora",
+        "caatinga",
+        "mataAtlântica",
+        "ameaçada",
+        "endêmica"
+      ],
+      "favoredPlants": [
+        "Cajueiro",
+        "Angico",
+        "Umbuzeiro",
+        "Maracujazeiro-do-mato"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/348489464/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/348489464/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/348489464/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu-nordestina%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu-nordestina%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona scutellaris: meliponicultura no semiárido",
+          "url": "https://scholar.google.com/scholar?q=Melipona+scutellaris+meliponiculture+semiarid"
+        },
+        {
+          "title": "Propriedades do mel de Uruçu-Nordestina",
+          "url": "https://scholar.google.com/scholar?q=Melipona+scutellaris+honey+properties"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/348489464/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/348489464/large.jpg",
+          "attribution": "(c) Gabriela Piovesan, some rights reserved (CC BY-NC)",
+          "photographerName": "Gabriela Piovesan",
+          "photographerLogin": "gabipz",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 348489464,
+          "observationId": 197809084
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/554596245/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/554596245/large.jpg",
+          "attribution": "(c) Frederico Acaz Sonntag, some rights reserved (CC BY-NC)",
+          "photographerName": "Frederico Acaz Sonntag",
+          "photographerLogin": "fredericosonntag",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 554596245,
+          "observationId": 307468521
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/176939852/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/176939852/large.jpeg",
+          "attribution": "(c) Carlos Otávio Gussoni, some rights reserved (CC BY-NC)",
+          "photographerName": "Carlos Otávio Gussoni",
+          "photographerLogin": "gussoni",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 176939852,
+          "observationId": 105453925
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/516060617/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/516060617/large.jpg",
+          "attribution": "(c) evellyn praxedes, some rights reserved (CC BY-NC)",
+          "photographerName": "evellyn praxedes",
+          "photographerLogin": "coral009",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 516060617,
+          "observationId": 287024140
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/234334800/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/234334800/large.jpg",
+          "attribution": "(c) ecesana, some rights reserved (CC BY-NC)",
+          "photographerName": "ecesana",
+          "photographerLogin": "ecesana",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 234334800,
+          "observationId": 137230402
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 15×15×10 cm"
+    },
+    {
+      "id": "tiuba",
+      "commonName": "Tiúba",
+      "scientificName": "Melipona compressipes",
+      "shortDescription": "Abelha amazônica muito produtiva, base da meliponicultura no Maranhão e Pará",
+      "longDescription": "A Tiúba, conhecida também como Uruçu-Cinza em algumas regiões, é uma das espécies mais criadas no Norte e Nordeste do Brasil, especialmente no Maranhão, onde é considerada patrimônio cultural. Seu mel é fluido, com teor de umidade naturalmente alto, e de sabor levemente ácido e floral, muito apreciado localmente. Constrói ninhos em ocos de árvores próximas a cursos d'água e à vegetação de transição entre Amazônia e Cerrado. Colônias robustas com alta capacidade produtiva. É sensível ao desmatamento e à perda de espécies arbóreas nativas utilizadas para nidificação.",
+      "regions": [
+        "Norte",
+        "Nordeste"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Cerrado"
+      ],
+      "sizeMm": 9,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores próximas a cursos d'água",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-ácido",
+        "polinizadora",
+        "amazônia"
+      ],
+      "favoredPlants": [
+        "Açaizeiro",
+        "Cupuaçuzeiro",
+        "Copaíba",
+        "Tucumã"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/426350172/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/426350172/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/426350172/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftiuba%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona compressipes: produção e manejo no Maranhão",
+          "url": "https://scholar.google.com/scholar?q=Melipona+compressipes+management+Maranhao"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/426350172/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/426350172/large.jpg",
+          "attribution": "(c) sanxylocopa, some rights reserved (CC BY-NC)",
+          "photographerName": "sanxylocopa",
+          "photographerLogin": "sanxylocopa",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 426350172,
+          "observationId": 239389414
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/95512755/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/95512755/large.jpg",
+          "attribution": "(c) Nelson Wisnik, some rights reserved (CC BY-NC)",
+          "photographerName": "Nelson Wisnik",
+          "photographerLogin": "nelson_wisnik",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 95512755,
+          "observationId": 59761748
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 15×15×8 cm"
+    },
+    {
+      "id": "urucu-amarela",
+      "commonName": "Uruçu-Amarela",
+      "scientificName": "Melipona rufiventris",
+      "shortDescription": "Grande produtora de mel claro, nativa da Mata Atlântica e do Cerrado do Sudeste",
+      "longDescription": "A Uruçu-Amarela é uma das maiores abelhas sem ferrão do Sudeste brasileiro. Possui abdômen amarelado marcante e pelagem densa, sendo facilmente distinguível de outras meliponas. Constrói ninhos grandes em ocos de árvores de espécies como o cedro e a imbuia. Seu mel é claro, de baixa acidez e aroma floral intenso, muito valorizado tanto no mercado artesanal quanto pela indústria cosmética. Polinizadora eficiente de espécies nativas da Mata Atlântica como jabuticaba, pitanga e araçá. Enfrenta ameaças graves pela fragmentação florestal e pela caça predatória de enxames silvestres.",
+      "regions": [
+        "Sudeste",
+        "Sul",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Cerrado"
+      ],
+      "sizeMm": 11,
+      "behavior": "Mansa",
+      "nest": "Grandes ocos em árvores nativas como cedro e imbuia",
+      "conservationStatus": "vulnerable",
+      "featured": true,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-claro",
+        "mel-medicinal",
+        "polinizadora",
+        "mataAtlântica",
+        "cerrado",
+        "ameaçada"
+      ],
+      "favoredPlants": [
+        "Jabuticabeira",
+        "Pitangueira",
+        "Araçazeiro",
+        "Cedro"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/128804280/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/128804280/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/128804280/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu-amarela%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu-amarela%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona rufiventris: conservação e manejo na Mata Atlântica",
+          "url": "https://scholar.google.com/scholar?q=Melipona+rufiventris+conservation"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/128804280/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/128804280/large.jpeg",
+          "attribution": "(c) Guilherme A. Fischer, some rights reserved (CC BY-NC)",
+          "photographerName": "Guilherme A. Fischer",
+          "photographerLogin": "gafischer",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 128804280,
+          "observationId": 78685638
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/28112197/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/28112197/large.jpeg",
+          "attribution": "(c) Antônio, some rights reserved (CC BY-NC)",
+          "photographerName": "Antônio",
+          "photographerLogin": "ajcaguiar",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 28112197,
+          "observationId": 18392985
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/543042480/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/543042480/large.jpg",
+          "attribution": "(c) Izabella, some rights reserved (CC BY-NC)",
+          "photographerName": "Izabella",
+          "photographerLogin": "izabellafonseca",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 543042480,
+          "observationId": 301362220
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/518936012/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/518936012/large.jpg",
+          "attribution": "(c) Flavia Amorim, some rights reserved (CC BY-NC)",
+          "photographerName": "Flavia Amorim",
+          "photographerLogin": "flaviamorim",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 518936012,
+          "observationId": 288556166
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/513930815/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/513930815/large.jpg",
+          "attribution": "(c) Marco Antônio Zamith, some rights reserved (CC BY-NC)",
+          "photographerName": "Marco Antônio Zamith",
+          "photographerLogin": "marcozamith",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 513930815,
+          "observationId": 285903965
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 20×15×8 cm"
+    },
+    {
+      "id": "manduri",
+      "commonName": "Manduri",
+      "scientificName": "Melipona marginata",
+      "shortDescription": "Pequena melipona da Mata Atlântica, mel muito ácido e de alto valor medicinal",
+      "longDescription": "A Manduri é uma das menores espécies do gênero Melipona, com corpo compacto e coloração escura com manchas amarelas nas laterais do abdômen. Habita preferencialmente a Mata Atlântica densa do Sul e Sudeste, onde nidifica em ocos de árvores de pequeno e médio porte. Seu mel é muito ácido, escuro e aromático, reconhecido por curandeiros e meliponicultores tradicionais por suas propriedades cicatrizantes e antibacterianas. Produz volumes menores que outras meliponas, o que o torna raro e valioso. Espécie vulnerável pela perda de habitat e pouca reprodução em cativeiro.",
+      "regions": [
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Mata Atlântica"
+      ],
+      "sizeMm": 8,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores de pequeno e médio porte",
+      "conservationStatus": "vulnerable",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-ácido",
+        "mel-medicinal",
+        "mataAtlântica",
+        "ameaçada"
+      ],
+      "favoredPlants": [
+        "Bromélias",
+        "Orquídeas nativas",
+        "Guabiroba",
+        "Cambuci"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/470584868/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/470584868/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/470584868/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmanduri%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona marginata: biologia e mel medicinal",
+          "url": "https://scholar.google.com/scholar?q=Melipona+marginata+biology+honey"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/470584868/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/470584868/large.jpeg",
+          "attribution": "(c) Cristiane Bolochio, some rights reserved (CC BY-NC)",
+          "photographerName": "Cristiane Bolochio",
+          "photographerLogin": "crisbolochio",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 470584868,
+          "observationId": 261885499
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/154842271/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/154842271/large.jpg",
+          "attribution": "(c) Reinaldo de Oliveira Elias, some rights reserved (CC BY)",
+          "photographerName": "Reinaldo de Oliveira Elias",
+          "photographerLogin": "roe_brasil",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 154842271,
+          "observationId": 93453671
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/177198648/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/177198648/large.jpg",
+          "attribution": "(c) Giovanni B. Pupin, some rights reserved (CC BY-NC)",
+          "photographerName": "Giovanni B. Pupin",
+          "photographerLogin": "pupingb",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 177198648,
+          "observationId": 105590573
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/450634064/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/450634064/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 450634064,
+          "observationId": 251810433
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/538764196/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/538764196/large.jpg",
+          "attribution": "(c) Gabriel O. Keller, some rights reserved (CC BY)",
+          "photographerName": "Gabriel O. Keller",
+          "photographerLogin": "kellerogabriel2000",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 538764196,
+          "observationId": 299062524
+        }
+      ],
+      "rationalBox": "PNN, câmara de cria 12×12×5 cm"
+    },
+    {
+      "id": "guaraipo",
+      "commonName": "Guaraipo",
+      "scientificName": "Melipona bicolor",
+      "shortDescription": "Única melipona com rainhas operárias funcionais, espécie fascinante do Sul do Brasil",
+      "longDescription": "O Guaraipo é uma das espécies mais científicamente interessantes do gênero Melipona. É a única abelha sem ferrão brasileira na qual operárias podem se tornar funcionalmente reprodutivas e coexistir com a rainha principal, comportamento raro entre as abelhas sociais. Possui coloração variável, com indivíduos mais claros ou mais escuros na mesma colônia. Nativa da Mata Atlântica do Sul e Sudeste, nidifica em ocos de árvores. Seu mel é de qualidade elevada e cor âmbar. É uma excelente polinizadora de espécies da Mata Atlântica subtropical. Considerada vulnerável pela perda de habitat e pela caça predatória.",
+      "regions": [
+        "Sul",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Mata Atlântica"
+      ],
+      "sizeMm": 10,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores em florestas subtropicais",
+      "conservationStatus": "vulnerable",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-claro",
+        "polinizadora",
+        "mataAtlântica",
+        "ameaçada"
+      ],
+      "favoredPlants": [
+        "Erva-mate",
+        "Bracatinga",
+        "Imbuia",
+        "Araucária"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/566914418/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/566914418/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/566914418/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fguaraipo%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona bicolor: worker reproduction and colony dynamics",
+          "url": "https://scholar.google.com/scholar?q=Melipona+bicolor+worker+reproduction"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/566914418/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/566914418/large.jpg",
+          "attribution": "(c) Will Godoy, some rights reserved (CC BY-NC)",
+          "photographerName": "Will Godoy",
+          "photographerLogin": "will_godoy",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 566914418,
+          "observationId": 313904966
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/485618687/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/485618687/large.jpeg",
+          "attribution": "(c) Eduardo Kraemer Goes, some rights reserved (CC BY-NC)",
+          "photographerName": "Eduardo Kraemer Goes",
+          "photographerLogin": "kraemer",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 485618687,
+          "observationId": 270052574
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/605077399/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/605077399/large.jpg",
+          "attribution": "(c) Otto Heringer, some rights reserved (CC BY)",
+          "photographerName": "Otto Heringer",
+          "photographerLogin": "otto_heringer",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 605077399,
+          "observationId": 333300780
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/460463611/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/460463611/large.jpg",
+          "attribution": "(c) Fabiano Maroti, some rights reserved (CC BY-NC)",
+          "photographerName": "Fabiano Maroti",
+          "photographerLogin": "fabiano_maroti",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 460463611,
+          "observationId": 256775513
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/466437623/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/466437623/large.jpg",
+          "attribution": "(c) Helberth Peixoto, some rights reserved (CC BY-NC)",
+          "photographerName": "Helberth Peixoto",
+          "photographerLogin": "helberthpeixoto",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 466437623,
+          "observationId": 259797675
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 15×15×7 cm"
+    },
+    {
+      "id": "urucu-do-norte",
+      "commonName": "Uruçu-do-Norte",
+      "scientificName": "Melipona flavolineata",
+      "shortDescription": "A grande melipona da Amazônia Oriental, com listras amarelas vistosas e mel muito produzido",
+      "longDescription": "A Uruçu-do-Norte é uma das principais espécies da meliponicultura amazônica, amplamente criada no Pará e no Maranhão. Seu nome popular refere-se às faixas amarelas brilhantes que percorrem o abdômen, tornando-a visualmente marcante. Colônias grandes e altamente produtivas, podendo render até 5 litros de mel por ano com manejo adequado. O mel é fluido, de coloração âmbar clara e sabor floral suave. Nidifica em ocos de árvores de médio a grande porte, especialmente em matas ciliares e bordas de floresta. Importante polinizadora de espécies amazônicas como o açaí, o cupuaçu e o bacuri.",
+      "regions": [
+        "Norte",
+        "Nordeste"
+      ],
+      "biomes": [
+        "Amazônia"
+      ],
+      "sizeMm": 11,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores de médio a grande porte em matas ciliares",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-claro",
+        "polinizadora",
+        "amazônia"
+      ],
+      "favoredPlants": [
+        "Açaizeiro",
+        "Cupuaçuzeiro",
+        "Bacuri",
+        "Taperebá"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/587095964/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/587095964/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/587095964/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu-do-norte%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona flavolineata: manejo e produção no Pará",
+          "url": "https://scholar.google.com/scholar?q=Melipona+flavolineata+management+Para"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/587095964/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/587095964/large.jpg",
+          "attribution": "(c) Nailson Júnior, some rights reserved (CC BY-NC)",
+          "photographerName": "Nailson Júnior",
+          "photographerLogin": "nailsonjr17",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 587095964,
+          "observationId": 324378102
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/451158863/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/451158863/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 451158863,
+          "observationId": 252071816
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/664443458/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/664443458/large.jpg",
+          "attribution": "(c) Mateus Oliveira Rocha, some rights reserved (CC BY-NC)",
+          "photographerName": "Mateus Oliveira Rocha",
+          "photographerLogin": "oliveirajunr",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 664443458,
+          "observationId": 363981594
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/304300812/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/304300812/large.jpg",
+          "attribution": "(c) Luciano Ferreira, some rights reserved (CC BY-NC)",
+          "photographerName": "Luciano Ferreira",
+          "photographerLogin": "lucianochvs",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 304300812,
+          "observationId": 175114330
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/437846395/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/437846395/large.jpeg",
+          "attribution": "(c) Christoph Moning, some rights reserved (CC BY)",
+          "photographerName": "Christoph Moning",
+          "photographerLogin": "christoph_moning",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 437846395,
+          "observationId": 245373916
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 20×15×10 cm"
+    },
+    {
+      "id": "mumbuca",
+      "commonName": "Mumbuca",
+      "scientificName": "Melipona asilvai",
+      "shortDescription": "Endêmica da Caatinga baiana, com mel de cor escura e alto valor na medicina popular",
+      "longDescription": "A Mumbuca é uma abelha sem ferrão endêmica da região sul da Bahia e norte de Minas Gerais, habitando principalmente a transição entre Caatinga e Mata Atlântica. Seu nome é de origem indígena tupi e refere-se ao som característico que emite ao voar. O mel da Mumbuca é escuro, denso e intensamente aromático, com sabor levemente amargo e propriedades medicinais muito valorizadas por comunidades tradicionais, especialmente para problemas respiratórios e infecções. A espécie é sensível à fragmentação florestal e ao desmatamento da Caatinga. Projetos de meliponicultura comunitária na Bahia têm a Mumbuca como espécie-chave para geração de renda e conservação.",
+      "regions": [
+        "Nordeste"
+      ],
+      "biomes": [
+        "Caatinga",
+        "Mata Atlântica"
+      ],
+      "sizeMm": 9,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores nativas da Caatinga e transição",
+      "conservationStatus": "vulnerable",
+      "featured": true,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "média",
+        "social",
+        "meliponicultura",
+        "mel-medicinal",
+        "caatinga",
+        "mataAtlântica",
+        "ameaçada",
+        "endêmica"
+      ],
+      "favoredPlants": [
+        "Cajueiro",
+        "Umbuzeiro",
+        "Angico",
+        "Jurema-Preta"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/597505874/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/597505874/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/597505874/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmumbuca%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Melipona asilvai: ecologia e conservação na Caatinga",
+          "url": "https://scholar.google.com/scholar?q=Melipona+asilvai+ecology+Caatinga"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/597505874/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/597505874/large.jpg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 597505874,
+          "observationId": 329606043
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/230776699/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/230776699/large.jpeg",
+          "attribution": "(c) Wagner Nogueira, some rights reserved (CC BY-NC)",
+          "photographerName": "Wagner Nogueira",
+          "photographerLogin": "wagnernogueira",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 230776699,
+          "observationId": 135316738
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/599915156/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/599915156/large.jpg",
+          "attribution": "(c) Olyana Furtado, some rights reserved (CC BY-NC)",
+          "photographerName": "Olyana Furtado",
+          "photographerLogin": "olyana",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 599915156,
+          "observationId": 330785755
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/344368462/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/344368462/large.jpeg",
+          "attribution": "(c) Ana Caroline Lima, some rights reserved (CC BY)",
+          "photographerName": "Ana Caroline Lima",
+          "photographerLogin": "anabio_93",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 344368462,
+          "observationId": 195706652
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/99645270/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/99645270/large.jpeg",
+          "attribution": "(c) Frederico Acaz Sonntag, some rights reserved (CC BY-NC)",
+          "photographerName": "Frederico Acaz Sonntag",
+          "photographerLogin": "fredericosonntag",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 99645270,
+          "observationId": 62210267
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 12×12×7 cm"
+    },
+    {
+      "id": "irai",
+      "commonName": "Iraí",
+      "scientificName": "Nannotrigona testaceicornis",
+      "shortDescription": "Minúscula e incansável, uma das melhores polinizadoras de hortas e jardins urbanos",
+      "longDescription": "A Iraí é uma das menores abelhas sem ferrão do Brasil, com corpo delicado e coloração amarelo-alaranjada nas antenas, daí o epíteto testaceicornis. Apesar do tamanho, é surpreendentemente ativa e eficiente como polinizadora, visitando um grande número de flores por dia. Adapta-se bem a ambientes urbanos e é frequentemente encontrada em jardins, hortas e parques. Constrói ninhos em cavidades muito pequenas, como frestas de muros, bambus ocos e caixas de meliponicultura compactas. Produz mel em pequenas quantidades, mas de qualidade e sabor distintos. É uma espécie ideal para iniciantes na criação urbana de abelhas nativas.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Cerrado",
+        "Amazônia",
+        "Caatinga"
+      ],
+      "sizeMm": 4,
+      "behavior": "Muito Mansa",
+      "nest": "Cavidades muito pequenas: frestas, bambus ocos, caixas compactas",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "urbana",
+        "iniciantes",
+        "meliponicultura",
+        "polinizadora"
+      ],
+      "favoredPlants": [
+        "Tomateiro",
+        "Pimentão",
+        "Alecrim",
+        "Lavanda"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/49484894/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/49484894/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/49484894/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Firai%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Nannotrigona testaceicornis: ecologia e polinização urbana",
+          "url": "https://scholar.google.com/scholar?q=Nannotrigona+testaceicornis+urban+pollination"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/49484894/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/49484894/large.jpg",
+          "attribution": "(c) Gabrielly Benaducci Tolentino, some rights reserved (CC BY-NC)",
+          "photographerName": "Gabrielly Benaducci Tolentino",
+          "photographerLogin": "gabriellybenaducci",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 49484894,
+          "observationId": 31608609
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/47483554/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/47483554/large.jpeg",
+          "attribution": "(c) José Valério, some rights reserved (CC BY-NC)",
+          "photographerName": "José Valério",
+          "photographerLogin": "josev_ge",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 47483554,
+          "observationId": 30385557
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/382611292/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/382611292/large.jpeg",
+          "attribution": "(c) Gabriel Costa, some rights reserved (CC BY-NC)",
+          "photographerName": "Gabriel Costa",
+          "photographerLogin": "costagg",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 382611292,
+          "observationId": 216384208
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/48577491/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/48577491/large.jpg",
+          "attribution": "(c) tfrancoy, some rights reserved (CC BY-NC)",
+          "photographerName": "tfrancoy",
+          "photographerLogin": "tfrancoy",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 48577491,
+          "observationId": 31062580
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/319082411/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/319082411/large.jpeg",
+          "attribution": "(c) João Abraão, some rights reserved (CC BY-NC)",
+          "photographerName": "João Abraão",
+          "photographerLogin": "joaoabraao",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 319082411,
+          "observationId": 182946064
+        }
+      ],
+      "rationalBox": "Mini-PNN, câmara de cria 8×8×4 cm"
+    },
+    {
+      "id": "tubuna",
+      "commonName": "Tubuna",
+      "scientificName": "Scaptotrigona bipunctata",
+      "shortDescription": "Abelha de médio porte, muito ativa e produtiva, típica da Mata Atlântica do Sul",
+      "longDescription": "A Tubuna é uma abelha sem ferrão de médio porte, com coloração predominantemente preta e pelagem discreta. Destaca-se pela sua grande atividade de voo mesmo em dias nublados ou de baixa temperatura, o que a torna uma polinizadora valiosa no Sul e Sudeste do Brasil. Constrói ninhos em ocos de árvores e, em alguns casos, em ocos no solo. A entrada do ninho é delimitada por cerume de coloração escura e textura irregular. Seu mel é ácido, escuro e aromático. Colônias numerosas e populosas, com boa produção de própolis. Bastante resistente a variações climáticas.",
+      "regions": [
+        "Sul",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Mata Atlântica"
+      ],
+      "sizeMm": 6,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores ou cavidades no solo; entrada de cerume escuro",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-ácido",
+        "polinizadora",
+        "mataAtlântica"
+      ],
+      "favoredPlants": [
+        "Bracatinga",
+        "Araucária",
+        "Erva-mate",
+        "Caquizeiro"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/343694198/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/343694198/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/343694198/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftubuna%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Scaptotrigona bipunctata: biologia e manejo",
+          "url": "https://scholar.google.com/scholar?q=Scaptotrigona+bipunctata+biology"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/343694198/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/343694198/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 343694198,
+          "observationId": 195376698
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/337445968/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/337445968/large.jpg",
+          "attribution": "(c) leticiasouza, some rights reserved (CC BY-NC)",
+          "photographerName": "leticiasouza",
+          "photographerLogin": "leticiasouza",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 337445968,
+          "observationId": 192247273
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/341808785/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/341808785/large.jpeg",
+          "attribution": "(c) Antônio, some rights reserved (CC BY-NC)",
+          "photographerName": "Antônio",
+          "photographerLogin": "ajcaguiar",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 341808785,
+          "observationId": 194026646
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/111230169/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/111230169/large.jpeg",
+          "attribution": "(c) Eric Fischer Rempe, some rights reserved (CC BY-NC)",
+          "photographerName": "Eric Fischer Rempe",
+          "photographerLogin": "ericfischerrempe",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 111230169,
+          "observationId": 68657983
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/464753834/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/464753834/large.jpg",
+          "attribution": "(c) Fernando Paludo, some rights reserved (CC BY-NC)",
+          "photographerName": "Fernando Paludo",
+          "photographerLogin": "fernandopaludo",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 464753834,
+          "observationId": 258964347
+        }
+      ],
+      "rationalBox": "PNN, câmara de cria 10×10×6 cm"
+    },
+    {
+      "id": "mandaguari",
+      "commonName": "Mandaguari",
+      "scientificName": "Scaptotrigona depilis",
+      "shortDescription": "Abelha robusta e produtiva do Cerrado e Mata Atlântica, popular na meliponicultura do interior",
+      "longDescription": "A Mandaguari é uma abelha sem ferrão de médio porte com coloração preta uniforme e voo robusto e ruidoso. É amplamente distribuída no Cerrado e na Mata Atlântica, sendo uma das espécies mais criadas no interior de São Paulo, Minas Gerais e Goiás. Constrói ninhos em ocos de árvores com entrada de cerume escuro e texturizado. Colônias grandes e bem organizadas. Seu mel é ácido, escuro e de sabor forte, muito apreciado por meliponicultores experientes. Produz própolis de qualidade reconhecida. Bastante resistente a temperaturas elevadas, o que a torna adaptada ao Cerrado.",
+      "regions": [
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Mata Atlântica"
+      ],
+      "sizeMm": 6,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores; entrada de cerume escuro e texturizado",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-ácido",
+        "polinizadora",
+        "cerrado",
+        "mataAtlântica"
+      ],
+      "favoredPlants": [
+        "Ipê-amarelo",
+        "Barbatimão",
+        "Cagaita",
+        "Murici"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/58169475/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/58169475/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/58169475/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandaguari%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Scaptotrigona depilis: manejo e produção no Cerrado",
+          "url": "https://scholar.google.com/scholar?q=Scaptotrigona+depilis+management+Cerrado"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/58169475/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/58169475/large.jpg",
+          "attribution": "(c) Ísis Meri Medri, some rights reserved (CC BY-NC)",
+          "photographerName": "Ísis Meri Medri",
+          "photographerLogin": "isismedri",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 58169475,
+          "observationId": 36765678
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/435878039/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/435878039/large.jpg",
+          "attribution": "(c) Lucas Rubio, some rights reserved (CC BY)",
+          "photographerName": "Lucas Rubio",
+          "photographerLogin": "lrubio7",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 435878039,
+          "observationId": 244368980
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/227181182/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/227181182/large.jpg",
+          "attribution": "(c) Breno Farias, some rights reserved (CC BY-NC)",
+          "photographerName": "Breno Farias",
+          "photographerLogin": "brenofarias",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 227181182,
+          "observationId": 133379543
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/294405403/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/294405403/large.jpeg",
+          "attribution": "(c) Ruan Victor Dias, some rights reserved (CC BY-NC)",
+          "photographerName": "Ruan Victor Dias",
+          "photographerLogin": "ruanvictordias",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 294405403,
+          "observationId": 169794194
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/474240307/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/474240307/large.jpg",
+          "attribution": "(c) Cherre Bezerra Da Silva, some rights reserved (CC BY-NC)",
+          "photographerName": "Cherre Bezerra Da Silva",
+          "photographerLogin": "entomologista",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 474240307,
+          "observationId": 263933979
+        }
+      ],
+      "rationalBox": "PNN / INPA, câmara de cria 12×12×6 cm"
+    },
+    {
+      "id": "canudo",
+      "commonName": "Canudo",
+      "scientificName": "Scaptotrigona postica",
+      "shortDescription": "Conhecida também como Mombucão, é agressiva na defesa do ninho mas produtora de mel aromático",
+      "longDescription": "O Canudo, ou Mombucão, é uma das espécies mais populares do Nordeste e Centro-Oeste brasileiro. Recebe o nome popular por sua entrada tubular longa construída com cerume escuro, um dos ninhos mais elaborados entre as meliponas. As operárias são defensoras eficientes, podendo grudar no cabelo e na roupa de intrusos, embora não possuam ferrão. Seu mel é escuro, denso e de sabor intenso e levemente picante, muito apreciado na medicina popular. Colônias grandes com alta capacidade de estocagem de alimento. Uma das espécies mais criadas em regiões semiáridas do Nordeste.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Caatinga",
+        "Cerrado",
+        "Amazônia"
+      ],
+      "sizeMm": 7,
+      "behavior": "Mansa",
+      "nest": "Ocos de árvores; entrada tubular longa de cerume escuro",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-medicinal",
+        "polinizadora",
+        "caatinga",
+        "cerrado"
+      ],
+      "favoredPlants": [
+        "Cajueiro",
+        "Umburana",
+        "Angico",
+        "Faveiro"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/438101368/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/438101368/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/438101368/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fcanudo%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Scaptotrigona postica: biologia e manejo no semiárido",
+          "url": "https://scholar.google.com/scholar?q=Scaptotrigona+postica+semiarid+management"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/438101368/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/438101368/large.jpeg",
+          "attribution": "(c) Fellipe Silva, some rights reserved (CC BY-NC)",
+          "photographerName": "Fellipe Silva",
+          "photographerLogin": "allfeh",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 438101368,
+          "observationId": 245502384
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/294849541/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/294849541/large.jpeg",
+          "attribution": "(c) Pedro Cavalcante, some rights reserved (CC BY-NC)",
+          "photographerName": "Pedro Cavalcante",
+          "photographerLogin": "pedrocavalcante",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 294849541,
+          "observationId": 170032913
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/53693112/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/53693112/large.jpeg",
+          "attribution": "(c) Diogo Luiz, some rights reserved (CC BY)",
+          "photographerName": "Diogo Luiz",
+          "photographerLogin": "diogoluiz",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 53693112,
+          "observationId": 34141262
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/436677840/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/436677840/large.jpeg",
+          "attribution": "(c) Paula Romano, some rights reserved (CC BY-NC)",
+          "photographerName": "Paula Romano",
+          "photographerLogin": "paularomano",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 436677840,
+          "observationId": 244783995
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/505663361/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/505663361/large.jpg",
+          "attribution": "(c) NINA WENÓLI, some rights reserved (CC BY-NC)",
+          "photographerName": "NINA WENÓLI",
+          "photographerLogin": "ninawenoli",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 505663361,
+          "observationId": 281491481
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 12×12×6 cm"
+    },
+    {
+      "id": "mirim",
+      "commonName": "Mirim",
+      "scientificName": "Plebeia droryana",
+      "shortDescription": "Pequena, urbana e muito adaptável, ideal para criação em espaços reduzidos",
+      "longDescription": "A Mirim é uma das abelhas sem ferrão mais frequentemente encontradas em ambientes urbanos. De tamanho diminuto, constrói ninhos em cavidades muito pequenas, frestas de muros, buracos em alvenaria, caixas de meliponicultura compactas e até em eletrodutos abandonados. Extremamente mansa, raramente demonstra comportamento de defesa. Seu mel é produzido em pequenas quantidades, mas tem sabor delicado e propriedades levemente antibacterianas. É uma espécie excelente para projetos de educação ambiental, pois pode ser instalada em escolas, consultórios e apartamentos com terraço. Distribui-se principalmente no Sudeste e Sul do Brasil.",
+      "regions": [
+        "Sudeste",
+        "Sul",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Cerrado"
+      ],
+      "sizeMm": 4,
+      "behavior": "Muito Mansa",
+      "nest": "Pequenas cavidades: muros, alvenaria, caixas compactas",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "urbana",
+        "iniciantes",
+        "meliponicultura",
+        "mataAtlântica"
+      ],
+      "favoredPlants": [
+        "Jabuticabeira",
+        "Pitangueira",
+        "Flor de laranjeira"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/481331768/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/481331768/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/481331768/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Plebeia droryana em ambientes urbanos",
+          "url": "https://scholar.google.com/scholar?q=Plebeia+droryana+urban+environment"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/481331768/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/481331768/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 481331768,
+          "observationId": 267817168
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/471850484/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/471850484/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 471850484,
+          "observationId": 262731394
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/462763534/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/462763534/large.jpg",
+          "attribution": "no rights reserved",
+          "photographerName": "Julia Ariadna",
+          "photographerLogin": "tutitah",
+          "licenseCode": "cc0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "iNaturalistPhotoId": 462763534,
+          "observationId": 257955313
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/14880496/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/14880496/large.jpg",
+          "attribution": "(c) El Renacer de la Laguna FVET UBA, some rights reserved (CC BY-NC)",
+          "photographerName": "El Renacer de la Laguna FVET UBA",
+          "photographerLogin": "elrenacerdelalaguna",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 14880496,
+          "observationId": 10661148
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/228078236/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/228078236/large.jpg",
+          "attribution": "(c) Robison Araújo Silva, some rights reserved (CC BY-NC)",
+          "photographerName": "Robison Araújo Silva",
+          "photographerLogin": "rhasig",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 228078236,
+          "observationId": 133862106
+        }
+      ],
+      "rationalBox": "Mini-PNN, câmara de cria 8×8×4 cm"
+    },
+    {
+      "id": "mirim-guacu",
+      "commonName": "Mirim-Guaçu",
+      "scientificName": "Plebeia remota",
+      "shortDescription": "Mirim de maior porte que tolera frio intenso, a mais robusta do gênero Plebeia no Sul",
+      "longDescription": "A Mirim-Guaçu é ligeiramente maior que as demais espécies do gênero Plebeia e destaca-se por sua notável tolerância ao frio, sendo encontrada em áreas de altitude da Serra Gaúcha e da Serra Catarinense. Constrói ninhos em ocos de árvores de médio porte com cerume amarelado. É uma das poucas abelhas sem ferrão que mantém alguma atividade de voo em dias de temperatura baixa (abaixo de 15°C). Seu mel é levemente ácido e de aroma herbal. Espécie ainda pouco explorada na meliponicultura, mas com alto potencial para regiões serranas do Sul do Brasil.",
+      "regions": [
+        "Sul",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Mata Atlântica"
+      ],
+      "sizeMm": 5,
+      "behavior": "Muito Mansa",
+      "nest": "Ocos de árvores de médio porte; cerume amarelado",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-ácido",
+        "mataAtlântica",
+        "pampa"
+      ],
+      "favoredPlants": [
+        "Bracatinga",
+        "Araucária",
+        "Vassourinha",
+        "Erva-mate"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/603952616/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/603952616/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/603952616/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim-guacu%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Plebeia remota: cold tolerance and highland distribution",
+          "url": "https://scholar.google.com/scholar?q=Plebeia+remota+cold+tolerance"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/603952616/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/603952616/large.jpg",
+          "attribution": "(c) Victor Hugo Rebecchi Siqueira, some rights reserved (CC BY-NC)",
+          "photographerName": "Victor Hugo Rebecchi Siqueira",
+          "photographerLogin": "victorhugorebecchisiqueira",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 603952616,
+          "observationId": 332754699
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/422468935/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/422468935/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 422468935,
+          "observationId": 237386768
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/450634528/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/450634528/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 450634528,
+          "observationId": 251810442
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/57392804/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/57392804/large.jpeg",
+          "attribution": "(c) Flávio Mendes, some rights reserved (CC BY-NC)",
+          "photographerName": "Flávio Mendes",
+          "photographerLogin": "flaviomendes",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 57392804,
+          "observationId": 36316088
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/632247501/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/632247501/large.jpg",
+          "attribution": "(c) andressacarnevalli, some rights reserved (CC BY-NC)",
+          "photographerName": "andressacarnevalli",
+          "photographerLogin": "andressacarnevalli",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 632247501,
+          "observationId": 346814089
+        }
+      ],
+      "rationalBox": "Mini-PNN, câmara de cria 10×10×5 cm"
+    },
+    {
+      "id": "arapua",
+      "commonName": "Arapuá",
+      "scientificName": "Trigona spinipes",
+      "shortDescription": "A mais comum e agressiva, temida por grudar nos cabelos, mas polinizadora de amplo espectro",
+      "longDescription": "A Arapuá é provavelmente a abelha sem ferrão mais abundante e amplamente distribuída do Brasil. Conhecida por sua postura defensiva agressiva (as operárias grudam nos cabelos e na roupa, podendo causar incômodo considerável), sendo frequentemente confundida com uma abelha perigosa. Na verdade, não possui ferrão funcional. Seu comportamento agressivo é uma estratégia de defesa evolutiva muito eficiente. Constrói ninhos externos expostos, cobertos por uma massa compacta de resina, cera e detritos vegetais, frequentemente em galhos de árvores ou beiradas de telhados. Apesar da má fama, é uma polinizadora de amplo espectro e papel ecológico inegável.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Mata Atlântica",
+        "Cerrado",
+        "Caatinga"
+      ],
+      "sizeMm": 6,
+      "behavior": "Agressiva",
+      "nest": "Ninho externo exposto: resina, cera e detritos vegetais em galhos ou beiradas",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "agressiva",
+        "polinizadora"
+      ],
+      "favoredPlants": [
+        "Mamoneira",
+        "Girassol",
+        "Flor de abóbora",
+        "Ipê"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/596989127/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/596989127/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/596989127/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Farapua%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Trigona spinipes: ecologia e comportamento defensivo",
+          "url": "https://scholar.google.com/scholar?q=Trigona+spinipes+defensive+behavior"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/596989127/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/596989127/large.jpg",
+          "attribution": "(c) R Vasconcellos, some rights reserved (CC BY)",
+          "photographerName": "R Vasconcellos",
+          "photographerLogin": "rvasconcellos",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 596989127,
+          "observationId": 329350626
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/655513876/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/655513876/large.jpg",
+          "attribution": "(c) Fabrício Mil Homens Riella, some rights reserved (CC BY)",
+          "photographerName": "Fabrício Mil Homens Riella",
+          "photographerLogin": "bariza",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 655513876,
+          "observationId": 359292228
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/129938684/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/129938684/large.jpg",
+          "attribution": "(c) João Vitor Oliveira de Souza, some rights reserved (CC BY-NC)",
+          "photographerName": "João Vitor Oliveira de Souza",
+          "photographerLogin": "jvitor_os",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 129938684,
+          "observationId": 79339715
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/572912948/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/572912948/large.jpg",
+          "attribution": "(c) Vargas, some rights reserved (CC BY-NC)",
+          "photographerName": "Vargas",
+          "photographerLogin": "varguinhask",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 572912948,
+          "observationId": 317074244
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/558586930/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/558586930/large.jpg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 558586930,
+          "observationId": 309544602
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 15×15×8 cm"
+    },
+    {
+      "id": "tataira",
+      "commonName": "Tataíra",
+      "scientificName": "Oxytrigona tataira",
+      "shortDescription": "Única abelha sem ferrão que causa queimaduras, secreção cáustica em vez de picada",
+      "longDescription": "A Tataíra é uma das abelhas sem ferrão mais singulares do Brasil. Em vez de ferrão, suas glândulas mandibulares produzem uma secreção cáustica rica em ácido fórmico que, ao entrar em contato com a pele, causa queimaduras dolorosas semelhantes às de uma vespa. Por isso é temida nas regiões onde ocorre, especialmente no Cerrado e na Caatinga. Constrói ninhos em ocos de árvores com entrada pequena e sigilosa. A colônia é defensora eficiente e reage a perturbações borrifando a secreção ácida. Apesar da reputação, é uma polinizadora importante. O nome Tataíra vem do tupi e significa 'abelha de fogo'.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Caatinga",
+        "Amazônia"
+      ],
+      "sizeMm": 5,
+      "behavior": "Agressiva",
+      "nest": "Ocos de árvores com entrada pequena e discreta",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "agressiva",
+        "polinizadora",
+        "caatinga",
+        "cerrado"
+      ],
+      "favoredPlants": [
+        "Pequizeiro",
+        "Cagaita",
+        "Jurema",
+        "Aroeira"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/373329176/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/373329176/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/373329176/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Ftataira%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Oxytrigona tataira: formic acid secretion and defense",
+          "url": "https://scholar.google.com/scholar?q=Oxytrigona+tataira+formic+acid+defense"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/373329176/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/373329176/large.jpeg",
+          "attribution": "(c) Patrícia Mees, some rights reserved (CC BY)",
+          "photographerName": "Patrícia Mees",
+          "photographerLogin": "patricia_mees",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 373329176,
+          "observationId": 211136886
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/9110076/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/9110076/large.jpg",
+          "attribution": "(c) Bruno Cardoso, some rights reserved (CC BY-NC)",
+          "photographerName": "Bruno Cardoso",
+          "photographerLogin": "brunocardoso",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 9110076,
+          "observationId": 7090594
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/339054852/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/339054852/large.jpeg",
+          "attribution": "(c) Liu Idárraga Orozco, some rights reserved (CC BY-NC)",
+          "photographerName": "Liu Idárraga Orozco",
+          "photographerLogin": "liuid",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 339054852,
+          "observationId": 193061453
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/456383326/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/456383326/large.jpeg",
+          "attribution": "(c) Gilberto S. S. Almeida, some rights reserved (CC BY-NC)",
+          "photographerName": "Gilberto S. S. Almeida",
+          "photographerLogin": "gilberto_s__s__almeida",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 456383326,
+          "observationId": 254753126
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/336846678/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/336846678/large.jpeg",
+          "attribution": "(c) Darlan Goedert, some rights reserved (CC BY-NC)",
+          "photographerName": "Darlan Goedert",
+          "photographerLogin": "darlan00",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 336846678,
+          "observationId": 191942453
+        }
+      ]
+    },
+    {
+      "id": "moca-branca",
+      "commonName": "Moça-Branca",
+      "scientificName": "Frieseomelitta varia",
+      "shortDescription": "Pequena e elegante, com cera branca característica no ninho e mel muito delicado",
+      "longDescription": "A Moça-Branca é facilmente reconhecível pela cera de cor esbranquiçada que usa para construir o ninho, contrastando com o cerume escuro da maioria das abelhas sem ferrão. Pequena e delicada, é extremamente mansa e raramente demonstra comportamento de defesa. Distribui-se pelo Cerrado e pela Mata Atlântica do Sudeste e Centro-Oeste. Seu mel é claro, fluido e de sabor muito suave e levemente floral, considerado um dos mais refinados entre as meliponas. Produção pequena, o que torna o mel raro. Nidifica em ocos de árvores ou em cupinzeiros abandonados, usando a cera branca como material estrutural.",
+      "regions": [
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Mata Atlântica"
+      ],
+      "sizeMm": 5,
+      "behavior": "Muito Mansa",
+      "nest": "Ocos de árvores ou cupinzeiros; cera branca característica",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "meliponicultura",
+        "mel-claro",
+        "cerrado",
+        "mataAtlântica"
+      ],
+      "favoredPlants": [
+        "Murici",
+        "Cagaita",
+        "Pequizeiro",
+        "Ipê-branco"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/444898400/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/444898400/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/444898400/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmoca-branca%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Frieseomelitta varia: nest architecture and honey quality",
+          "url": "https://scholar.google.com/scholar?q=Frieseomelitta+varia+nest+honey"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/444898400/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/444898400/large.jpg",
+          "attribution": "(c) Thomaz de Carvalho Callado, some rights reserved (CC BY)",
+          "photographerName": "Thomaz de Carvalho Callado",
+          "photographerLogin": "thomazcallado",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 444898400,
+          "observationId": 248936435
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/577021745/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/577021745/large.jpg",
+          "attribution": "(c) Jordan Moncho, some rights reserved (CC BY-NC)",
+          "photographerName": "Jordan Moncho",
+          "photographerLogin": "j_moncho",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 577021745,
+          "observationId": 319224307
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/589115961/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/589115961/large.jpg",
+          "attribution": "(c) mutonaomi, some rights reserved (CC BY-NC)",
+          "photographerName": "mutonaomi",
+          "photographerLogin": "mutonaomi",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 589115961,
+          "observationId": 325383426
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/103510847/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/103510847/large.jpg",
+          "attribution": "(c) José Valério, some rights reserved (CC BY-NC)",
+          "photographerName": "José Valério",
+          "photographerLogin": "josev_ge",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 103510847,
+          "observationId": 64390240
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/108750662/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/108750662/large.jpeg",
+          "attribution": "(c) Lucas Rafael, some rights reserved (CC BY-NC)",
+          "photographerName": "Lucas Rafael",
+          "photographerLogin": "lucas1rafael",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 108750662,
+          "observationId": 67326203
+        }
+      ],
+      "rationalBox": "PNN / INPA, câmara de cria 12×12×6 cm"
+    },
+    {
+      "id": "cupira",
+      "commonName": "Cupira",
+      "scientificName": "Partamona helleri",
+      "shortDescription": "Nidifica em cupinzeiros ativos, uma das únicas abelhas que vive dentro de termiteiros",
+      "longDescription": "A Cupira é uma das abelhas sem ferrão mais fascinantes do Brasil por seu comportamento de nidificação: constrói seus ninhos dentro de cupinzeiros ativos, convivendo com os cupins sem aparente conflito. Acredita-se que a abelha utiliza substâncias químicas para evitar ataques dos cupins. A entrada do ninho é uma abertura circular pequena na parede do cupinzeiro. Distribui-se amplamente pelo Cerrado, Mata Atlântica e Caatinga. Seu mel é levemente ácido e de coloração âmbar. É uma espécie curiosa e de grande interesse científico pela interação com os cupins.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga",
+        "Amazônia"
+      ],
+      "sizeMm": 6,
+      "behavior": "Mansa",
+      "nest": "Interior de cupinzeiros ativos (termiteiros)",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "termitera",
+        "mel-ácido",
+        "polinizadora",
+        "cerrado"
+      ],
+      "favoredPlants": [
+        "Ipê-roxo",
+        "Caju",
+        "Pequizeiro",
+        "Angico"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/354036324/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/354036324/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/354036324/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fcupira%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Partamona helleri: nesting in termitaria",
+          "url": "https://scholar.google.com/scholar?q=Partamona+helleri+termitaria+nesting"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/354036324/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/354036324/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 354036324,
+          "observationId": 200643913
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/57731858/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/57731858/large.jpeg",
+          "attribution": "(c) Nelson Wisnik, some rights reserved (CC BY-NC)",
+          "photographerName": "Nelson Wisnik",
+          "photographerLogin": "nelson_wisnik",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 57731858,
+          "observationId": 36515284
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/98632678/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/98632678/large.jpg",
+          "attribution": "(c) Paulo Gonçalves Carvalho, some rights reserved (CC BY-NC)",
+          "photographerName": "Paulo Gonçalves Carvalho",
+          "photographerLogin": "paulogcarvalho",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 98632678,
+          "observationId": 61627252
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/113581936/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/113581936/large.jpeg",
+          "attribution": "(c) Helio Lourencini, some rights reserved (CC BY)",
+          "photographerName": "Helio Lourencini",
+          "photographerLogin": "helio-lourencini",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 113581936,
+          "observationId": 69927631
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/598656782/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/598656782/large.jpg",
+          "attribution": "(c) Sávio Inácio, some rights reserved (CC BY-NC)",
+          "photographerName": "Sávio Inácio",
+          "photographerLogin": "savioinacio",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 598656782,
+          "observationId": 330172503
+        }
+      ],
+      "rationalBox": "INPA, câmara de cria 12×12×8 cm"
+    },
+    {
+      "id": "abelha-limao",
+      "commonName": "Abelha-Limão",
+      "scientificName": "Lestrimelitta limao",
+      "shortDescription": "A ladrona, invade colônias vizinhas usando feromônio de limão e rouba mel e pólen",
+      "longDescription": "A Abelha-Limão é uma das espécies mais incomuns entre as abelhas sem ferrão: é completamente kleptoparasita. Suas operárias não coletam pólen nem néctar diretamente das flores, ao invés disso, invadem ninhos de outras abelhas sem ferrão usando um potente feromônio com odor de limão (rico em citral) que confunde e dispersa as defensoras do ninho-alvo. Em seguida, saqueiam as reservas de mel, pólen e cerume. A colônia atacada pode ser completamente destruída. Apesar do comportamento predatório, a Abelha-Limão tem papel ecológico relevante no controle populacional de outras meliponas. É uma espécie de distribuição ampla e comportamento fascinante.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga"
+      ],
+      "sizeMm": 6,
+      "behavior": "Agressiva",
+      "nest": "Ocos de árvores; invade ninhos de outras espécies",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "semFerrão",
+        "meliponini",
+        "pequena",
+        "social",
+        "kleptoparasita",
+        "agressiva"
+      ],
+      "favoredPlants": [],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/178065820/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/178065820/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/178065820/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-limao%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Lestrimelitta limao: kleptoparasitism and citral alarm pheromone",
+          "url": "https://scholar.google.com/scholar?q=Lestrimelitta+limao+kleptoparasitism+citral"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/178065820/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/178065820/large.jpg",
+          "attribution": "(c) luizavelozo, some rights reserved (CC BY-NC)",
+          "photographerName": "luizavelozo",
+          "photographerLogin": "luizavelozo",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 178065820,
+          "observationId": 106045754
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/350006111/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/350006111/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 350006111,
+          "observationId": 198564038
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/532949602/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/532949602/large.jpg",
+          "attribution": "(c) Arnol Rueda, some rights reserved (CC BY-NC)",
+          "photographerName": "Arnol Rueda",
+          "photographerLogin": "arnol6",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 532949602,
+          "observationId": 296010056
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/54776375/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/54776375/large.jpg",
+          "attribution": "(c) Marcelo Calazans, some rights reserved (CC BY-NC)",
+          "photographerName": "Marcelo Calazans",
+          "photographerLogin": "marcelocalazans",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 54776375,
+          "observationId": 34778198
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/329810074/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/329810074/large.jpg",
+          "attribution": "(c) Almir Figueiredo, some rights reserved (CC BY-NC)",
+          "photographerName": "Almir Figueiredo",
+          "photographerLogin": "fanzmosismeliponariourbano",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 329810074,
+          "observationId": 188442312
+        }
+      ]
+    },
+    {
+      "id": "mamangava-preta",
+      "commonName": "Mamangava-Preta",
+      "scientificName": "Bombus morio",
+      "shortDescription": "O maior mamangão do Brasil, vibra flores para liberar pólen em processo chamado buzz pollination",
+      "longDescription": "A Mamangava-Preta é o maior e mais comum bumblebee (mamangava) do Brasil, com corpo robusto, pelagem preta densa e voo potente e barulhento. Ao contrário das abelhas sem ferrão, possui ferrão funcional, mas raramente pica humanos. É uma das melhores polinizadoras de flores com anteras poricidas, como tomateiros, pimentões e berinjelas, usando a técnica de polinização por vibração (buzz pollination): apoia-se na flor e vibra os músculos torácicos em alta frequência para liberar o pólen. Constrói ninhos no solo ou em cavidades pré-existentes. Colônias anuais, com rainha fundadora no inverno.",
+      "regions": [
+        "Sul",
+        "Sudeste",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Cerrado",
+        "Pampa"
+      ],
+      "sizeMm": 22,
+      "behavior": "Mansa",
+      "nest": "Ninhos no solo ou em cavidades pré-existentes; colônias anuais",
+      "conservationStatus": "vulnerable",
+      "featured": true,
+      "tags": [
+        "comFerrão",
+        "mamangava",
+        "grande",
+        "social",
+        "polinizadora",
+        "mataAtlântica",
+        "cerrado",
+        "pampa",
+        "ameaçada",
+        "nidificacaoSolo"
+      ],
+      "favoredPlants": [
+        "Tomateiro",
+        "Pimentão",
+        "Berinjela",
+        "Maracujazeiro",
+        "Trevos"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/65928485/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/65928485/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/65928485/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmamangava-preta%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmamangava-preta%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Bombus morio: buzz pollination and agricultural importance",
+          "url": "https://scholar.google.com/scholar?q=Bombus+morio+buzz+pollination"
+        },
+        {
+          "title": "Conservação de mamangavas no Brasil",
+          "url": "https://scholar.google.com/scholar?q=Bombus+Brazil+conservation+decline"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/65928485/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/65928485/large.jpeg",
+          "attribution": "(c) Pablo Bombín, some rights reserved (CC BY)",
+          "photographerName": "Pablo Bombín",
+          "photographerLogin": "bombin",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 65928485,
+          "observationId": 41554176
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/519579010/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/519579010/large.jpg",
+          "attribution": "(c) octavio_costa, some rights reserved (CC BY-NC)",
+          "photographerName": "octavio_costa",
+          "photographerLogin": "octavio_costa",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 519579010,
+          "observationId": 288897731
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/622853113/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/622853113/large.jpg",
+          "attribution": "(c) Luísa Marques, some rights reserved (CC BY-NC)",
+          "photographerName": "Luísa Marques",
+          "photographerLogin": "lulieight",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 622853113,
+          "observationId": 342069888
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/60526230/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/60526230/large.jpg",
+          "attribution": "(c) Gustavo Fernando Brahamian, some rights reserved (CC BY-NC)",
+          "photographerName": "Gustavo Fernando Brahamian",
+          "photographerLogin": "avutardafuriosa",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 60526230,
+          "observationId": 38112328
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/337220258/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/337220258/large.jpeg",
+          "attribution": "(c) Luís Olímpio Menta Giasson, some rights reserved (CC BY-NC)",
+          "photographerName": "Luís Olímpio Menta Giasson",
+          "photographerLogin": "lgiasson",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 337220258,
+          "observationId": 192132727
+        }
+      ]
+    },
+    {
+      "id": "mamangava-do-sul",
+      "commonName": "Mamangava-do-Sul",
+      "scientificName": "Bombus brasiliensis",
+      "shortDescription": "Espécie ameaçada do sul do Brasil, declínio acentuado nas últimas décadas",
+      "longDescription": "A Mamangava-do-Sul é uma espécie endêmica do Sul do Brasil e nordeste da Argentina, com populações em declínio acentuado documentado desde os anos 1990. Seu corpo é robusto com faixas amarelas e pretas bem definidas. Assim como outros bumblebees, é excelente polinizadora por vibração de flores com anteras poricidas. Habita áreas de mata nativa, campos e bordas de floresta na Mata Atlântica e Pampa. O declínio da espécie é atribuído ao uso de pesticidas, doenças transmitidas por mamangavas comerciais introduzidas e à perda de habitat. Considerada uma das espécies de Bombus em pior estado de conservação no Brasil.",
+      "regions": [
+        "Sul"
+      ],
+      "biomes": [
+        "Mata Atlântica",
+        "Pampa"
+      ],
+      "sizeMm": 18,
+      "behavior": "Mansa",
+      "nest": "Ninhos no solo ou em cavidades; colônias anuais",
+      "conservationStatus": "endangered",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "mamangava",
+        "grande",
+        "social",
+        "polinizadora",
+        "mataAtlântica",
+        "pampa",
+        "ameaçada",
+        "endêmica",
+        "nidificacaoSolo"
+      ],
+      "favoredPlants": [
+        "Trevos",
+        "Maracujazeiro",
+        "Tomateiro",
+        "Flores nativas do Pampa"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/105997912/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/105997912/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/105997912/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmamangava-do-sul%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Bombus brasiliensis: population decline and conservation",
+          "url": "https://scholar.google.com/scholar?q=Bombus+brasiliensis+decline+conservation"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/105997912/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/105997912/large.jpg",
+          "attribution": "(c) Cajá-manga, some rights reserved (CC BY)",
+          "photographerName": "Cajá-manga",
+          "photographerLogin": "caja-manga",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 105997912,
+          "observationId": 65816938
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/381951961/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/381951961/large.jpeg",
+          "attribution": "(c) chris_ahlgrimm, some rights reserved (CC BY-NC)",
+          "photographerName": "chris_ahlgrimm",
+          "photographerLogin": "chris_ahlgrimm",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 381951961,
+          "observationId": 215998351
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/644142905/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/644142905/large.jpg",
+          "attribution": "(c) Renato Machado de Sobral, some rights reserved (CC BY-NC)",
+          "photographerName": "Renato Machado de Sobral",
+          "photographerLogin": "chatonov",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 644142905,
+          "observationId": 353026648
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/338416239/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/338416239/large.jpg",
+          "attribution": "(c) fabricio_reis_costa, some rights reserved (CC BY-NC)",
+          "photographerName": "fabricio_reis_costa",
+          "photographerLogin": "fabricio_reis_costa",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 338416239,
+          "observationId": 192737702
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/622925197/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/622925197/large.jpg",
+          "attribution": "(c) gilbertopasquali, some rights reserved (CC BY-NC)",
+          "photographerName": "gilbertopasquali",
+          "photographerLogin": "gilbertopasquali",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 622925197,
+          "observationId": 342105857
+        }
+      ]
+    },
+    {
+      "id": "mamangava-de-toco",
+      "commonName": "Mamangava-de-Toco",
+      "scientificName": "Xylocopa frontalis",
+      "shortDescription": "Grande abelha solitária que escava ninhos em tocos e madeira morta",
+      "longDescription": "A Mamangava-de-Toco é uma das maiores abelhas solitárias do Brasil. Seu corpo robusto, negro e com pelagem amarela densa no tórax a torna inconfundível. Constrói ninhos escavando galerias em madeira morta, tocos e troncos secos, daí o nome popular. Fêmeas solitárias cuidam sozinhas de sua prole, provisionando células com uma mistura de pólen e néctar (pão de abelha). Apesar do porte intimidador, é extremamente dócil e raramente pica. É uma polinizadora essencial de flores de tubo longo como as da maracujá e do maracujá-nativo, sendo capaz de realizar buzz pollination. Amplamente distribuída pelo Brasil.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga"
+      ],
+      "sizeMm": 22,
+      "behavior": "Mansa",
+      "nest": "Galerias escavadas em madeira morta, tocos e troncos secos",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "grande",
+        "nidificacaoMadeira",
+        "polinizadora"
+      ],
+      "favoredPlants": [
+        "Maracujazeiro",
+        "Canela-de-velho",
+        "Ipê",
+        "Quaresmeira"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/165314061/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/165314061/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/165314061/large.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmamangava-de-toco%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Xylocopa frontalis: nesting biology and pollination",
+          "url": "https://scholar.google.com/scholar?q=Xylocopa+frontalis+nesting+pollination"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/165314061/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/165314061/large.jpeg",
+          "attribution": "(c) Sebastián Fornés, some rights reserved (CC BY)",
+          "photographerName": "Sebastián Fornés",
+          "photographerLogin": "seba_fornes",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 165314061,
+          "observationId": 99197254
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/312930336/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/312930336/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 312930336,
+          "observationId": 179722013
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/328122824/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/328122824/large.jpg",
+          "attribution": "(c) Gustavo Fernando Brahamian, some rights reserved (CC BY-NC)",
+          "photographerName": "Gustavo Fernando Brahamian",
+          "photographerLogin": "avutardafuriosa",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 328122824,
+          "observationId": 187608019
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/88949534/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/88949534/large.jpg",
+          "attribution": "(c) maria_jose_arias, some rights reserved (CC BY-NC)",
+          "photographerName": "maria_jose_arias",
+          "photographerLogin": "maria_jose_arias",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 88949534,
+          "observationId": 55844728
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/586998763/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/586998763/large.jpg",
+          "attribution": "(c) Camila Morales, some rights reserved (CC BY-NC)",
+          "photographerName": "Camila Morales",
+          "photographerLogin": "tucutucu",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 586998763,
+          "observationId": 324328099
+        }
+      ]
+    },
+    {
+      "id": "mamangava-cinza",
+      "commonName": "Mamangava-Cinza",
+      "scientificName": "Xylocopa grisescens",
+      "shortDescription": "Grande abelha solitária do Nordeste e Centro-Oeste, com pelagem cinza-prateada inconfundível",
+      "longDescription": "A Mamangava-Cinza é reconhecível pela pelagem cinza-prateada que recobre seu tórax e partes do abdômen, característica única entre as abelhas-de-madeira brasileiras. De grande porte, é frequente no Cerrado, Caatinga e bordas de Mata Atlântica. Escava ninhos em madeira seca de troncos e mourões. Como todas as Xylocopa, a fêmea cuida solitariamente da prole. Polinizadora de flores de grande porte, especialmente leguminosas, passifloráceas e flores de apelo butch (flores robustas que exigem abelhas grandes). É muito frequente em pomares de maracujá no Nordeste, sendo essencial para a frutificação.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Caatinga",
+        "Cerrado",
+        "Amazônia"
+      ],
+      "sizeMm": 20,
+      "behavior": "Mansa",
+      "nest": "Galerias em madeira seca de troncos e mourões",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "grande",
+        "nidificacaoMadeira",
+        "polinizadora",
+        "caatinga",
+        "cerrado"
+      ],
+      "favoredPlants": [
+        "Maracujazeiro",
+        "Feijão-de-porco",
+        "Angico",
+        "Faveiro"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/312107072/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/312107072/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/312107072/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmamangava-cinza%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Xylocopa grisescens: pollination of passion fruit in Brazil",
+          "url": "https://scholar.google.com/scholar?q=Xylocopa+grisescens+pollination+Brazil"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/312107072/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/312107072/large.jpg",
+          "attribution": "(c) willian_bee, some rights reserved (CC BY-NC)",
+          "photographerName": "willian_bee",
+          "photographerLogin": "willian_bee",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 312107072,
+          "observationId": 179284193
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/631133783/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/631133783/large.jpg",
+          "attribution": "(c) Bruno Döhler, some rights reserved (CC BY-NC)",
+          "photographerName": "Bruno Döhler",
+          "photographerLogin": "bruno_dohler",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 631133783,
+          "observationId": 346252627
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/93860022/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/93860022/large.jpeg",
+          "attribution": "(c) caduguidorizzi, some rights reserved (CC BY-NC)",
+          "photographerName": "caduguidorizzi",
+          "photographerLogin": "caduguidorizzi",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 93860022,
+          "observationId": 58776835
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/257109824/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/257109824/large.jpeg",
+          "attribution": "(c) Frederico Acaz Sonntag, some rights reserved (CC BY-NC)",
+          "photographerName": "Frederico Acaz Sonntag",
+          "photographerLogin": "fredericosonntag",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 257109824,
+          "observationId": 149226183
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/51427430/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/51427430/large.jpeg",
+          "attribution": "(c) thalitamelo, some rights reserved (CC BY-NC)",
+          "photographerName": "thalitamelo",
+          "photographerLogin": "thalitamelo",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 51427430,
+          "observationId": 32774068
+        }
+      ]
+    },
+    {
+      "id": "abelha-cachorro",
+      "commonName": "Abelha-Cachorro",
+      "scientificName": "Centris tarsata",
+      "shortDescription": "Solitária especialista em coleta de óleo floral, polinizadora exclusiva de várias flores do Nordeste",
+      "longDescription": "A Abelha-Cachorro pertence ao grupo das abelhas coletoras de óleo floral, uma estratégia nutricional rara entre os insetos. Em vez de apenas néctar e pólen, coleta óleo secretado por flores de espécies como a malpighiácea acerola-do-mato, usando pentes nas patas traseiras especializados para isso. O óleo é misturado ao pólen e fornecido como alimento larval. É uma das principais polinizadoras de espécies da família Malpighiaceae no Nordeste, como murici, acerola e outras. Nidifica em solo arenoso, escavando galerias compactas. O nome popular refere-se ao som grave do seu voo, que lembra o latido de um cão.",
+      "regions": [
+        "Nordeste",
+        "Norte",
+        "Centro-Oeste"
+      ],
+      "biomes": [
+        "Caatinga",
+        "Cerrado",
+        "Amazônia"
+      ],
+      "sizeMm": 13,
+      "behavior": "Mansa",
+      "nest": "Galerias no solo arenoso",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "média",
+        "nidificacaoSolo",
+        "polinizadora",
+        "caatinga",
+        "cerrado"
+      ],
+      "favoredPlants": [
+        "Murici",
+        "Acerola-do-mato",
+        "Malpighiáceas nativas",
+        "Caju"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/313469060/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/313469060/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/313469060/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-cachorro%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Centris tarsata: oil-collecting behavior and Malpighiaceae pollination",
+          "url": "https://scholar.google.com/scholar?q=Centris+tarsata+oil+collecting+Malpighiaceae"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/313469060/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/313469060/large.jpg",
+          "attribution": "(c) pedrosantoss, some rights reserved (CC BY-NC)",
+          "photographerName": "pedrosantoss",
+          "photographerLogin": "pedrosantoss",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 313469060,
+          "observationId": 180002416
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/26498860/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/26498860/large.jpeg",
+          "attribution": "(c) Douglas, some rights reserved (CC BY)",
+          "photographerName": "Douglas",
+          "photographerLogin": "douglas-u-oliveira",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 26498860,
+          "observationId": 17434609
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/417804070/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/417804070/large.jpeg",
+          "attribution": "(c) César Machado Nunes Teixeira, some rights reserved (CC BY-NC)",
+          "photographerName": "César Machado Nunes Teixeira",
+          "photographerLogin": "cesarmachado",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 417804070,
+          "observationId": 234969684
+        }
+      ]
+    },
+    {
+      "id": "abelha-de-cheiro",
+      "commonName": "Abelha-de-Cheiro",
+      "scientificName": "Eulaema nigrita",
+      "shortDescription": "Grande e peluda, coleta perfumes de orquídeas para atrair fêmeas, polinizadora de espécies raras",
+      "longDescription": "A Abelha-de-Cheiro é uma das maiores abelhas solitárias do Brasil e pertence à tribo Euglossini, as famosas abelhas-das-orquídeas. Os machos coletam compostos aromáticos voláteis em flores de orquídeas, fungos e outras fontes para formar misturas de perfume que usam em rituais de corte para atrair fêmeas. As fêmeas, por sua vez, são polinizadoras altamente eficientes de orquídeas, inclusive de espécies raras e ameaçadas que dependem exclusivamente dessa tribo para reprodução. De coloração preta com reflexos metálicos, é o maior representante do grupo no Brasil, com presença registrada em praticamente todos os biomas. Sensível à fragmentação florestal.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga"
+      ],
+      "sizeMm": 21,
+      "behavior": "Mansa",
+      "nest": "Cavidades em madeira ou solo; fêmeas solitárias",
+      "conservationStatus": "least-concern",
+      "featured": true,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "euglossini",
+        "grande",
+        "orquídeas",
+        "polinizadora",
+        "floresta"
+      ],
+      "favoredPlants": [
+        "Orquídeas nativas",
+        "Catasetum",
+        "Stanhopea",
+        "Gongora"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/667427850/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/667427850/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/667427850/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-de-cheiro%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-de-cheiro%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Eulaema nigrita: perfume collecting and orchid pollination",
+          "url": "https://scholar.google.com/scholar?q=Eulaema+nigrita+perfume+orchid+pollination"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/667427850/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/667427850/large.jpg",
+          "attribution": "(c) Gabriel Cardoso Fialho, some rights reserved (CC BY-NC)",
+          "photographerName": "Gabriel Cardoso Fialho",
+          "photographerLogin": "gabrielfialho",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 667427850,
+          "observationId": 365555862
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/373985116/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/373985116/large.jpeg",
+          "attribution": "(c) Pablo Cauã da Silva Toledo, some rights reserved (CC BY)",
+          "photographerName": "Pablo Cauã da Silva Toledo",
+          "photographerLogin": "pablocauapc",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 373985116,
+          "observationId": 211558922
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/593161454/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/593161454/large.jpg",
+          "attribution": "(c) Yby Naturalista, some rights reserved (CC BY-NC)",
+          "photographerName": "Yby Naturalista",
+          "photographerLogin": "ybynatureza",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 593161454,
+          "observationId": 327414998
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/59049499/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/59049499/large.jpeg",
+          "attribution": "(c) Alessandro De Almeida, some rights reserved (CC BY-NC)",
+          "photographerName": "Alessandro De Almeida",
+          "photographerLogin": "alessandrodealmeida",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 59049499,
+          "observationId": 37267453
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/569518452/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/569518452/large.jpg",
+          "attribution": "(c) Guilherme, some rights reserved (CC BY-NC)",
+          "photographerName": "Guilherme",
+          "photographerLogin": "guilhermemartinello",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 569518452,
+          "observationId": 315271028
+        }
+      ]
+    },
+    {
+      "id": "abelha-das-orquideas-verde",
+      "commonName": "Abelha-das-Orquídeas-Verde",
+      "scientificName": "Euglossa cordata",
+      "shortDescription": "Metalicamente verde e fascinante, machos viajam quilômetros coletando perfume de orquídeas",
+      "longDescription": "A Euglossa cordata é uma das mais belas abelhas do Brasil, com corpo compacto e coloração verde metálico brilhante que a torna inconfundível. Pertence à tribo Euglossini e é um dos polinizadores exclusivos de orquídeas que dependem de pseudocópula ou de recompensas aromáticas para reprodução. Os machos percorrem até 50 km em busca de compostos aromáticos específicos que coletam com auxílio das patas dianteiras e armazenam em estruturas especializadas das patas traseiras. Esse comportamento os torna vetores de pólen de orquídeas raras em grandes distâncias, serviço ecossistêmico insubstituível. É um excelente indicador de qualidade ambiental de florestas.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Amazônia",
+        "Mata Atlântica",
+        "Cerrado"
+      ],
+      "sizeMm": 14,
+      "behavior": "Mansa",
+      "nest": "Ninhos individuais em cavidades pequenas; fêmeas solitárias",
+      "conservationStatus": "least-concern",
+      "featured": true,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "euglossini",
+        "média",
+        "orquídeas",
+        "polinizadora",
+        "floresta",
+        "amazônia",
+        "mataAtlântica"
+      ],
+      "favoredPlants": [
+        "Orquídeas Catasetinae",
+        "Clowesia",
+        "Gongora",
+        "Stanhopea"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/626381169/square.jpg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/626381169/medium.jpg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/626381169/large.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-das-orquideas-verde%2Fgallery1.jpg?alt=media",
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-das-orquideas-verde%2Fgallery2.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Euglossa cordata: long-distance pollen dispersal in Orchidaceae",
+          "url": "https://scholar.google.com/scholar?q=Euglossa+cordata+orchid+pollination+long+distance"
+        },
+        {
+          "title": "Euglossine bees as bioindicators of forest quality",
+          "url": "https://scholar.google.com/scholar?q=Euglossini+bioindicator+forest+quality+Brazil"
+        }
+      ],
+      "iNaturalistPhotos": [
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/626381169/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/626381169/large.jpg",
+          "attribution": "(c) Alisson, some rights reserved (CC BY-NC)",
+          "photographerName": "Alisson",
+          "photographerLogin": "alisson_01",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 626381169,
+          "observationId": 343822215
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/305836361/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/305836361/large.jpeg",
+          "attribution": "(c) Bruno Henrique Aranda, some rights reserved (CC BY)",
+          "photographerName": "Bruno Henrique Aranda",
+          "photographerLogin": "aranda87",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 305836361,
+          "observationId": 175948441
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/664588934/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/664588934/large.jpg",
+          "attribution": "(c) Thalli, some rights reserved (CC BY-NC)",
+          "photographerName": "Thalli",
+          "photographerLogin": "amobichofeio",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 664588934,
+          "observationId": 364062890
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/549306198/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/549306198/large.jpg",
+          "attribution": "(c) Renata Mello, some rights reserved (CC BY-NC)",
+          "photographerName": "Renata Mello",
+          "photographerLogin": "renatamello",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 549306198,
+          "observationId": 304691413
+        }
+      ]
+    },
+    {
+      "id": "abelha-cortadeira",
+      "commonName": "Abelha-Cortadeira",
+      "scientificName": "Megachile orbicularis",
+      "shortDescription": "Corta discos perfeitos de folhas para construir células de cria, arquiteta solitária dos jardins",
+      "longDescription": "A Abelha-Cortadeira é famosa por seu comportamento de construção: com as mandíbulas afiadas, corta discos e tiras precisas de folhas verdes para forrar as células de cria que constrói em cavidades pré-existentes, buracos em madeira, talos ocos de plantas e até furos em tijolos. Cada célula é uma obra de engenharia vegetal: discos circulares nas laterais e tiras alongadas para fechar o fundo e o topo. A fêmea provisiona cada célula com pólen umedecido com néctar e deposita um único ovo. O dano às folhas causado por essa abelha é uma das primeiras evidências da sua presença em jardins. É uma polinizadora eficiente de diversas flores.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste",
+        "Sul"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Mata Atlântica",
+        "Caatinga"
+      ],
+      "sizeMm": 10,
+      "behavior": "Mansa",
+      "nest": "Células de folhas cortadas em cavidades de madeira ou talos ocos",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "média",
+        "nidificacaoMadeira",
+        "polinizadora",
+        "urbana"
+      ],
+      "favoredPlants": [
+        "Roseira",
+        "Bougainvillea",
+        "Feijão",
+        "Girassol"
+      ],
+      "photos": {
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/24197665/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/24197665/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/24197665/medium.jpeg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-cortadeira%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Megachile: leaf-cutting behavior and nest construction",
+          "url": "https://scholar.google.com/scholar?q=Megachile+leaf+cutting+nesting+behavior+Brazil"
+        }
+      ],
+      "iNaturalistPhotos": []
+    },
+    {
+      "id": "abelha-da-terra",
+      "commonName": "Abelha-da-Terra",
+      "scientificName": "Epicharis rustica",
+      "shortDescription": "Solitária que aninha no solo, coletora de óleo e importante polinizadora do Cerrado",
+      "longDescription": "A Abelha-da-Terra pertence ao gênero Epicharis, um grupo de abelhas solitárias que nidificam no solo e são especializadas na coleta de óleo floral, especialmente de espécies da família Malpighiaceae, como o murici. Seu corpo é robusto, peludo e com coloração castanho-avermelhada. Escava galerias verticais no solo argiloso-arenoso, onde deposita células provisionadas com uma mistura de óleo e pólen. É uma das principais polinizadoras do murici (Byrsonima spp.) e outras malpighiáceas nativas do Cerrado. Sua presença é indicativa de solo em bom estado de conservação e de vegetação nativa próxima.",
+      "regions": [
+        "Norte",
+        "Nordeste",
+        "Centro-Oeste",
+        "Sudeste"
+      ],
+      "biomes": [
+        "Cerrado",
+        "Caatinga",
+        "Amazônia"
+      ],
+      "sizeMm": 14,
+      "behavior": "Mansa",
+      "nest": "Galerias no solo argiloso-arenoso",
+      "conservationStatus": "least-concern",
+      "featured": false,
+      "tags": [
+        "comFerrão",
+        "solitária",
+        "média",
+        "nidificacaoSolo",
+        "polinizadora",
+        "cerrado",
+        "caatinga"
+      ],
+      "favoredPlants": [
+        "Murici",
+        "Malpighiáceas nativas",
+        "Acerola-do-cerrado",
+        "Barbatimão"
+      ],
+      "photos": {
+        "thumbnail": "https://static.inaturalist.org/photos/261990448/square.jpg",
+        "media": "https://static.inaturalist.org/photos/261990448/medium.jpg",
+        "original": "https://static.inaturalist.org/photos/261990448/medium.jpg"
+      },
+      "photoGallery": [
+        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fabelha-da-terra%2Fgallery1.jpg?alt=media"
+      ],
+      "scientificArticles": [
+        {
+          "title": "Epicharis rustica: oil-collecting and Byrsonima pollination",
+          "url": "https://scholar.google.com/scholar?q=Epicharis+rustica+oil+collecting+Malpighiaceae"
+        }
+      ],
+      "iNaturalistPhotos": []
+    }
+  ]
+}
