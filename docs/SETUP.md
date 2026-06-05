@@ -63,13 +63,43 @@ species/{id}
   favoredPlants: string[]
   photos: { thumbnail, media, original }
   photoGallery?: string[]
+  iNaturalistPhotos?: PhotoCredit[]   // enriched via scripts/fetch-inaturalist-photos.js
   scientificArticles?: { title, url }[]
+  rationalBox?: string
+  trapNest?: string
   featured?: boolean
   createdAt: Timestamp
   updatedAt: Timestamp
 ```
 
-Sample data: `firestore-example-data.json`
+Sample data: `scripts/firestore-example-data.json`
+
+---
+
+## Data import scripts
+
+All scripts live in `scripts/` and run with Node.js directly (no transpilation needed).
+
+```bash
+# 1. Place your Firebase Admin SDK key (gitignored)
+cp <downloaded-key>.json serviceAccountKey.json
+
+# 2. Import base species data
+node scripts/import-species.js
+
+# 3. Enrich with meliponiculture fields (rationalBox, trapNest)
+node scripts/enrich-meliponiculture.js
+
+# 4. Fetch iNaturalist photos and attach to each species
+node scripts/fetch-inaturalist-photos.js
+
+# 5. Backfill cover photos on existing documents
+node scripts/backfill-covers.js
+```
+
+`scripts/species-data.json` — consolidated dataset with all species data and iNaturalist photos, used by the import scripts.
+
+> `serviceAccountKey.json` is gitignored. Never commit it.
 
 ---
 

@@ -77,6 +77,18 @@ src/
     └── haptics.ts          ← Haptic feedback wrappers
 ```
 
+At the project root:
+
+```
+scripts/
+├── import-species.js           ← seed Firestore from species-data.json
+├── enrich-meliponiculture.js   ← add rationalBox / trapNest fields
+├── fetch-inaturalist-photos.js ← attach iNaturalist photo credits
+├── backfill-covers.js          ← backfill cover photos on existing docs
+├── species-data.json           ← consolidated dataset (species + photos)
+└── firestore-example-data.json ← minimal sample for schema reference
+```
+
 ---
 
 ## Routes

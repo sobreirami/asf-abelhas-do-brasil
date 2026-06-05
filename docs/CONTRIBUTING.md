@@ -80,6 +80,6 @@ npm run type:check    # no TypeScript errors
 ## Adding a new species field
 
 1. Update `src/types/species.ts`
-2. Update `firestore-example-data.json` with a sample value
+2. Update `scripts/firestore-example-data.json` with a sample value
 3. Update `docs/SETUP.md` schema section
 4. Update the detail screen if the field should be displayed
