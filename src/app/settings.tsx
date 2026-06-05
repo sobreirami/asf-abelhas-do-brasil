@@ -1,339 +1,178 @@
 import Ionicons from '@react-native-vector-icons/ionicons';
+import { ImpactFeedbackStyle } from 'expo-haptics';
 import { router, Stack } from 'expo-router';
-import React from 'react';
-import {
-  Alert,
-  Linking,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
+import { FontWeight } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { clearAllCache } from '@/services/cacheService';
 import { LanguageCode } from '@/services/languageService';
-import { AccentColor, TextScale } from '@/services/preferencesService';
-import { triggerHaptic, triggerNotificationHaptic } from '@/utils/haptics';
-import { ImpactFeedbackStyle, NotificationFeedbackType } from 'expo-haptics';
-
-const ACCENT_OPTIONS: { key: AccentColor; color: { light: string; dark: string } }[] = [
-  { key: 'mel', color: { light: '#F5B800', dark: '#FFC53D' } },
-  { key: 'oliva', color: { light: '#6B8E23', dark: '#A8CE6C' } },
-  { key: 'laranja', color: { light: '#FF9500', dark: '#FF9F45' } },
-];
-
-const TEXT_SCALE_OPTIONS: TextScale[] = ['small', 'normal', 'large'];
-
-const LANG_OPTIONS: { code: LanguageCode; label: string }[] = [
-  { code: 'pt-BR', label: 'Português (Brasil)' },
-  { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' },
-];
+import { ThemePreference } from '@/services/preferencesService';
+import { triggerHaptic } from '@/utils/haptics';
 
 export default function SettingsScreen() {
   const colors = useThemeColors();
-  const {
-    colorScheme,
-    accentColor,
-    setAccentColor,
-    textScale,
-    setTextScale,
-    showScientificNames,
-    setShowScientificNames,
-  } = useTheme();
-  const { t, language, setLanguagePreference } = useLanguage();
+  const { language, setLanguagePreference, t } = useLanguage();
+  const { themePreference, setThemePreference } = useTheme();
+  const colorScheme = useColorScheme();
+  const activeTheme = themePreference === 'auto' ? colorScheme : themePreference;
+
+  const [cleared, setCleared] = useState(false);
 
   const handleClearCache = async () => {
     await triggerHaptic(ImpactFeedbackStyle.Medium);
-    Alert.alert(t.settings.clearCacheConfirmTitle, t.settings.clearCacheConfirmMsg, [
-      { text: t.common.cancel, style: 'cancel' },
-      {
-        text: t.settings.clearCache,
-        style: 'destructive',
-        onPress: async () => {
-          await clearAllCache();
-          await triggerNotificationHaptic(NotificationFeedbackType.Success);
-          Alert.alert('', t.settings.clearCacheSuccess);
-        },
-      },
-    ]);
+    await clearAllCache();
+    setCleared(true);
+    Alert.alert(t.alerts.clearCacheTitle, t.alerts.clearCacheMessage, [{ text: t.common.ok }]);
   };
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: t.settings.title,
-          headerShown: true,
-          headerTransparent: false,
-          headerStyle: { backgroundColor: colors.background },
-          headerTintColor: colors.text,
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <Pressable
-              onPress={() => router.back()}
-              style={styles.backBtn}
-              accessibilityRole="button"
-              accessibilityLabel={t.common.back}
-            >
-              <Ionicons name="chevron-back" size={24} color={colors.text} />
-            </Pressable>
-          ),
-        }}
-      />
+      <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView
-        edges={['bottom']}
+        edges={['top']}
         style={[styles.container, { backgroundColor: colors.background }]}
       >
+        <View style={[styles.topBar, { backgroundColor: colors.background }]}>
+          <Pressable
+            onPress={() => router.back()}
+            style={[
+              styles.backBtn,
+              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel={t.common.back}
+          >
+            <Ionicons name="chevron-back" size={22} color={colors.text} />
+          </Pressable>
+          <Text style={[styles.topBarTitle, { color: colors.text }]}>{t.settings.title}</Text>
+        </View>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
         >
-          {/* Geral */}
-          <SectionHeader label={t.settings.generalSection} colors={colors} />
-          <View
-            style={[
-              styles.group,
-              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-            ]}
-          >
-            {/* Idioma */}
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="language-outline" size={20} color={colors.primary} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.language}
-                </Text>
-              </View>
-            </View>
-            <View style={[styles.segmentRow, { borderTopColor: colors.border }]}>
-              {LANG_OPTIONS.map((opt) => (
-                <Pressable
-                  key={opt.code}
-                  onPress={async () => {
-                    await triggerHaptic(ImpactFeedbackStyle.Light);
-                    setLanguagePreference(opt.code);
-                  }}
-                  style={[
-                    styles.segmentBtn,
-                    language === opt.code && { backgroundColor: colors.primary },
-                    { borderColor: colors.border },
+          {/* Conteúdo */}
+          <SettingsGroup title={t.settings.contentSection} colors={colors}>
+            <SettingsRow
+              icon="language-outline"
+              label={t.settings.language}
+              last
+              colors={colors}
+              control={
+                <SegmentedControl
+                  value={language === 'pt-BR' ? 'pt' : language === 'es' ? 'es' : 'en'}
+                  options={[
+                    { value: 'pt', label: 'PT' },
+                    { value: 'en', label: 'EN' },
+                    { value: 'es', label: 'ES' },
                   ]}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: language === opt.code }}
+                  onChange={async (v) => {
+                    await triggerHaptic(ImpactFeedbackStyle.Light);
+                    const code: LanguageCode = v === 'pt' ? 'pt-BR' : v === 'es' ? 'es' : 'en';
+                    setLanguagePreference(code);
+                  }}
+                  colors={colors}
+                />
+              }
+            />
+          </SettingsGroup>
+
+          {/* Aparência */}
+          <SettingsGroup title={t.settings.appearanceSection} colors={colors}>
+            <SettingsRow
+              icon="contrast-outline"
+              label={t.preferences.appearance}
+              last
+              colors={colors}
+              control={
+                <SegmentedControl
+                  value={activeTheme ?? 'light'}
+                  options={[
+                    { value: 'light', label: t.theme.light },
+                    { value: 'dark', label: t.theme.dark },
+                  ]}
+                  onChange={async (v) => {
+                    await triggerHaptic(ImpactFeedbackStyle.Light);
+                    setThemePreference(v as ThemePreference);
+                  }}
+                  colors={colors}
+                />
+              }
+            />
+          </SettingsGroup>
+
+          {/* Dados */}
+          <SettingsGroup title={t.settings.dataSection} colors={colors}>
+            <SettingsRow
+              icon="server-outline"
+              label={t.settings.offlineStorage}
+              sub={cleared ? t.settings.clearCacheSuccess : t.settings.clearCacheDesc}
+              last
+              colors={colors}
+              control={
+                <Pressable
+                  onPress={cleared ? undefined : handleClearCache}
+                  disabled={cleared}
+                  style={[
+                    styles.clearBtn,
+                    cleared
+                      ? { backgroundColor: colors.surfaceElevated }
+                      : { backgroundColor: colors.error + '29', borderColor: colors.error + '52' },
+                  ]}
                 >
                   <Text
                     style={[
-                      styles.segmentText,
-                      { color: language === opt.code ? colors.onPrimary : colors.textMuted },
+                      styles.clearBtnText,
+                      { color: cleared ? colors.textFaint : colors.error },
                     ]}
-                    numberOfLines={1}
                   >
-                    {opt.label}
+                    {cleared ? t.settings.clearCacheSuccess : t.filters.clear}
                   </Text>
                 </Pressable>
-              ))}
-            </View>
-
-            <Divider colors={colors} />
-
-            {/* Nomes científicos */}
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="leaf-outline" size={20} color={colors.primary} />
-                <View>
-                  <Text style={[styles.settingLabel, { color: colors.text }]}>
-                    {t.settings.showScientificNames}
-                  </Text>
-                  <Text style={[styles.settingDesc, { color: colors.textFaint }]}>
-                    {t.settings.showScientificNamesDesc}
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                value={showScientificNames}
-                onValueChange={async (v) => {
-                  await triggerHaptic(ImpactFeedbackStyle.Light);
-                  setShowScientificNames(v);
-                }}
-                trackColor={{ false: colors.border, true: colors.primary }}
-                thumbColor={Colors[colorScheme].card}
-              />
-            </View>
-          </View>
-
-          {/* Aparência */}
-          <SectionHeader label={t.settings.appearanceSection} colors={colors} />
-          <View
-            style={[
-              styles.group,
-              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-            ]}
-          >
-            {/* Cor de destaque */}
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="color-palette-outline" size={20} color={colors.primary} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.accentColor}
-                </Text>
-              </View>
-            </View>
-            <View style={[styles.accentRow, { borderTopColor: colors.border }]}>
-              {ACCENT_OPTIONS.map((opt) => {
-                const hex = opt.color[colorScheme];
-                const selected = accentColor === opt.key;
-                const labelKey =
-                  `accent${opt.key.charAt(0).toUpperCase()}${opt.key.slice(1)}` as keyof typeof t.settings;
-                return (
-                  <Pressable
-                    key={opt.key}
-                    onPress={async () => {
-                      await triggerHaptic(ImpactFeedbackStyle.Light);
-                      setAccentColor(opt.key);
-                    }}
-                    style={[styles.accentBtn, selected && { borderColor: hex, borderWidth: 2 }]}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected }}
-                    accessibilityLabel={String(t.settings[labelKey])}
-                  >
-                    <View style={[styles.accentSwatch, { backgroundColor: hex }]} />
-                    <Text
-                      style={[styles.accentLabel, { color: selected ? hex : colors.textMuted }]}
-                    >
-                      {String(t.settings[labelKey])}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-
-            <Divider colors={colors} />
-
-            {/* Tamanho de texto */}
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="text-outline" size={20} color={colors.primary} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.textSize}
-                </Text>
-              </View>
-            </View>
-            <View style={[styles.segmentRow, { borderTopColor: colors.border }]}>
-              {TEXT_SCALE_OPTIONS.map((opt) => {
-                const labelKey =
-                  `textSize${opt.charAt(0).toUpperCase()}${opt.slice(1)}` as keyof typeof t.settings;
-                return (
-                  <Pressable
-                    key={opt}
-                    onPress={async () => {
-                      await triggerHaptic(ImpactFeedbackStyle.Light);
-                      setTextScale(opt);
-                    }}
-                    style={[
-                      styles.segmentBtn,
-                      textScale === opt && { backgroundColor: colors.primary },
-                      { borderColor: colors.border },
-                    ]}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: textScale === opt }}
-                  >
-                    <Text
-                      style={[
-                        styles.segmentText,
-                        { color: textScale === opt ? colors.onPrimary : colors.textMuted },
-                      ]}
-                    >
-                      {String(t.settings[labelKey])}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
-
-          {/* Dados */}
-          <SectionHeader label={t.settings.dataSection} colors={colors} />
-          <View
-            style={[
-              styles.group,
-              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-            ]}
-          >
-            <Pressable
-              onPress={handleClearCache}
-              style={styles.settingRow}
-              accessibilityRole="button"
-            >
-              <View style={styles.settingLeft}>
-                <Ionicons name="trash-outline" size={20} color={colors.error} />
-                <View>
-                  <Text style={[styles.settingLabel, { color: colors.error }]}>
-                    {t.settings.clearCache}
-                  </Text>
-                  <Text style={[styles.settingDesc, { color: colors.textFaint }]}>
-                    {t.settings.clearCacheDesc}
-                  </Text>
-                </View>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color={colors.textFaint} />
-            </Pressable>
-          </View>
+              }
+            />
+          </SettingsGroup>
 
           {/* Sobre */}
-          <SectionHeader label={t.settings.aboutSection} colors={colors} />
-          <View
-            style={[
-              styles.group,
-              { backgroundColor: colors.surfaceElevated, borderColor: colors.border },
-            ]}
-          >
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.version}
-                </Text>
-              </View>
-              <Text style={[styles.settingValue, { color: colors.textFaint }]}>1.0.0</Text>
-            </View>
+          <SettingsGroup title={t.settings.aboutSection} colors={colors}>
+            <SettingsRow
+              icon="star-outline"
+              label={t.settings.rateApp}
+              colors={colors}
+              onClick={() => {}}
+              control={<Ionicons name="chevron-forward" size={18} color={colors.textFaint} />}
+            />
+            <SettingsRow
+              icon="document-text-outline"
+              label={t.settings.termsOfUse}
+              colors={colors}
+              onClick={() => {}}
+              control={<Ionicons name="chevron-forward" size={18} color={colors.textFaint} />}
+            />
+            <SettingsRow
+              icon="lock-closed-outline"
+              label={t.settings.privacyPolicy}
+              last
+              colors={colors}
+              onClick={() => {}}
+              control={<Ionicons name="chevron-forward" size={18} color={colors.textFaint} />}
+            />
+          </SettingsGroup>
 
-            <Divider colors={colors} />
-
-            <Pressable
-              onPress={() => Linking.openURL('https://github.com/sobreirami/asf-abelhas-do-brasil')}
-              style={styles.settingRow}
-              accessibilityRole="link"
-            >
-              <View style={styles.settingLeft}>
-                <Ionicons name="logo-github" size={20} color={colors.primary} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.repository}
-                </Text>
-              </View>
-              <Ionicons name="open-outline" size={18} color={colors.textFaint} />
-            </Pressable>
-
-            <Divider colors={colors} />
-
-            <View style={styles.settingRow}>
-              <View style={styles.settingLeft}>
-                <Ionicons name="heart-outline" size={20} color={colors.error} />
-                <Text style={[styles.settingLabel, { color: colors.text }]}>
-                  {t.settings.credits}
-                </Text>
-              </View>
-              <Text style={[styles.settingValue, { color: colors.textFaint }]}>
-                Michel Rodrigues
-              </Text>
-            </View>
+          {/* Rodapé */}
+          <View style={styles.footer}>
+            <Text style={[styles.footerTagline, { color: colors.textMuted }]}>
+              Feito com ❤️ para a biodiversidade brasileira
+            </Text>
+            <Text style={[styles.footerVersion, { color: colors.textFaint }]}>
+              {t.settings.version} 1.0 · Projeto educativo
+            </Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -341,90 +180,186 @@ export default function SettingsScreen() {
   );
 }
 
-function SectionHeader({
-  label,
+function SettingsGroup({
+  title,
+  children,
   colors,
 }: {
-  label: string;
+  title: string;
+  children: React.ReactNode;
   colors: ReturnType<typeof useThemeColors>;
 }) {
   return (
-    <Text style={[styles.sectionHeader, { color: colors.textFaint }]}>{label.toUpperCase()}</Text>
+    <View style={styles.group}>
+      <Text style={[styles.groupTitle, { color: colors.textFaint }]}>{title.toUpperCase()}</Text>
+      <View
+        style={[styles.groupCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+      >
+        {children}
+      </View>
+    </View>
   );
 }
 
-function Divider({ colors }: { colors: ReturnType<typeof useThemeColors> }) {
-  return <View style={[styles.divider, { backgroundColor: colors.border }]} />;
+function SettingsRow({
+  icon,
+  label,
+  sub,
+  control,
+  last,
+  onClick,
+  colors,
+}: {
+  icon: string;
+  label: string;
+  sub?: string;
+  control: React.ReactNode;
+  last?: boolean;
+  onClick?: () => void;
+  colors: ReturnType<typeof useThemeColors>;
+}) {
+  return (
+    <Pressable
+      onPress={onClick}
+      disabled={!onClick}
+      style={({ pressed }) => [
+        styles.row,
+        !last && { borderBottomWidth: 1, borderBottomColor: colors.border },
+        pressed && onClick ? { backgroundColor: colors.surfaceElevated } : undefined,
+      ]}
+    >
+      <View style={[styles.rowIcon, { backgroundColor: colors.primary + '21' }]}>
+        <Ionicons name={icon as never} size={19} color={colors.primary} />
+      </View>
+      <View style={styles.rowText}>
+        <Text style={[styles.rowLabel, { color: colors.text }]}>{label}</Text>
+        {sub ? <Text style={[styles.rowSub, { color: colors.textFaint }]}>{sub}</Text> : null}
+      </View>
+      {control}
+    </Pressable>
+  );
+}
+
+function SegmentedControl({
+  value,
+  options,
+  onChange,
+  colors,
+}: {
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+  colors: ReturnType<typeof useThemeColors>;
+}) {
+  return (
+    <View style={[styles.segmented, { backgroundColor: colors.surfaceElevated }]}>
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <Pressable
+            key={o.value}
+            onPress={() => onChange(o.value)}
+            style={[styles.segmentedItem, active && { backgroundColor: colors.primary }]}
+            accessibilityRole="button"
+            accessibilityState={{ selected: active }}
+          >
+            <Text
+              style={[
+                styles.segmentedLabel,
+                { color: active ? colors.onPrimary : colors.textMuted },
+              ]}
+            >
+              {o.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContent: { paddingBottom: 60, paddingTop: Spacing.sm },
-  backBtn: { padding: Spacing.xs },
-
-  sectionHeader: {
-    fontSize: FontSize.xs,
-    fontWeight: FontWeight.semibold,
-    letterSpacing: 0.8,
-    marginHorizontal: Spacing.lg,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.sm,
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
-  group: {
-    marginHorizontal: Spacing.lg,
-    borderRadius: BorderRadius.lg,
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    borderWidth: 1,
+  },
+  topBarTitle: {
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    letterSpacing: -0.3,
+  },
+  scrollContent: { paddingBottom: 40 },
+
+  group: { paddingHorizontal: 20, marginBottom: 22 },
+  groupTitle: {
+    fontSize: 12.5,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 0.6,
+    marginBottom: 9,
+    marginHorizontal: 4,
+  },
+  groupCard: {
+    borderRadius: 18,
     borderWidth: 1,
     overflow: 'hidden',
   },
-  divider: { height: StyleSheet.hairlineWidth, marginHorizontal: Spacing.md },
 
-  settingRow: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: Spacing.md,
+    gap: 13,
+    padding: 13,
+    paddingHorizontal: 15,
     minHeight: 52,
   },
-  settingLeft: {
-    flexDirection: 'row',
+  rowIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    flexShrink: 0,
     alignItems: 'center',
-    gap: Spacing.sm,
-    flex: 1,
+    justifyContent: 'center',
   },
-  settingLabel: { fontSize: FontSize.md, fontWeight: FontWeight.medium },
-  settingDesc: { fontSize: FontSize.xs, marginTop: 1 },
-  settingValue: { fontSize: FontSize.sm },
+  rowText: { flex: 1, minWidth: 0 },
+  rowLabel: { fontSize: 15.5, fontWeight: FontWeight.semibold },
+  rowSub: { fontSize: 12.5, marginTop: 2, lineHeight: 17 },
 
-  segmentRow: {
+  segmented: {
     flexDirection: 'row',
-    padding: Spacing.sm,
-    gap: Spacing.xs,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    borderRadius: 11,
+    padding: 3,
+    gap: 2,
   },
-  segmentBtn: {
-    flex: 1,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.md,
-    alignItems: 'center',
-    borderWidth: 1,
+  segmentedItem: {
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 13,
   },
-  segmentText: { fontSize: FontSize.xs, fontWeight: FontWeight.semibold },
+  segmentedLabel: { fontSize: 13.5, fontWeight: FontWeight.bold },
 
-  accentRow: {
-    flexDirection: 'row',
-    padding: Spacing.sm,
-    gap: Spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  accentBtn: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 6,
-    padding: Spacing.sm,
-    borderRadius: BorderRadius.md,
+  clearBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 11,
     borderWidth: 1,
     borderColor: 'transparent',
   },
-  accentSwatch: { width: 32, height: 32, borderRadius: 16 },
-  accentLabel: { fontSize: FontSize.xs, fontWeight: FontWeight.semibold },
+  clearBtnText: { fontSize: 13.5, fontWeight: FontWeight.bold },
+
+  footer: { alignItems: 'center', paddingVertical: 4, paddingHorizontal: 20 },
+  footerTagline: { fontSize: 13, fontWeight: FontWeight.semibold },
+  footerVersion: { fontSize: 12, marginTop: 5 },
 });
