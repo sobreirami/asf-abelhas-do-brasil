@@ -44,7 +44,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemColorScheme = useSystemColorScheme();
-  const [themePreference, setThemePreferenceState] = useState<ThemePreference>('dark');
+  const [themePreference, setThemePreferenceState] = useState<ThemePreference>('auto');
   const [accentColor, setAccentColorState] = useState<AccentColor>('mel');
   const [textScale, setTextScaleState] = useState<TextScale>('normal');
   const [showScientificNames, setShowScientificNamesState] = useState(true);

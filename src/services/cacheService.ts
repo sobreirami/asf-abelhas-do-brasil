@@ -42,11 +42,7 @@ export const getCachedFeaturedSpecies = async (): Promise<Species[] | null> => {
 
 export const clearAllCache = async (): Promise<void> => {
   try {
-    await storageAdapter.multiRemove([
-      CACHE_KEYS.SPECIES_LIST,
-      CACHE_KEYS.FEATURED_SPECIES,
-      CACHE_KEYS.LAST_UPDATE,
-    ]);
+    await storageAdapter.clear();
   } catch {}
 };
 

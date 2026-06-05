@@ -1,7 +1,11 @@
 import en from '@/locales/en';
 import es from '@/locales/es';
 import ptBR from '@/locales/pt-BR';
-import { getLanguagePreference, LanguageCode } from '@/services/languageService';
+import {
+  getLanguagePreference,
+  LanguageCode,
+  saveLanguagePreference,
+} from '@/services/languageService';
 import React, { createContext, use, useCallback, useEffect, useState } from 'react';
 import { NativeModules, Platform } from 'react-native';
 
@@ -53,6 +57,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguagePreference = useCallback((lang: LanguageCode) => {
     setLanguagePreferenceState(lang);
+    saveLanguagePreference(lang);
   }, []);
 
   return (
