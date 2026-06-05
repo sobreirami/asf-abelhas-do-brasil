@@ -1,7 +1,6 @@
 import { storageAdapter } from '@/services/storage';
 import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
-import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View, ViewToken } from 'react-native';
@@ -14,6 +13,7 @@ import Animated, {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import HoneycombPattern from '@/components/ui/HoneycombPattern';
+import MascotScene, { type MascotVariant } from '@/components/ui/MascotScene';
 import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -22,6 +22,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type OnboardingSlide = {
   id: string;
+  mascot: MascotVariant;
   icon: IoniconsIconName;
   badge: string;
   title: string;
@@ -56,6 +57,7 @@ export default function OnboardingScreen() {
   const slides: OnboardingSlide[] = [
     {
       id: '1',
+      mascot: 'default',
       icon: 'leaf',
       badge: t.onboarding.badge1,
       title: t.onboarding.slide1Title,
@@ -63,6 +65,7 @@ export default function OnboardingScreen() {
     },
     {
       id: '2',
+      mascot: 'explore',
       icon: 'search',
       badge: t.onboarding.badge2,
       title: t.onboarding.slide2Title,
@@ -70,6 +73,7 @@ export default function OnboardingScreen() {
     },
     {
       id: '3',
+      mascot: 'protect',
       icon: 'shield-checkmark',
       badge: t.onboarding.badge3,
       title: t.onboarding.slide3Title,
@@ -110,15 +114,7 @@ export default function OnboardingScreen() {
   const renderSlide = useCallback(
     ({ item }: { item: OnboardingSlide }) => (
       <Animated.View entering={FadeIn} style={styles.slide}>
-        {/* Mascote grande com glow */}
-        <View style={styles.mascotWrapper}>
-          <View style={[styles.mascotGlow, { backgroundColor: colors.primary + '30' }]} />
-          <Image
-            source={require('../../assets/images/icon-transparent.png')}
-            style={styles.mascotImage}
-            contentFit="contain"
-          />
-        </View>
+        <MascotScene variant={item.mascot} size={200} />
 
         {/* Badge da etapa */}
         <View
@@ -235,25 +231,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 34,
-  },
-  mascotWrapper: {
-    position: 'relative',
-    width: 188,
-    height: 188,
-    marginBottom: Spacing.xl,
-  },
-  mascotGlow: {
-    position: 'absolute',
-    inset: -24,
-    borderRadius: 120,
-    top: -24,
-    left: -24,
-    right: -24,
-    bottom: -24,
-  },
-  mascotImage: {
-    width: '100%',
-    height: '100%',
   },
   badge: {
     flexDirection: 'row',
