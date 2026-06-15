@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["TEAMID.com.sobreirami.asfabelhasdobrasil"],
+        "components": [
+          {
+            "/": "/species/*",
+            "comment": "Opens species detail screen in the app"
+          }
+        ]
+      }
+    ]
+  }
+}
