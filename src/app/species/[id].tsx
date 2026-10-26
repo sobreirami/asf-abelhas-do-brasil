@@ -443,7 +443,7 @@ export default function SpeciesDetailScreen() {
               >
                 <Ionicons name="close" size={32} color={colors.onOverlay} />
               </Pressable>
-              <ZoomableImage uri={selectedImage} placeholderColor={colors.skeletonBase} />
+              <ZoomableImage uri={selectedImage} />
               <Text style={[styles.imageHint, { color: colors.onOverlay }]}>
                 {t.species.imageZoomHint}
               </Text>
@@ -455,7 +455,7 @@ export default function SpeciesDetailScreen() {
   );
 }
 
-function ZoomableImage({ uri, placeholderColor }: { uri: string; placeholderColor: string }) {
+function ZoomableImage({ uri }: { uri: string }) {
   const scale = useSharedValue(1);
   const savedScale = useSharedValue(1);
   const translateX = useSharedValue(0);
@@ -528,7 +528,6 @@ function ZoomableImage({ uri, placeholderColor }: { uri: string; placeholderColo
           style={{ width: '100%', height: '100%' }}
           contentFit="contain"
           transition={300}
-          placeholder={placeholderColor}
         />
       </Animated.View>
     </GestureDetector>
