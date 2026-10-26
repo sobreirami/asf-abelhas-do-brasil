@@ -7,7 +7,7 @@ import {
   saveLanguagePreference,
 } from '@/services/languageService';
 import React, { createContext, use, useCallback, useEffect, useState } from 'react';
-import { NativeModules, Platform } from 'react-native';
+import { I18nManager, Platform, Settings } from 'react-native';
 
 type Translations = typeof ptBR;
 
@@ -26,17 +26,23 @@ const translations: Record<'pt-BR' | 'en' | 'es', Translations> = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-function getDeviceLanguage(): 'pt-BR' | 'en' | 'es' {
-  let deviceLanguage = 'pt-BR';
-
+// TurboModules are always on since RN 0.87: native constants are only reachable
+// through the typed module APIs, never as properties of `NativeModules.*`.
+function getDeviceLocale(): string | undefined {
   if (Platform.OS === 'ios') {
-    deviceLanguage =
-      NativeModules.SettingsManager?.settings?.AppleLocale ||
-      NativeModules.SettingsManager?.settings?.AppleLanguages?.[0] ||
-      'pt-BR';
-  } else {
-    deviceLanguage = NativeModules.I18nManager?.localeIdentifier || 'pt-BR';
+    const appleLocale: unknown = Settings.get('AppleLocale');
+    if (typeof appleLocale === 'string') return appleLocale;
+    const appleLanguages: unknown = Settings.get('AppleLanguages');
+    if (Array.isArray(appleLanguages) && typeof appleLanguages[0] === 'string') {
+      return appleLanguages[0];
+    }
+    return undefined;
   }
+  return I18nManager.getConstants().localeIdentifier;
+}
+
+function getDeviceLanguage(): 'pt-BR' | 'en' | 'es' {
+  const deviceLanguage = getDeviceLocale() ?? 'pt-BR';
 
   if (deviceLanguage.startsWith('pt')) return 'pt-BR';
   if (deviceLanguage.startsWith('en')) return 'en';
