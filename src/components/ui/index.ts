@@ -1,4 +1,5 @@
 export { default as Button } from './Button';
+export { default as ExternalLink, useOpenExternalLink } from './ExternalLink';
 export { default as Chip } from './Chip';
 export { default as CustomHeader } from './CustomHeader';
 export { default as EmptyState } from './EmptyState';

@@ -73,14 +73,14 @@ export default function SpeciesDetailScreen() {
   };
 
   const handleOpenExternalLink = (url: string) => {
-    Alert.alert(t.species.externalLinkTitle, t.species.externalLinkMessage, [
+    Alert.alert(t.common.externalLinkTitle, t.common.externalLinkMessage, [
       {
         text: t.common.cancel,
         style: 'cancel',
         onPress: () => triggerNotificationHaptic(NotificationFeedbackType.Warning),
       },
       {
-        text: t.species.externalLinkContinue,
+        text: t.common.externalLinkContinue,
         onPress: async () => {
           await triggerHaptic(ImpactFeedbackStyle.Light);
           Linking.openURL(url);

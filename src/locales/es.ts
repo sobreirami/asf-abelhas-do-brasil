@@ -46,9 +46,6 @@ export default {
     aboutTitle: 'Sobre esta especie',
     favoredPlants: 'Plantas Favoritas',
     favoredPlantsDescription: 'Plantas recomendadas para cultivo y producción de miel:',
-    externalLinkTitle: 'Abrir Enlace Externo',
-    externalLinkMessage: '¿Serás redirigido a un sitio externo. Deseas continuar?',
-    externalLinkContinue: 'Continuar',
     imageZoomHint: 'Pellizca para hacer zoom',
     rationalBox: 'Caja Racional',
     trapNest: 'Nido Trampa',
@@ -269,6 +266,9 @@ export default {
     loading: 'Cargando...',
     error: 'Error',
     success: 'Éxito',
+    externalLinkTitle: 'Abrir Enlace Externo',
+    externalLinkMessage: 'Serás redirigido a un sitio externo. ¿Deseas continuar?',
+    externalLinkContinue: 'Continuar',
   },
 
   // Alerts

@@ -45,9 +45,6 @@ export default {
     aboutTitle: 'Sobre esta espécie',
     favoredPlants: 'Plantas Favoritas',
     favoredPlantsDescription: 'Plantas recomendadas para cultivo e produção de mel:',
-    externalLinkTitle: 'Abrir Link Externo',
-    externalLinkMessage: 'Você será redirecionado para um site externo. Deseja continuar?',
-    externalLinkContinue: 'Continuar',
     imageZoomHint: 'Pinça para dar zoom',
     rationalBox: 'Caixa Racional',
     trapNest: 'Ninho Isca',
@@ -267,6 +264,9 @@ export default {
     loading: 'Carregando...',
     error: 'Erro',
     success: 'Sucesso',
+    externalLinkTitle: 'Abrir Link Externo',
+    externalLinkMessage: 'Você será redirecionado para um site externo. Deseja continuar?',
+    externalLinkContinue: 'Continuar',
   },
 
   // Alerts

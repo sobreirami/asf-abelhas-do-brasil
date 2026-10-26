@@ -45,9 +45,6 @@ export default {
     aboutTitle: 'About this species',
     favoredPlants: 'Favored Plants',
     favoredPlantsDescription: 'Recommended plants for cultivation and honey production:',
-    externalLinkTitle: 'Open External Link',
-    externalLinkMessage: 'You will be redirected to an external site. Do you want to continue?',
-    externalLinkContinue: 'Continue',
     imageZoomHint: 'Pinch to zoom',
     rationalBox: 'Rational Box',
     trapNest: 'Trap Nest',
@@ -264,6 +261,9 @@ export default {
     loading: 'Loading...',
     error: 'Error',
     success: 'Success',
+    externalLinkTitle: 'Open External Link',
+    externalLinkMessage: 'You will be redirected to an external site. Do you want to continue?',
+    externalLinkContinue: 'Continue',
   },
 
   // Alerts
