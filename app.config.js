@@ -16,6 +16,9 @@ module.exports = {
       supportsTablet: true,
       bundleIdentifier: 'com.sobreirami.asfabelhasdobrasil',
       icon: './assets/images/icon.png',
+      // Universal Links: substitua TEAMID pelo seu Apple Team ID
+      // (developer.apple.com → Account → Membership)
+      associatedDomains: ['applinks:asfabelhasdobrasil.com.br'],
     },
     android: {
       adaptiveIcon: {
@@ -26,6 +29,22 @@ module.exports = {
       primaryColor: '#F5B800',
       predictiveBackGestureEnabled: false,
       package: 'com.sobreirami.asfabelhasdobrasil',
+      // App Links: autoVerify requer assetlinks.json válido no servidor
+      // SHA-256: obter via `eas credentials --platform android`
+      intentFilters: [
+        {
+          action: 'VIEW',
+          autoVerify: true,
+          data: [
+            {
+              scheme: 'https',
+              host: 'asfabelhasdobrasil.com.br',
+              pathPrefix: '/species',
+            },
+          ],
+          category: ['BROWSABLE', 'DEFAULT'],
+        },
+      ],
     },
     plugins: [
       [
