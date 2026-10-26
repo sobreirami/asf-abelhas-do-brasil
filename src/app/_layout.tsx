@@ -35,6 +35,8 @@ export function SuspenseFallback() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  // 'auto' resolves against the OS scheme; follow the in-app theme (ThemeContext) instead.
+  const systemBarsStyle = colorScheme === 'dark' ? 'light' : 'dark';
   const [isReady, setIsReady] = useState(false);
   const [splashDone, setSplashDone] = useState(false);
 
@@ -107,8 +109,8 @@ function RootLayoutNav() {
           }}
         />
       </Stack>
-      <StatusBar style="auto" />
-      <NavigationBar style="auto" />
+      <StatusBar style={systemBarsStyle} />
+      <NavigationBar style={systemBarsStyle} />
       {!splashDone && <AnimatedSplash onDone={() => setSplashDone(true)} />}
     </NavigationThemeProvider>
   );
