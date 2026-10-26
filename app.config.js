@@ -1,8 +1,8 @@
 const { config } = require('dotenv');
 
-config(); // carrega .env → process.env
+config(); // load .env into process.env
 
-/** @type {import('expo/config').ExpoConfig} */
+/** @type {{ expo: import('expo/config').ExpoConfig }} */
 module.exports = {
   expo: {
     name: 'AbelhasDoBrasil',
@@ -12,6 +12,7 @@ module.exports = {
     icon: './assets/images/icon.png',
     scheme: 'asfabelhasdobrasil',
     userInterfaceStyle: 'automatic',
+    primaryColor: '#F5B800',
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.sobreirami.asfabelhasdobrasil',
@@ -26,7 +27,6 @@ module.exports = {
         backgroundImage: './assets/images/adaptive-icon-background.png',
         backgroundColor: '#F5B800',
       },
-      primaryColor: '#F5B800',
       predictiveBackGestureEnabled: false,
       package: 'com.sobreirami.asfabelhasdobrasil',
       // App Links: autoVerify requer assetlinks.json válido no servidor
@@ -59,7 +59,6 @@ module.exports = {
           },
         },
       ],
-      ['expo-status-bar', { style: 'auto' }],
       [
         'expo-build-properties',
         {
