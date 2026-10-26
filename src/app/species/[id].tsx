@@ -5,7 +5,17 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  Modal,
+  Pressable,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {
   GestureDetector,
   GestureHandlerRootView,
@@ -72,7 +82,6 @@ export default function SpeciesDetailScreen() {
     if (!species) return;
     await triggerHaptic(ImpactFeedbackStyle.Light);
     try {
-      const { Share } = await import('react-native');
       const url = `https://asfabelhasdobrasil.com.br/species/${id}`;
       await Share.share({
         message: `${species.commonName} (${species.scientificName})\n\n${species.shortDescription}\n\n${t.species.shareOpenIn} ${url}`,
