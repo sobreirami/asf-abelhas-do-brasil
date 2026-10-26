@@ -48,6 +48,7 @@ export default {
     imageZoomHint: 'Pinch to zoom',
     rationalBox: 'Rational Box',
     trapNest: 'Trap Nest',
+    shareOpenIn: 'Open in app:',
   },
 
   // Preferences Screen

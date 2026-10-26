@@ -48,6 +48,7 @@ export default {
     imageZoomHint: 'Pinça para dar zoom',
     rationalBox: 'Caixa Racional',
     trapNest: 'Ninho Isca',
+    shareOpenIn: 'Conheça no app:',
   },
 
   // Preferences Screen

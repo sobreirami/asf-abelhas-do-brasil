@@ -49,6 +49,7 @@ export default {
     imageZoomHint: 'Pellizca para hacer zoom',
     rationalBox: 'Caja Racional',
     trapNest: 'Nido Trampa',
+    shareOpenIn: 'Abrir en la app:',
   },
 
   // Preferences Screen

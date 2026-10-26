@@ -66,10 +66,14 @@ export default function SpeciesDetailScreen() {
     await triggerHaptic(ImpactFeedbackStyle.Light);
     try {
       const { Share } = await import('react-native');
+      const url = `https://asfabelhasdobrasil.com.br/species/${id}`;
       await Share.share({
-        message: `Conheça ${species.commonName} (${species.scientificName}) - Uma abelha nativa do Brasil!`,
+        message: `${species.commonName} (${species.scientificName})\n\n${species.shortDescription}\n\n${t.species.shareOpenIn} ${url}`,
+        url, // iOS usa este campo para link clicável no iMessage e WhatsApp
       });
-    } catch {}
+    } catch (error) {
+      if (__DEV__) console.warn('Share error:', error);
+    }
   };
 
   const handleOpenExternalLink = (url: string) => {
