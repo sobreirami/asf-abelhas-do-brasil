@@ -41,22 +41,18 @@ export default function Chip({
   const textColor = selected ? onPrimary : colors.text;
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
+    transform: [{ scale: scale.get() }],
+    opacity: opacity.get(),
   }));
 
   const handlePressIn = () => {
-    // eslint-disable-next-line react-hooks/immutability
-    scale.value = withSpring(0.94, { damping: 15, stiffness: 400 });
-    // eslint-disable-next-line react-hooks/immutability
-    opacity.value = withTiming(0.75, { duration: 80 });
+    scale.set(withSpring(0.94, { damping: 15, stiffness: 400 }));
+    opacity.set(withTiming(0.75, { duration: 80 }));
   };
 
   const handlePressOut = () => {
-    // eslint-disable-next-line react-hooks/immutability
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-    // eslint-disable-next-line react-hooks/immutability
-    opacity.value = withTiming(1, { duration: 150 });
+    scale.set(withSpring(1, { damping: 15, stiffness: 300 }));
+    opacity.set(withTiming(1, { duration: 150 }));
   };
 
   const handlePress = async () => {

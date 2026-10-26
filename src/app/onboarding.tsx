@@ -49,20 +49,20 @@ export default function OnboardingScreen() {
   const nextScale = useSharedValue(1);
   const skipScale = useSharedValue(1);
 
-  const nextAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: nextScale.value }] }));
-  const skipAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: skipScale.value }] }));
+  const nextAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: nextScale.get() }] }));
+  const skipAnimatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: skipScale.get() }] }));
 
   const onNextPressIn = useCallback(() => {
-    nextScale.value = withSpring(0.96, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+    nextScale.set(withSpring(0.96, { duration: 100 }));
   }, [nextScale]);
   const onNextPressOut = useCallback(() => {
-    nextScale.value = withSpring(1, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+    nextScale.set(withSpring(1, { duration: 100 }));
   }, [nextScale]);
   const onSkipPressIn = useCallback(() => {
-    skipScale.value = withSpring(0.96, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+    skipScale.set(withSpring(0.96, { duration: 100 }));
   }, [skipScale]);
   const onSkipPressOut = useCallback(() => {
-    skipScale.value = withSpring(1, { duration: 100 }); // eslint-disable-line react-hooks/immutability
+    skipScale.set(withSpring(1, { duration: 100 }));
   }, [skipScale]);
 
   const slides: OnboardingSlide[] = [
