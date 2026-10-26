@@ -9,7 +9,7 @@ import { BorderRadius, Colors, FontSize, FontWeight } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Species } from '@/types/species';
-import { CARD_WIDTH, SNAP_TO_INTERVAL } from './constants';
+import { CARD_GAP, CARD_WIDTH, SNAP_TO_INTERVAL } from './constants';
 
 const CONSERVATION_COLORS: Record<string, string> = {
   'least-concern': '#6FCF73',
@@ -106,7 +106,7 @@ export default function FeaturedCarousel({ species, loading = false }: FeaturedC
 }
 
 const styles = StyleSheet.create({
-  listContent: { paddingHorizontal: 20, gap: 13, paddingBottom: 6 },
+  listContent: { paddingHorizontal: 20, gap: CARD_GAP, paddingBottom: 6 },
   card: {
     width: CARD_WIDTH,
     height: 168,
