@@ -3,7 +3,15 @@ import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { router } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
-import { FlatList, type ListViewToken, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  type ListViewToken,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
@@ -33,8 +41,11 @@ export default function OnboardingScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'dark'];
   const { t } = useLanguage();
+  // Each page must match the viewport width exactly: percentage widths inside a
+  // horizontal FlatList resolve against the content size, not the screen.
+  const { width: pageWidth } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList<OnboardingSlide>>(null);
   const nextScale = useSharedValue(1);
   const skipScale = useSharedValue(1);
 
@@ -91,6 +102,15 @@ export default function OnboardingScreen() {
     []
   );
 
+  const getItemLayout = useCallback(
+    (_: ArrayLike<OnboardingSlide> | null | undefined, index: number) => ({
+      length: pageWidth,
+      offset: pageWidth * index,
+      index,
+    }),
+    [pageWidth]
+  );
+
   const finishOnboarding = async () => {
     await storageAdapter.setItem('@onboarding_completed', 'true');
     router.replace('/(tabs)');
@@ -114,7 +134,7 @@ export default function OnboardingScreen() {
 
   const renderSlide = useCallback(
     ({ item }: { item: OnboardingSlide }) => (
-      <Animated.View entering={FadeIn} style={styles.slide}>
+      <Animated.View entering={FadeIn} style={[styles.slide, { width: pageWidth }]}>
         <MascotScene variant={item.mascot} size={200} />
 
         {/* Badge da etapa */}
@@ -137,7 +157,7 @@ export default function OnboardingScreen() {
         </Text>
       </Animated.View>
     ),
-    [colors]
+    [colors, pageWidth]
   );
 
   return (
@@ -154,6 +174,7 @@ export default function OnboardingScreen() {
         keyExtractor={(item) => item.id}
         horizontal
         pagingEnabled
+        getItemLayout={getItemLayout}
         scrollEventThrottle={16}
         onViewableItemsChanged={handleViewableItemsChanged}
         viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
@@ -227,7 +248,6 @@ const styles = StyleSheet.create({
   },
   list: { flex: 1 },
   slide: {
-    width: '100%',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
