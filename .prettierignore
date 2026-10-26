@@ -8,3 +8,6 @@ coverage
 .DS_Store
 package-lock.json
 yarn.lock
+
+# Dataset written by scripts/*.js with JSON.stringify(data, null, 2)
+scripts/species-data.json

@@ -1,33 +1,25 @@
 // https://docs.expo.dev/guides/using-eslint/
-const { defineConfig } = require('eslint/config');
+const { defineConfig, globalIgnores } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 
 module.exports = defineConfig([
+  globalIgnores([
+    'dist/',
+    'web-build/',
+    '.expo/',
+    'expo-env.d.ts',
+    'android/',
+    'ios/',
+    'web/',
+    'build/',
+    'coverage/',
+  ]),
   expoConfig,
   {
-    ignores: ['dist/*', '.expo/*', 'node_modules/*', 'build/*'],
-  },
-  {
-    plugins: {
-      prettier: require('eslint-plugin-prettier'),
-    },
+    // eslint-config-expo registers the @typescript-eslint plugin for TS files only
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
-      // Prettier integration
-      'prettier/prettier': [
-        'error',
-        {
-          semi: true,
-          trailingComma: 'es5',
-          singleQuote: true,
-          printWidth: 100,
-          tabWidth: 2,
-          useTabs: false,
-          arrowParens: 'always',
-          endOfLine: 'lf',
-        },
-      ],
-
-      // TypeScript specific
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -36,16 +28,30 @@ module.exports = defineConfig([
         },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
-
+    },
+  },
+  {
+    rules: {
       // React/React Native specific
-      'react/prop-types': 'off', // TypeScript handles this
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
 
       // General best practices
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
-      'no-var': 'error',
     },
   },
+  {
+    // Node.js admin scripts (`node scripts/<name>.js`)
+    files: ['scripts/**/*.js'],
+    languageOptions: {
+      globals: { __dirname: 'readonly', __filename: 'readonly' },
+    },
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  // Keep last: enables prettier/prettier (options come from .prettierrc) and
+  // eslint-config-prettier (turns off rules that conflict with Prettier)
+  eslintPluginPrettierRecommended,
 ]);
