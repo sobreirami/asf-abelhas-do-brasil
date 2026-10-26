@@ -1,10 +1,11 @@
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pressable, SectionList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import ExternalLink from '@/components/ui/ExternalLink';
 import HoneycombPattern from '@/components/ui/HoneycombPattern';
 import { BorderRadius, Colors, FontSize, FontWeight, Spacing } from '@/constants/theme';
 import { useFilter } from '@/contexts/FilterContext';
@@ -169,7 +170,7 @@ export default function ConservationScreen() {
           <HoneycombPattern opacity={0.05} color={colors.primary} />
           <Text style={[styles.heroTitle, { color: colors.text }]}>Conservação</Text>
           <Text style={[styles.heroSubtitle, { color: colors.textMuted }]}>
-            Como estão as abelhas nativas — e por que cada espécie importa.
+            Como estão as abelhas nativas.
           </Text>
         </View>
 
@@ -238,10 +239,18 @@ export default function ConservationScreen() {
         style={[styles.closingNote, { backgroundColor: colors.card, borderColor: colors.border }]}
       >
         <Ionicons name="shield-checkmark" size={22} color={colors.success} />
-        <Text style={[styles.closingText, { color: colors.textMuted }]}>
-          Os status seguem critérios da IUCN. Criar abelhas sem ferrão com responsabilidade ajuda a
-          preservar cada espécie.
-        </Text>
+        <View style={styles.closingContent}>
+          <Text style={[styles.closingText, { color: colors.textMuted }]}>
+            Os status seguem critérios da IUCN. Criar abelhas sem ferrão com responsabilidade ajuda
+            a preservar cada espécie.
+          </Text>
+          <ExternalLink
+            label="Saiba mais sobre os critérios da IUCN →"
+            url="https://www.iucnredlist.org/resources/categories-and-criteria"
+            accessibilityLabel="Saiba mais sobre os critérios da IUCN"
+            style={styles.iucnLink}
+          />
+        </View>
       </View>
     ),
     [colors]
@@ -440,7 +449,7 @@ const styles = StyleSheet.create({
 
   closingNote: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12,
     borderRadius: 18,
     padding: 16,
@@ -448,5 +457,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderWidth: 1,
   },
-  closingText: { flex: 1, fontSize: 13.5, lineHeight: 20 },
+  closingContent: { flex: 1, minWidth: 0 },
+  closingText: { fontSize: 13.5, lineHeight: 20 },
+  iucnLink: { fontSize: 13.5, fontWeight: FontWeight.semibold, marginTop: 8 },
 });
