@@ -351,13 +351,15 @@ export default function SpeciesDetailScreen() {
               const hasGallery = galleryPhotos.length > 0;
               if (!hasInat && !hasGallery) return null;
               return (
-                <PhotoCarousel
-                  photos={hasInat ? inatPhotos.map((p) => p.url) : galleryPhotos}
-                  credits={hasInat ? inatPhotos : undefined}
-                  delay={500}
-                  onImagePress={handleOpenImage}
-                  onExternalLinkPress={handleOpenExternalLink}
-                />
+                <View style={styles.fullBleed}>
+                  <PhotoCarousel
+                    photos={hasInat ? inatPhotos.map((p) => p.url) : galleryPhotos}
+                    credits={hasInat ? inatPhotos : undefined}
+                    delay={500}
+                    onImagePress={handleOpenImage}
+                    onExternalLinkPress={handleOpenExternalLink}
+                  />
+                </View>
               );
             })()}
 
@@ -733,6 +735,8 @@ const styles = StyleSheet.create({
 
   // Sections
   section: { marginTop: Spacing.lg },
+  // PhotoCarousel pads its own content: cancel the sheet's horizontal padding
+  fullBleed: { marginHorizontal: -Spacing.lg },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
   sectionTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
   bodyText: { fontSize: 15.5, lineHeight: 25 },

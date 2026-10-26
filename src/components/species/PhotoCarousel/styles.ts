@@ -1,8 +1,6 @@
 import { BorderRadius, FontSize, FontWeight, Spacing } from '@/constants/theme';
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-export const IMAGE_WIDTH = SCREEN_WIDTH - Spacing.lg * 2;
 export const IMAGE_HEIGHT = 300;
 
 export const styles = StyleSheet.create({
@@ -20,7 +18,6 @@ export const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   imageWrapper: {
-    width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',

@@ -3,6 +3,7 @@ import { Image } from 'expo-image';
 import React, { useRef, useState, useCallback } from 'react';
 import {
   FlatList,
+  type LayoutChangeEvent,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
@@ -15,7 +16,7 @@ import { Colors, Shadows, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { PhotoCredit } from '@/types/species';
-import { IMAGE_WIDTH, styles } from './styles';
+import { styles } from './styles';
 
 interface PhotoCarouselProps {
   photos: string[];
@@ -35,17 +36,28 @@ export default function PhotoCarousel({
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
   const { t } = useLanguage();
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList<string>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  // Page width follows the list's real viewport (re-measured when the window is
+  // resized); listContent adds Spacing.lg of horizontal padding on each side.
+  const [listWidth, setListWidth] = useState(0);
+  const imageWidth = Math.max(listWidth - Spacing.lg * 2, 0);
+  const snapInterval = imageWidth + Spacing.md;
+
+  const handleListLayout = useCallback((event: LayoutChangeEvent) => {
+    setListWidth(event.nativeEvent.layout.width);
+  }, []);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (imageWidth === 0) return;
     const offsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(offsetX / IMAGE_WIDTH);
-    setCurrentIndex(index);
+    const index = Math.round(offsetX / snapInterval);
+    setCurrentIndex(Math.min(Math.max(index, 0), photos.length - 1));
   };
 
   const scrollToIndex = (index: number) => {
-    flatListRef.current?.scrollToIndex({ index, animated: true });
+    // Pages snap to multiples of snapInterval, so scroll by offset to land exactly on one
+    flatListRef.current?.scrollToOffset({ offset: index * snapInterval, animated: true });
     setCurrentIndex(index);
   };
 
@@ -77,16 +89,21 @@ export default function PhotoCarousel({
         data={photos}
         horizontal
         pagingEnabled
+        onLayout={handleListLayout}
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        snapToInterval={IMAGE_WIDTH + Spacing.md}
+        snapToInterval={snapInterval}
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
         keyExtractor={(item, index) => `photo-${index}`}
         renderItem={({ item, index }) => (
           <Pressable
-            style={[styles.imageWrapper, Shadows.md, { backgroundColor: colors.card }]}
+            style={[
+              styles.imageWrapper,
+              Shadows.md,
+              { width: imageWidth, backgroundColor: colors.card },
+            ]}
             onPress={() => handleImagePress(item)}
           >
             <Image
