@@ -22,7 +22,7 @@ import { AnimatedSplash } from '@/components/AnimatedSplash';
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  anchor: '(tabs)',
 };
 
 export function SuspenseFallback() {
