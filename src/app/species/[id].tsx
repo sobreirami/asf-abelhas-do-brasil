@@ -6,7 +6,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Linking, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  GestureDetector,
+  GestureHandlerRootView,
+  usePanGesture,
+  usePinchGesture,
+  useSimultaneousGestures,
+  useTapGesture,
+} from 'react-native-gesture-handler';
 import Animated, {
   FadeInDown,
   useAnimatedStyle,
@@ -447,57 +454,60 @@ function ZoomableImage({ uri, placeholderColor }: { uri: string; placeholderColo
   const savedTranslateX = useSharedValue(0);
   const savedTranslateY = useSharedValue(0);
 
-  const pinchGesture = Gesture.Pinch()
-    .onUpdate((e) => {
-      scale.value = Math.max(1, Math.min(savedScale.value * e.scale, 5));
-    })
-    .onEnd(() => {
-      savedScale.value = scale.value;
-      if (scale.value <= 1) {
-        scale.value = withSpring(1);
-        translateX.value = withSpring(0);
-        translateY.value = withSpring(0);
-        savedScale.value = 1;
-        savedTranslateX.value = 0;
-        savedTranslateY.value = 0;
+  const pinchGesture = usePinchGesture({
+    onUpdate: (e) => {
+      scale.set(Math.max(1, Math.min(savedScale.get() * e.scale, 5)));
+    },
+    onDeactivate: () => {
+      savedScale.set(scale.get());
+      if (scale.get() <= 1) {
+        scale.set(withSpring(1));
+        translateX.set(withSpring(0));
+        translateY.set(withSpring(0));
+        savedScale.set(1);
+        savedTranslateX.set(0);
+        savedTranslateY.set(0);
       }
-    });
+    },
+  });
 
-  const panGesture = Gesture.Pan()
-    .onUpdate((e) => {
-      if (scale.value > 1) {
-        translateX.value = savedTranslateX.value + e.translationX;
-        translateY.value = savedTranslateY.value + e.translationY;
+  const panGesture = usePanGesture({
+    onUpdate: (e) => {
+      if (scale.get() > 1) {
+        translateX.set(savedTranslateX.get() + e.translationX);
+        translateY.set(savedTranslateY.get() + e.translationY);
       }
-    })
-    .onEnd(() => {
-      savedTranslateX.value = translateX.value;
-      savedTranslateY.value = translateY.value;
-    });
+    },
+    onDeactivate: () => {
+      savedTranslateX.set(translateX.get());
+      savedTranslateY.set(translateY.get());
+    },
+  });
 
-  const doubleTapGesture = Gesture.Tap()
-    .numberOfTaps(2)
-    .onEnd(() => {
-      if (scale.value > 1) {
-        scale.value = withSpring(1);
-        translateX.value = withSpring(0);
-        translateY.value = withSpring(0);
-        savedScale.value = 1;
-        savedTranslateX.value = 0;
-        savedTranslateY.value = 0;
+  const doubleTapGesture = useTapGesture({
+    numberOfTaps: 2,
+    onDeactivate: () => {
+      if (scale.get() > 1) {
+        scale.set(withSpring(1));
+        translateX.set(withSpring(0));
+        translateY.set(withSpring(0));
+        savedScale.set(1);
+        savedTranslateX.set(0);
+        savedTranslateY.set(0);
       } else {
-        scale.value = withSpring(2.5);
-        savedScale.value = 2.5;
+        scale.set(withSpring(2.5));
+        savedScale.set(2.5);
       }
-    });
+    },
+  });
 
-  const composed = Gesture.Simultaneous(pinchGesture, panGesture, doubleTapGesture);
+  const composed = useSimultaneousGestures(pinchGesture, panGesture, doubleTapGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { scale: scale.value },
+      { translateX: translateX.get() },
+      { translateY: translateY.get() },
+      { scale: scale.get() },
     ],
   }));
 
