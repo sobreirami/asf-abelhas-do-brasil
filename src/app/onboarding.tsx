@@ -3,7 +3,7 @@ import { ImpactFeedbackStyle, triggerHaptic } from '@/utils/haptics';
 import Ionicons, { type IoniconsIconName } from '@react-native-vector-icons/ionicons';
 import { router } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View, ViewToken } from 'react-native';
+import { FlatList, type ListViewToken, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
@@ -82,9 +82,10 @@ export default function OnboardingScreen() {
   ];
 
   const handleViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-        setCurrentIndex(viewableItems[0].index);
+    ({ viewableItems }: { viewableItems: ListViewToken[] }) => {
+      const index = viewableItems[0]?.index;
+      if (typeof index === 'number') {
+        setCurrentIndex(index);
       }
     },
     []
