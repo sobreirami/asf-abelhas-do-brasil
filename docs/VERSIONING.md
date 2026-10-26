@@ -19,12 +19,12 @@ MAJOR.MINOR.PATCH[-rcN]
 
 ## Where to update
 
-| File           | Field          |
-| -------------- | -------------- |
-| `app.json`     | `expo.version` |
-| `package.json` | `version`      |
+| File            | Field          |
+| --------------- | -------------- |
+| `app.config.js` | `expo.version` |
+| `package.json`  | `version`      |
 
-Both fields must be kept in sync. `app.json` is the source of truth for the Expo / EAS build system.
+Both fields must be kept in sync. `app.config.js` is the source of truth for the Expo / EAS build system.
 
 ---
 
@@ -46,23 +46,25 @@ development
 ### Step by step
 
 1. Develop on `main` (or in a feature branch → merge to `main`)
-2. When ready to test on device: bump version to `-rcN` in `app.json` and `package.json`
-3. Run `eas build --profile preview` and install on device
+2. When ready to test on device: bump version to `-rcN` in `app.config.js` and `package.json`
+3. Run `eas build --profile preview` and install on device — since SDK 58, Android release builds are R8-minified: smoke-test them, and add keep rules via `expo-build-properties` → `android.extraProguardRules` (never edit `android/` by hand)
 4. If bugs found: fix, bump to `-rc(N+1)`, repeat
 5. When approved: remove `-rcN` suffix, bump final version
 6. Run `eas build --profile production`
 7. Submit to App Store / Play Store
-8. Publish OTA update via `eas update` for minor fixes that don't need a new binary
+8. Publish OTA update via `eas update` for minor fixes that don't need a new binary (requires `expo-updates` — see [SETUP.md](SETUP.md#ota-updates-expo-updates))
 
 ---
 
 ## OTA vs binary release
 
-| Change type                      | Delivery                                    |
-| -------------------------------- | ------------------------------------------- |
-| JS / TS / assets only            | OTA (`eas update`) — no store submission    |
-| Native module added or updated   | New binary (`eas build`) + store submission |
-| `app.json` native config changed | New binary required                         |
+| Change type                           | Delivery                                    |
+| ------------------------------------- | ------------------------------------------- |
+| JS / TS / assets only                 | OTA (`eas update`) — no store submission    |
+| Native module added or updated        | New binary (`eas build`) + store submission |
+| `app.config.js` native config changed | New binary required                         |
+
+> OTA delivery requires `expo-updates`, which is not installed yet — until it is, every change ships as a new binary.
 
 ---
 

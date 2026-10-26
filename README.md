@@ -8,11 +8,11 @@ Mobile app for the catalog of Brazilian native stingless bees, built for the Ass
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22.13+, 24.3+ or 26+ (required by Expo SDK 58 / React Native 0.88; odd-numbered releases such as 23 and 25 are not supported) — 24.12+ recommended, since firebase 13's `@firebase/*` packages declare `node >=24.12`
 - npm 10+
-- Xcode (iOS, macOS only)
-- Android Studio (Android)
-- Expo CLI: `npm install -g expo-cli`
+- Xcode 26.4+ (iOS, macOS only)
+- Android Studio (Android) + JDK 17
+- Expo CLI: bundled with the `expo` package — run it with `npx expo` (the global `expo-cli` package is deprecated)
 
 ### Install and run
 
@@ -34,7 +34,7 @@ npm run android        # Android emulator
 
 ```
 src/app/ (Expo Router)
-    ├── (tabs)/             ← NativeTabs: Gallery · About · Preferences
+    ├── (tabs)/             ← NativeTabs: Gallery · Conservation · About
     ├── species/[id]        ← Species detail (card presentation)
     ├── filters             ← Advanced filters (transparent modal)
     ├── report              ← Report error (transparent modal)
@@ -51,7 +51,7 @@ src/app/ (Expo Router)
 | `constants/theme.ts` | `Colors`, `Spacing`, `Typography` — single source of truth            |
 | `locales/`           | i18n strings: `pt-BR.ts`, `en.ts`, `es.ts`                            |
 
-**Stack:** React Native · Expo SDK 56 · Expo Router 56 · Firebase · Reanimated v4 · TypeScript strict
+**Stack:** React Native 0.88 · React 19.3 · Expo SDK 58 · Expo Router 58 · Firebase · Reanimated 4.7 · Gesture Handler 3 · TypeScript strict
 
 ---
 
@@ -90,7 +90,7 @@ Online-first: always fetches from Firebase. On error, falls back to AsyncStorage
 
 ## Environment variables
 
-Credentials are read via `expo-constants` from `app.json → extra`. Copy `.env.example` to `.env` and fill in the Firebase values.
+Credentials are read via `expo-constants` from `app.config.js → extra`, which loads `.env` with `dotenv`. Copy `.env.example` to `.env` and fill in the Firebase values.
 
 ```bash
 FIREBASE_API_KEY=...
@@ -114,7 +114,7 @@ eas build --profile development --platform ios
 # Production build
 eas build --platform all
 
-# OTA update (no new build required)
+# OTA update — requires expo-updates first (see docs/SETUP.md › OTA updates)
 eas update --branch production --message "fix: species detail crash"
 ```
 

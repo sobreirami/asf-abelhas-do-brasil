@@ -38,14 +38,15 @@ Before committing: `npm run lint && npm run format:check && npm run type:check`
 
 ## Stack
 
-| Item          | Value                                                  |
-| ------------- | ------------------------------------------------------ |
-| Framework     | Expo SDK 56 + React Native 0.85                        |
-| Navigation    | Expo Router 56 (file-based, App Directory)             |
-| Backend       | Firebase Firestore + Firebase Storage                  |
-| Local storage | AsyncStorage (abstracted in `storage.ts` — MMKV-ready) |
-| Animations    | react-native-reanimated v4 + react-native-worklets 0.9 |
-| Language      | TypeScript strict                                      |
+| Item          | Value                                                    |
+| ------------- | -------------------------------------------------------- |
+| Framework     | Expo SDK 58 + React Native 0.88 + React 19.3             |
+| Navigation    | Expo Router 58 (file-based, App Directory)               |
+| Backend       | Firebase Firestore + Firebase Storage                    |
+| Local storage | AsyncStorage (abstracted in `storage.ts` — MMKV-ready)   |
+| Animations    | react-native-reanimated 4.7 + react-native-worklets 0.13 |
+| Gestures      | react-native-gesture-handler 3 (hook API)                |
+| Language      | TypeScript strict                                        |
 
 ## Structure
 
@@ -88,10 +89,10 @@ src/
 
 - **Online-first + offline fallback** — always fetches Firebase; falls back to AsyncStorage on error
 - **Client-side filters** — applied in-memory over loaded list; Firestore queries only for `region`/`behavior`
-- **NativeTabs** — `expo-router/unstable-native-tabs` for native tab behavior on iOS/Android
+- **NativeTabs** — `expo-router/native-tabs` for native tab behavior on iOS/Android (Android `md` icons require `expo-symbols`)
 - **No external state manager** — React Context is sufficient
 - **`storage.ts` abstraction** — drop-in swap point for MMKV
-- **expo-router SDK 56** — no direct `@react-navigation/*` imports; use re-exports from `expo-router` (`ThemeProvider`, `DarkTheme`, `DefaultTheme`)
+- **expo-router SDK 58** — no direct `@react-navigation/*` imports; use re-exports from `expo-router` (`ThemeProvider`, `DarkTheme`, `DefaultTheme`)
 
 ## Skeleton loading
 

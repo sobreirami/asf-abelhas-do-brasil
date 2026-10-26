@@ -4,11 +4,12 @@
 
 | Item          | Value                                                      |
 | ------------- | ---------------------------------------------------------- |
-| Framework     | Expo SDK 56 + React Native 0.85                            |
-| Navigation    | Expo Router 56 (file-based, App Directory)                 |
+| Framework     | Expo SDK 58 + React Native 0.88 + React 19.3               |
+| Navigation    | Expo Router 58 (file-based, App Directory)                 |
 | Backend       | Firebase Firestore + Firebase Storage                      |
 | Local storage | AsyncStorage (`@react-native-async-storage/async-storage`) |
-| Animations    | react-native-reanimated v4 + react-native-worklets 0.9     |
+| Animations    | react-native-reanimated 4.7 + react-native-worklets 0.13   |
+| Gestures      | react-native-gesture-handler 3 (hook API)                  |
 | Language      | TypeScript strict                                          |
 
 ---
@@ -20,8 +21,9 @@ src/
 ├── app/                    ← Expo Router file-based routes
 │   ├── _layout.tsx         ← Root layout: providers + stack config
 │   ├── (tabs)/             ← NativeTabs group
-│   │   ├── _layout.tsx     ← Tab layout (expo-router/unstable-native-tabs)
+│   │   ├── _layout.tsx     ← Tab layout (expo-router/native-tabs)
 │   │   ├── index.tsx       ← Species gallery
+│   │   ├── conservation.tsx ← Conservation status overview
 │   │   ├── about.tsx       ← About ASF
 │   │   └── preferences.tsx ← User settings
 │   ├── species/[id].tsx    ← Species detail
@@ -146,10 +148,10 @@ Simple, single-file components live in `components/ui/`.
 
 ## Architecture decisions
 
-| Decision                           | Rationale                                                                               |
-| ---------------------------------- | --------------------------------------------------------------------------------------- |
-| Online-first with offline fallback | Always fetches from Firebase; falls back to AsyncStorage cache on error                 |
-| Client-side filters                | Applied in-memory over the loaded list (Firestore queries only for `region`/`behavior`) |
-| NativeTabs                         | `expo-router/unstable-native-tabs` gives native iOS/Android tab feel                    |
-| No external state manager          | React Context is sufficient for the current scope                                       |
-| `storage.ts` abstraction           | Drop-in swap point for MMKV when native builds are available                            |
+| Decision                           | Rationale                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Online-first with offline fallback | Always fetches from Firebase; falls back to AsyncStorage cache on error                                 |
+| Client-side filters                | Applied in-memory over the loaded list (Firestore queries only for `region`/`behavior`)                 |
+| NativeTabs                         | `expo-router/native-tabs` gives native iOS/Android tab feel (Android `md` icons require `expo-symbols`) |
+| No external state manager          | React Context is sufficient for the current scope                                                       |
+| `storage.ts` abstraction           | Drop-in swap point for MMKV when native builds are available                                            |
