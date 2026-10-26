@@ -77,10 +77,6 @@ module.exports = {
       typedRoutes: true,
       reactCompiler: true,
     },
-    updates: {
-      url: 'https://u.expo.dev/a0d5f249-00a0-4622-98ca-e79a4ba16f4c',
-      enableBsdiffPatchSupport: true,
-    },
     extra: {
       router: {},
       eas: {
