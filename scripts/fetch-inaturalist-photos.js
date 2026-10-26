@@ -1,11 +1,11 @@
 /**
  * Fetches CC-licensed photos + full attribution from iNaturalist API v2
- * for each species in firestore-species-data.json.
+ * for each species in scripts/species-data.json.
  *
  * Usage:
- *   INAT_TOKEN=<your_jwt> node fetch-inaturalist-photos.js
+ *   INAT_TOKEN=<your_jwt> node scripts/fetch-inaturalist-photos.js
  *
- * Output: firestore-species-data-with-photos.json
+ * Output: scripts/species-data.json (updated in place)
  *
  * Only photos with open CC licenses are included. One photo per photographer
  * is kept to maximise visual diversity.
@@ -15,7 +15,9 @@ import { readFileSync, writeFileSync } from 'fs';
 
 const TOKEN = process.env.INAT_TOKEN;
 if (!TOKEN) {
-  console.error('Missing INAT_TOKEN env variable. Run as:\n  INAT_TOKEN=<jwt> node fetch-inaturalist-photos.js');
+  console.error(
+    'Missing INAT_TOKEN env variable. Run as:\n  INAT_TOKEN=<jwt> node scripts/fetch-inaturalist-photos.js'
+  );
   process.exit(1);
 }
 
@@ -26,13 +28,13 @@ const INAT_V2 = 'https://api.inaturalist.org/v2';
 const CC_LICENSES = 'cc-by,cc-by-nc,cc-by-sa,cc-by-nc-sa,cc-by-nd,cc-by-nc-nd,cc0';
 
 const LICENSE_URLS = {
-  'cc0':          'https://creativecommons.org/publicdomain/zero/1.0/',
-  'cc-by':        'https://creativecommons.org/licenses/by/4.0/',
-  'cc-by-nc':     'https://creativecommons.org/licenses/by-nc/4.0/',
-  'cc-by-sa':     'https://creativecommons.org/licenses/by-sa/4.0/',
-  'cc-by-nd':     'https://creativecommons.org/licenses/by-nd/4.0/',
-  'cc-by-nc-sa':  'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-  'cc-by-nc-nd':  'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+  cc0: 'https://creativecommons.org/publicdomain/zero/1.0/',
+  'cc-by': 'https://creativecommons.org/licenses/by/4.0/',
+  'cc-by-nc': 'https://creativecommons.org/licenses/by-nc/4.0/',
+  'cc-by-sa': 'https://creativecommons.org/licenses/by-sa/4.0/',
+  'cc-by-nd': 'https://creativecommons.org/licenses/by-nd/4.0/',
+  'cc-by-nc-sa': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  'cc-by-nc-nd': 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
 };
 
 // iNaturalist v2 photo URLs use /square.ext — swap to medium or large
@@ -50,7 +52,7 @@ async function fetchPhotos(scientificName) {
     quality_grade: 'research',
     photos: 'true',
     license: CC_LICENSES,
-    per_page: '30',        // fetch more so we can deduplicate by photographer
+    per_page: '30', // fetch more so we can deduplicate by photographer
     order_by: 'votes',
     fields: 'id,photos.url,photos.license_code,photos.attribution,user.login,user.name',
   });
@@ -107,7 +109,7 @@ async function fetchPhotos(scientificName) {
 }
 
 async function main() {
-  const raw = readFileSync('./firestore-species-data.json', 'utf-8');
+  const raw = readFileSync(new URL('./species-data.json', import.meta.url), 'utf-8');
   const data = JSON.parse(raw);
   const species = data.species ?? [];
 
@@ -121,18 +123,21 @@ async function main() {
     process.stdout.write(`[${i + 1}/${species.length}] ${s.commonName} (${s.scientificName}) … `);
 
     const credits = await fetchPhotos(s.scientificName);
-    console.log(`${credits.length} photo(s)${credits.length ? ' — ' + credits.map((c) => c.photographerName).join(', ') : ''}`);
+    console.log(
+      `${credits.length} photo(s)${credits.length ? ' — ' + credits.map((c) => c.photographerName).join(', ') : ''}`
+    );
 
     s.iNaturalistPhotos = credits;
-    if (credits.length > 0) found++; else empty++;
+    if (credits.length > 0) found++;
+    else empty++;
 
     if (i < species.length - 1) await sleep(DELAY_MS);
   }
 
-  writeFileSync('./firestore-species-data-with-photos.json', JSON.stringify(data, null, 2));
+  writeFileSync(new URL('./species-data.json', import.meta.url), JSON.stringify(data, null, 2));
 
   console.log(`\n✓  Done — ${found} species with photos, ${empty} without`);
-  console.log('✓  Written to firestore-species-data-with-photos.json');
+  console.log('✓  Written to scripts/species-data.json');
 }
 
 main().catch((err) => {

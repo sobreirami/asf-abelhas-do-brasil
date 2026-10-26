@@ -4,13 +4,13 @@
  * Fills photos.thumbnail / photos.media / photos.original
  * from iNaturalistPhotos[0] for every species that has iNaturalist photos.
  *
- * Reads  : firestore-species-data-with-photos.json
- * Writes : firestore-species-data-with-photos.json (in-place)
+ * Reads  : scripts/species-data.json
+ * Writes : scripts/species-data.json (in-place)
  * Then imports directly to Firestore with firebase-admin.
  *
  * Usage:
- *   node backfill-covers.js              # dry-run
- *   node backfill-covers.js --write      # update Firestore
+ *   node scripts/backfill-covers.js              # dry-run
+ *   node scripts/backfill-covers.js --write      # update Firestore
  */
 
 const { readFileSync, writeFileSync } = require('fs');
@@ -18,7 +18,7 @@ const { join } = require('path');
 
 const args = process.argv.slice(2);
 const DRY_RUN = !args.includes('--write');
-const DATA_PATH = join(__dirname, 'firestore-species-data-with-photos.json');
+const DATA_PATH = join(__dirname, 'species-data.json');
 
 // iNaturalist URL size helper
 function toSize(url, size) {
@@ -56,15 +56,17 @@ for (const s of species) {
 
   const photos = {
     thumbnail: toSize(baseUrl, 'square'),
-    media:     toSize(baseUrl, 'medium'),
-    original:  toSize(baseUrl, 'large'),
+    media: toSize(baseUrl, 'medium'),
+    original: toSize(baseUrl, 'large'),
   };
 
   if (!DRY_RUN) {
     s.photos = photos;
   }
 
-  console.log(`${featured} ✅ ${s.commonName.padEnd(34)} © ${first.photographerName} (${first.licenseCode})`);
+  console.log(
+    `${featured} ✅ ${s.commonName.padEnd(34)} © ${first.photographerName} (${first.licenseCode})`
+  );
   console.log(`       thumbnail: ${photos.thumbnail}`);
   updated++;
 }
@@ -81,22 +83,26 @@ writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
 console.log('\n✓  JSON updated in-place');
 
 // ── Import to Firestore ──────────────────────────────────────────────────────
-let admin;
+let adminApp;
+let adminFirestore;
 try {
-  admin = require('firebase-admin');
+  adminApp = require('firebase-admin/app');
+  adminFirestore = require('firebase-admin/firestore');
 } catch {
   console.error('\n❌ firebase-admin not installed. Run: npm install firebase-admin\n');
   process.exit(1);
 }
+const { initializeApp, cert } = adminApp;
+const { getFirestore, Timestamp } = adminFirestore;
 
-const keyPath = join(__dirname, 'serviceAccountKey.json');
+const keyPath = join(__dirname, '..', 'serviceAccountKey.json');
 const serviceAccount = JSON.parse(readFileSync(keyPath, 'utf-8'));
 
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-const db = admin.firestore();
+initializeApp({ credential: cert(serviceAccount) });
+const db = getFirestore();
 
 async function importCovers() {
-  const now = admin.firestore.Timestamp.now();
+  const now = Timestamp.now();
   let saved = 0;
   let errors = 0;
 

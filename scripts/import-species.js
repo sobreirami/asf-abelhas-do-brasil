@@ -1,7 +1,7 @@
 /**
  * import-species.js
  *
- * Imports all species from firestore-species-data.json into Firestore
+ * Imports all species from scripts/species-data.json into Firestore
  * using the Firebase Admin SDK (bypasses security rules via service account).
  *
  * Setup (one-time):
@@ -11,9 +11,9 @@
  *   3. npm install firebase-admin
  *
  * Usage:
- *   node import-species.js              # dry-run (preview only)
- *   node import-species.js --write      # write to Firestore (skips existing)
- *   node import-species.js --write --force  # overwrite existing documents
+ *   node scripts/import-species.js              # dry-run (preview only)
+ *   node scripts/import-species.js --write      # write to Firestore (skips existing)
+ *   node scripts/import-species.js --write --force  # overwrite existing documents
  */
 
 const { readFileSync, existsSync } = require('fs');
@@ -26,17 +26,21 @@ const FORCE = args.includes('--force');
 const COLLECTION = 'species';
 
 // ─── Check for firebase-admin ─────────────────────────────────────────────────
-let admin;
+let adminApp;
+let adminFirestore;
 try {
-  admin = require('firebase-admin');
+  adminApp = require('firebase-admin/app');
+  adminFirestore = require('firebase-admin/firestore');
 } catch {
   console.error('\n❌ firebase-admin not installed. Run:\n');
   console.error('   npm install firebase-admin\n');
   process.exit(1);
 }
+const { initializeApp, cert } = adminApp;
+const { getFirestore, Timestamp } = adminFirestore;
 
 // ─── Check for service account key ───────────────────────────────────────────
-const keyPath = join(__dirname, 'serviceAccountKey.json');
+const keyPath = join(__dirname, '..', 'serviceAccountKey.json');
 
 if (!existsSync(keyPath)) {
   console.error('\n❌ serviceAccountKey.json not found.\n');
@@ -56,33 +60,33 @@ try {
 }
 
 // ─── Firebase Admin init ──────────────────────────────────────────────────────
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+initializeApp({
+  credential: cert(serviceAccount),
 });
 
-const db = admin.firestore();
+const db = getFirestore();
 
 // ─── Load species data ────────────────────────────────────────────────────────
-const dataPath = join(__dirname, 'firestore-species-data-with-photos.json');
+const dataPath = join(__dirname, 'species-data.json');
 
 let data;
 try {
   data = JSON.parse(readFileSync(dataPath, 'utf-8'));
 } catch (err) {
-  console.error(`\n❌ Could not read firestore-species-data.json: ${err.message}\n`);
+  console.error(`\n❌ Could not read species-data.json: ${err.message}\n`);
   process.exit(1);
 }
 
 const species = data.species;
 
 if (!Array.isArray(species) || species.length === 0) {
-  console.error('\n❌ No species found in firestore-species-data.json\n');
+  console.error('\n❌ No species found in species-data.json\n');
   process.exit(1);
 }
 
 // ─── Import ───────────────────────────────────────────────────────────────────
 async function importSpecies() {
-  const now = admin.firestore.Timestamp.now();
+  const now = Timestamp.now();
   const projectId = serviceAccount.project_id;
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -91,7 +95,9 @@ async function importSpecies() {
   console.log(`  Project   : ${projectId}`);
   console.log(`  Collection: ${COLLECTION}`);
   console.log(`  Species   : ${species.length}`);
-  console.log(`  Mode      : ${DRY_RUN ? '🔍 DRY-RUN (no writes)' : FORCE ? '✏️  WRITE + OVERWRITE' : '✏️  WRITE (skip existing)'}`);
+  console.log(
+    `  Mode      : ${DRY_RUN ? '🔍 DRY-RUN (no writes)' : FORCE ? '✏️  WRITE + OVERWRITE' : '✏️  WRITE (skip existing)'}`
+  );
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
   if (DRY_RUN) {
@@ -116,7 +122,9 @@ async function importSpecies() {
 
     try {
       if (DRY_RUN) {
-        console.log(`  📄 [dry-run] ${id.padEnd(34)} ${fields.commonName} (${fields.scientificName})`);
+        console.log(
+          `  📄 [dry-run] ${id.padEnd(34)} ${fields.commonName} (${fields.scientificName})`
+        );
         created++;
         continue;
       }
@@ -154,12 +162,12 @@ async function importSpecies() {
   if (DRY_RUN) {
     console.log(`  Preview: ${created} species ready to import.`);
     console.log('\n  To import for real, run:');
-    console.log('    node import-species.js --write\n');
+    console.log('    node scripts/import-species.js --write\n');
   } else {
     console.log(`  ✅ Created   : ${created}`);
     if (overwritten > 0) console.log(`  ♻️  Updated   : ${overwritten}`);
-    if (skipped > 0)     console.log(`  ⏭️  Skipped   : ${skipped}`);
-    if (errors > 0)      console.log(`  ❌ Errors    : ${errors}`);
+    if (skipped > 0) console.log(`  ⏭️  Skipped   : ${skipped}`);
+    if (errors > 0) console.log(`  ❌ Errors    : ${errors}`);
     console.log('\n  Import complete! Check your Firestore console.\n');
   }
 

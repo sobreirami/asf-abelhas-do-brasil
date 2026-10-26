@@ -3,17 +3,17 @@
  *
  * Sets rationalBox (name + dimensions only) for species that have a known
  * rational hive model. Removes trapNest from all species.
- * Writes result back to firestore-species-data-with-photos.json.
+ * Writes result back to scripts/species-data.json.
  *
  * Usage:
- *   node enrich-meliponiculture.js          # dry-run
- *   node enrich-meliponiculture.js --write  # updates the JSON file
+ *   node scripts/enrich-meliponiculture.js          # dry-run
+ *   node scripts/enrich-meliponiculture.js --write  # updates the JSON file
  */
 
 const { readFileSync, writeFileSync } = require('fs');
 const { join } = require('path');
 
-const DATA_PATH = join(__dirname, 'firestore-species-data-with-photos.json');
+const DATA_PATH = join(__dirname, 'species-data.json');
 const args = process.argv.slice(2);
 const DRY_RUN = !args.includes('--write');
 
@@ -21,24 +21,24 @@ const DRY_RUN = !args.includes('--write');
 // Value is just the model name and chamber dimensions — nothing else.
 // Species absent from this map will have rationalBox removed.
 const RATIONAL_BOX = {
-  jatai:              'INPA / PNN — câmara de cria 10×10×4 cm',
-  mandacaia:          'INPA — câmara de cria 15×15×6 cm',
+  jatai: 'INPA / PNN — câmara de cria 10×10×4 cm',
+  mandacaia: 'INPA — câmara de cria 15×15×6 cm',
   'urucu-nordestina': 'INPA — câmara de cria 15×15×10 cm',
-  tiuba:              'INPA — câmara de cria 15×15×8 cm',
-  'urucu-amarela':    'INPA — câmara de cria 20×15×8 cm',
-  manduri:            'PNN — câmara de cria 12×12×5 cm',
-  guaraipo:           'INPA — câmara de cria 15×15×7 cm',
-  'urucu-do-norte':   'INPA — câmara de cria 20×15×10 cm',
-  mumbuca:            'INPA — câmara de cria 12×12×7 cm',
-  irai:               'Mini-PNN — câmara de cria 8×8×4 cm',
-  tubuna:             'PNN — câmara de cria 10×10×6 cm',
-  mandaguari:         'PNN / INPA — câmara de cria 12×12×6 cm',
-  canudo:             'INPA — câmara de cria 12×12×6 cm',
-  mirim:              'Mini-PNN — câmara de cria 8×8×4 cm',
-  'mirim-guacu':      'Mini-PNN — câmara de cria 10×10×5 cm',
-  arapua:             'INPA — câmara de cria 15×15×8 cm',
-  'moca-branca':      'PNN / INPA — câmara de cria 12×12×6 cm',
-  cupira:             'INPA — câmara de cria 12×12×8 cm',
+  tiuba: 'INPA — câmara de cria 15×15×8 cm',
+  'urucu-amarela': 'INPA — câmara de cria 20×15×8 cm',
+  manduri: 'PNN — câmara de cria 12×12×5 cm',
+  guaraipo: 'INPA — câmara de cria 15×15×7 cm',
+  'urucu-do-norte': 'INPA — câmara de cria 20×15×10 cm',
+  mumbuca: 'INPA — câmara de cria 12×12×7 cm',
+  irai: 'Mini-PNN — câmara de cria 8×8×4 cm',
+  tubuna: 'PNN — câmara de cria 10×10×6 cm',
+  mandaguari: 'PNN / INPA — câmara de cria 12×12×6 cm',
+  canudo: 'INPA — câmara de cria 12×12×6 cm',
+  mirim: 'Mini-PNN — câmara de cria 8×8×4 cm',
+  'mirim-guacu': 'Mini-PNN — câmara de cria 10×10×5 cm',
+  arapua: 'INPA — câmara de cria 15×15×8 cm',
+  'moca-branca': 'PNN / INPA — câmara de cria 12×12×6 cm',
+  cupira: 'INPA — câmara de cria 12×12×8 cm',
 };
 
 const raw = readFileSync(DATA_PATH, 'utf-8');
@@ -63,7 +63,9 @@ console.log('━━━━━━━━━━━━━━━━━━━━━━�
 
 data.species.forEach((s) => {
   const has = !!s.rationalBox;
-  console.log(`  ${has ? '✅' : '  '} ${s.id.padEnd(32)} ${has ? s.rationalBox : '(sem caixa racional)'}`);
+  console.log(
+    `  ${has ? '✅' : '  '} ${s.id.padEnd(32)} ${has ? s.rationalBox : '(sem caixa racional)'}`
+  );
 });
 
 if (DRY_RUN) {
@@ -71,5 +73,5 @@ if (DRY_RUN) {
 } else {
   writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf-8');
   console.log('\n  ✅ JSON atualizado.');
-  console.log('  Próximo passo: node import-species.js --write --force\n');
+  console.log('  Próximo passo: node scripts/import-species.js --write --force\n');
 }
