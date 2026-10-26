@@ -4,6 +4,18 @@ let lastClickTime = 0;
 const CLICK_THROTTLE = 300; // milliseconds
 
 /**
+ * Haptics are best-effort feedback: a rejected native call must never block
+ * the action (navigation, closing a modal…) that callers run after awaiting it.
+ */
+async function runHaptic(effect: () => Promise<void>): Promise<void> {
+  try {
+    await effect();
+  } catch (error) {
+    if (__DEV__) console.warn('Haptics error:', error);
+  }
+}
+
+/**
  * Trigger haptic feedback with double-click prevention
  * @param style Impact feedback style
  * @returns true if haptic was triggered, false if throttled
@@ -16,7 +28,7 @@ export const triggerHaptic = async (
     return false; // Click was throttled
   }
   lastClickTime = now;
-  await Haptics.impactAsync(style);
+  await runHaptic(() => Haptics.impactAsync(style));
   return true;
 };
 
@@ -26,14 +38,14 @@ export const triggerHaptic = async (
 export const triggerNotificationHaptic = async (
   type: Haptics.NotificationFeedbackType = Haptics.NotificationFeedbackType.Success
 ): Promise<void> => {
-  await Haptics.notificationAsync(type);
+  await runHaptic(() => Haptics.notificationAsync(type));
 };
 
 /**
  * Trigger selection haptic feedback (without throttling)
  */
 export const triggerSelectionHaptic = async (): Promise<void> => {
-  await Haptics.selectionAsync();
+  await runHaptic(() => Haptics.selectionAsync());
 };
 
 // Re-export types for convenience
