@@ -21,20 +21,46 @@ export interface PhotoCredit {
 export interface ScientificArticle {
   title: string;
   url: string;
+  authors?: string;
+  year?: number;
+  source?: string;
+}
+
+export type Temperament = 'docile' | 'defensive' | 'caustic';
+
+export type Sociality = 'eusocial' | 'solitary' | 'communal';
+
+export type ConservationStatus =
+  | 'least-concern'
+  | 'vulnerable'
+  | 'endangered'
+  | 'critically-endangered'
+  | 'data-deficient'
+  | 'not-evaluated';
+
+export interface Taxonomy {
+  family: string;
+  tribe: string;
+  genus: string;
 }
 
 export interface Species {
   id: string;
   commonName: string;
+  otherNames?: string[];
   scientificName: string;
+  taxonomy?: Taxonomy;
   shortDescription: string;
   longDescription: string;
   regions: string[];
   biomes: string[];
-  sizeMm: number;
-  behavior: string;
+  sizeMm?: number;
+  temperament: Temperament;
+  sociality: Sociality;
   nest: string;
-  conservationStatus: string;
+  conservationStatus: ConservationStatus;
+  conservationSource?: string;
+  conservationNote?: string;
   tags: string[];
   favoredPlants: string[];
   photos: SpeciesPhotos;
@@ -50,7 +76,6 @@ export interface Species {
 
 export interface SpeciesFilter {
   region?: string;
-  behavior?: string;
   searchTerm?: string;
 }
 

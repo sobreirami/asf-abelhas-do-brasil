@@ -20,6 +20,7 @@ const CONSERVATION_COLORS: Record<string, string> = {
   endangered: '#F0726A',
   'critically-endangered': '#F0726A',
   'data-deficient': '#9EAB90',
+  'not-evaluated': '#9EAB90',
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -91,7 +92,9 @@ function SpeciesCardBase({ species, onPress, index }: SpeciesCardProps) {
           {species.scientificName}
         </Text>
         <Text style={[styles.meta, { color: colors.textFaint }]} numberOfLines={1}>
-          {species.sizeMm} mm · {species.behavior}
+          {[species.sizeMm ? `${species.sizeMm} mm` : null, t.temperament[species.temperament]]
+            .filter(Boolean)
+            .join(' · ')}
         </Text>
       </View>
     </AnimatedPressable>

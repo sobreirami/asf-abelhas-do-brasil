@@ -88,7 +88,7 @@ src/
 ## Architecture decisions
 
 - **Online-first + offline fallback** — always fetches Firebase; falls back to AsyncStorage on error
-- **Client-side filters** — applied in-memory over loaded list; Firestore queries only for `region`/`behavior`
+- **Client-side filters** — applied in-memory over loaded list; Firestore queries only for `region`
 - **NativeTabs** — `expo-router/native-tabs` for native tab behavior on iOS/Android (Android `md` icons require `expo-symbols`)
 - **No external state manager** — React Context is sufficient
 - **`storage.ts` abstraction** — drop-in swap point for MMKV

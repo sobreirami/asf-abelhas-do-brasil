@@ -65,7 +65,7 @@ HomeScreen (mount)
   └── fetchSpecies()          → Firestore (paginated, 20/page)         → cache
 
 Filters (client-side, applied in-memory)
-  searchText · behavior · regions · biomes · conservationStatus · tags
+  searchText · temperament · sociality · regions · biomes · conservationStatus · tags
 ```
 
 ### Offline fallback

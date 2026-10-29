@@ -28,7 +28,9 @@ export default {
 
   // Species Detail
   species: {
-    behavior: 'Comportamiento',
+    temperament: 'Temperamento',
+    sociality: 'Socialidad',
+    conservationSource: 'Fuente',
     regions: 'Regiones',
     biomes: 'Biomas',
     conservationStatus: 'Estado de Conservación',
@@ -39,7 +41,7 @@ export default {
     nestType: 'Tipo de Nido',
     flowering: 'Floración',
     articles: 'Artículos Científicos',
-    scientificArticles: 'Artículos Científicos',
+    scientificArticles: 'Referencias',
     reportError: 'Reportar Error',
     notFound: 'Especie no encontrada',
     loading: 'Cargando...',
@@ -220,15 +222,14 @@ export default {
   // Filters
   filters: {
     searchPlaceholder: 'Buscar por nombre...',
-    behavior: 'Comportamiento',
+    temperament: 'Temperamento',
+    sociality: 'Socialidad',
     regions: 'Regiones',
     biomes: 'Biomas',
     conservationStatus: 'Estado de Conservación',
     tags: 'Etiquetas',
     apply: 'Aplicar Filtros',
     clear: 'Limpiar',
-    solitary: 'Solitaria',
-    social: 'Social',
     advancedFiltersTitle: 'Filtros Avanzados',
     searchByName: 'Buscar por Nombre',
     searchPlaceholderAdvanced: 'Nombre común o científico...',
@@ -240,10 +241,18 @@ export default {
     viewOnINaturalist: 'Ver en iNaturalist',
   },
 
-  // Behaviors
-  behaviors: {
+  // Temperament
+  temperament: {
+    docile: 'Mansa',
+    defensive: 'Defensiva',
+    caustic: 'Cáustica',
+  },
+
+  // Sociality
+  sociality: {
+    eusocial: 'Social',
     solitary: 'Solitaria',
-    social: 'Social',
+    communal: 'Comunal',
   },
 
   // Conservation Status
@@ -253,6 +262,7 @@ export default {
     endangered: 'En Peligro',
     'critically-endangered': 'En Peligro Crítico',
     'data-deficient': 'Datos Insuficientes',
+    'not-evaluated': 'No Evaluada',
   },
 
   // Common

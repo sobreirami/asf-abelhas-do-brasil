@@ -84,10 +84,9 @@ At the project root:
 ```
 scripts/
 ├── import-species.js           ← seed Firestore from species-data.json
-├── enrich-meliponiculture.js   ← add rationalBox / trapNest fields
 ├── fetch-inaturalist-photos.js ← attach iNaturalist photo credits
 ├── backfill-covers.js          ← backfill cover photos on existing docs
-├── species-data.json           ← consolidated dataset (species + photos)
+├── species-data.json           ← curated dataset (source of truth for species content)
 └── firestore-example-data.json ← minimal sample for schema reference
 ```
 
@@ -151,7 +150,7 @@ Simple, single-file components live in `components/ui/`.
 | Decision                           | Rationale                                                                                               |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Online-first with offline fallback | Always fetches from Firebase; falls back to AsyncStorage cache on error                                 |
-| Client-side filters                | Applied in-memory over the loaded list (Firestore queries only for `region`/`behavior`)                 |
+| Client-side filters                | Applied in-memory over the loaded list (Firestore queries only for `region`)                            |
 | NativeTabs                         | `expo-router/native-tabs` gives native iOS/Android tab feel (Android `md` icons require `expo-symbols`) |
 | No external state manager          | React Context is sufficient for the current scope                                                       |
 | `storage.ts` abstraction           | Drop-in swap point for MMKV when native builds are available                                            |

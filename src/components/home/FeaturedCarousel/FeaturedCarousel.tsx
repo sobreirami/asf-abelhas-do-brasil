@@ -17,6 +17,7 @@ const CONSERVATION_COLORS: Record<string, string> = {
   endangered: '#F0726A',
   'critically-endangered': '#F0726A',
   'data-deficient': '#9EAB90',
+  'not-evaluated': '#9EAB90',
 };
 
 type FeaturedCarouselProps = {

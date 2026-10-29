@@ -39,9 +39,6 @@ export const fetchSpecies = async (
     if (filters?.region) {
       constraints.push(where('regions', 'array-contains', filters.region));
     }
-    if (filters?.behavior) {
-      constraints.push(where('behavior', '==', filters.behavior));
-    }
     if (lastDoc) {
       constraints.push(startAfter(lastDoc));
     }
@@ -89,7 +86,8 @@ export const searchSpecies = async (searchTerm: string): Promise<Species[]> => {
     list.filter(
       (s) =>
         s.commonName.toLowerCase().includes(lowerTerm) ||
-        s.scientificName.toLowerCase().includes(lowerTerm)
+        s.scientificName.toLowerCase().includes(lowerTerm) ||
+        (s.otherNames ?? []).some((name) => name.toLowerCase().includes(lowerTerm))
     );
 
   // Tenta usar cache primeiro para evitar leitura total do Firestore

@@ -21,6 +21,7 @@ const STATUS_ORDER = [
   'vulnerable',
   'data-deficient',
   'least-concern',
+  'not-evaluated',
 ] as const;
 
 type StatusKey = (typeof STATUS_ORDER)[number];
@@ -31,6 +32,7 @@ const STATUS_COLORS: Record<StatusKey, string> = {
   vulnerable: '#FFCB4D',
   'data-deficient': '#9EAB90',
   'least-concern': '#6FCF73',
+  'not-evaluated': '#9EAB90',
 };
 
 const STATUS_LABELS: Record<StatusKey, string> = {
@@ -39,6 +41,7 @@ const STATUS_LABELS: Record<StatusKey, string> = {
   vulnerable: 'Vulnerável',
   'data-deficient': 'Dados Insuficientes',
   'least-concern': 'Pouco Preocupante',
+  'not-evaluated': 'Não Avaliada',
 };
 
 const THREATENED_STATUSES = new Set<string>(['critically-endangered', 'endangered', 'vulnerable']);
@@ -133,7 +136,7 @@ export default function ConservationScreen() {
   const grouped = useMemo(() => {
     const map: Record<string, Species[]> = {};
     for (const s of allSpecies) {
-      const key = s.conservationStatus || 'data-deficient';
+      const key = s.conservationStatus || 'not-evaluated';
       if (!map[key]) map[key] = [];
       map[key].push(s);
     }

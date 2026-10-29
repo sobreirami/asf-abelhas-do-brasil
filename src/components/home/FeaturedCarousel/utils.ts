@@ -9,6 +9,7 @@ export const getStatusColor = (status: string, colors: ThemeColors): string => {
     endangered: colors.error,
     'critically-endangered': colors.error,
     'data-deficient': colors.icon,
+    'not-evaluated': colors.icon,
   };
   return statusMap[status] || colors.icon;
 };

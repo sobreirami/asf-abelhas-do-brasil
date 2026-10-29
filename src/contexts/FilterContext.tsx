@@ -1,8 +1,11 @@
 import React, { createContext, Dispatch, SetStateAction, use, useState } from 'react';
 
+import type { Sociality, Temperament } from '@/types/species';
+
 export type FilterOptions = {
   searchText?: string;
-  behavior?: string;
+  temperament?: Temperament;
+  sociality?: Sociality;
   regions?: string[];
   biomes?: string[];
   conservationStatus?: string;

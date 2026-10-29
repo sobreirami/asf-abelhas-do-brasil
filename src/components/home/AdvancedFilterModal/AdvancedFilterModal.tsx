@@ -10,6 +10,7 @@ import { Colors, Shadows } from '@/constants/theme';
 import { FilterOptions } from '@/contexts/FilterContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import type { Sociality, Temperament } from '@/types/species';
 import { styles } from './styles';
 
 type AdvancedFilterModalProps = {
@@ -28,7 +29,8 @@ export default function AdvancedFilterModal({
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
-  const BEHAVIORS = [t.filters.solitary, t.filters.social, 'Semi-social'];
+  const TEMPERAMENTS: Temperament[] = ['docile', 'defensive', 'caustic'];
+  const SOCIALITIES: Sociality[] = ['eusocial', 'solitary', 'communal'];
   const REGIONS = ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul'];
   const BIOMES = ['Mata Atlântica', 'Cerrado', 'Amazônia', 'Caatinga', 'Pantanal', 'Pampa'];
   const CONSERVATION_STATUS = [
@@ -37,11 +39,23 @@ export default function AdvancedFilterModal({
     'endangered',
     'critically-endangered',
     'data-deficient',
+    'not-evaluated',
   ];
-  const TAGS = ['meliponicultura', 'polinização', 'mel medicinal', 'urbana', 'agressiva', 'mansa'];
+  const TAGS = [
+    'meliponicultura',
+    'iniciantes',
+    'urbana',
+    'mel-medicinal',
+    'polinização-por-vibração',
+    'coletora-de-óleo',
+    'orquídeas',
+    'ninho-no-solo',
+    'endêmica',
+  ];
 
   const [searchText, setSearchText] = useState(currentFilters.searchText || '');
-  const [selectedBehavior, setSelectedBehavior] = useState(currentFilters.behavior);
+  const [selectedTemperament, setSelectedTemperament] = useState(currentFilters.temperament);
+  const [selectedSociality, setSelectedSociality] = useState(currentFilters.sociality);
   const [selectedRegions, setSelectedRegions] = useState<string[]>(currentFilters.regions || []);
   const [selectedBiomes, setSelectedBiomes] = useState<string[]>(currentFilters.biomes || []);
   const [selectedStatus, setSelectedStatus] = useState(currentFilters.conservationStatus);
@@ -65,7 +79,8 @@ export default function AdvancedFilterModal({
   const handleClear = async () => {
     await triggerNotificationHaptic(NotificationFeedbackType.Warning);
     setSearchText('');
-    setSelectedBehavior(undefined);
+    setSelectedTemperament(undefined);
+    setSelectedSociality(undefined);
     setSelectedRegions([]);
     setSelectedBiomes([]);
     setSelectedStatus(undefined);
@@ -75,7 +90,8 @@ export default function AdvancedFilterModal({
   const handleApply = () => {
     onApply({
       searchText: searchText || undefined,
-      behavior: selectedBehavior,
+      temperament: selectedTemperament,
+      sociality: selectedSociality,
       regions: selectedRegions.length > 0 ? selectedRegions : undefined,
       biomes: selectedBiomes.length > 0 ? selectedBiomes : undefined,
       conservationStatus: selectedStatus,
@@ -123,16 +139,36 @@ export default function AdvancedFilterModal({
 
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              <Ionicons name="people" size={18} color={colors.text} /> {t.filters.behavior}
+              <Ionicons name="hand-left" size={18} color={colors.text} /> {t.filters.temperament}
             </Text>
             <View style={styles.chipContainer}>
-              {BEHAVIORS.map((behavior) => (
+              {TEMPERAMENTS.map((temperament) => (
                 <Chip
-                  key={behavior}
-                  label={behavior}
-                  selected={selectedBehavior === behavior}
+                  key={temperament}
+                  label={t.temperament[temperament]}
+                  selected={selectedTemperament === temperament}
                   onPress={() =>
-                    setSelectedBehavior(selectedBehavior === behavior ? undefined : behavior)
+                    setSelectedTemperament(
+                      selectedTemperament === temperament ? undefined : temperament
+                    )
+                  }
+                />
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              <Ionicons name="people" size={18} color={colors.text} /> {t.filters.sociality}
+            </Text>
+            <View style={styles.chipContainer}>
+              {SOCIALITIES.map((sociality) => (
+                <Chip
+                  key={sociality}
+                  label={t.sociality[sociality]}
+                  selected={selectedSociality === sociality}
+                  onPress={() =>
+                    setSelectedSociality(selectedSociality === sociality ? undefined : sociality)
                   }
                 />
               ))}

@@ -40,16 +40,17 @@ FiltersScreen (modal)
 
 Client-side filters applied in-memory:
 
-| Filter               | Source                                     |
-| -------------------- | ------------------------------------------ |
-| `searchText`         | commonName / scientificName contains match |
-| `behavior`           | exact match                                |
-| `regions`            | array-contains-any                         |
-| `biomes`             | array-contains-any                         |
-| `conservationStatus` | exact match                                |
-| `tags`               | array-contains-any                         |
+| Filter               | Source                                             |
+| -------------------- | -------------------------------------------------- |
+| `searchText`         | commonName / scientificName contains match         |
+| `temperament`        | exact match (`docile` / `defensive` / `caustic`)   |
+| `sociality`          | exact match (`eusocial` / `solitary` / `communal`) |
+| `regions`            | array-contains-any                                 |
+| `biomes`             | array-contains-any                                 |
+| `conservationStatus` | exact match                                        |
+| `tags`               | array-contains-any                                 |
 
-> `region` and `behavior` are also sent to Firestore as query constraints when present — all others are applied client-side only.
+> `region` is also sent to Firestore as a query constraint when present — all others are applied client-side only.
 
 ---
 

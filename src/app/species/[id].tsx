@@ -52,6 +52,7 @@ const CONSERVATION_COLORS: Record<string, string> = {
   endangered: '#F0726A',
   'critically-endangered': '#F0726A',
   'data-deficient': '#9EAB90',
+  'not-evaluated': '#9EAB90',
 };
 
 export default function SpeciesDetailScreen() {
@@ -197,19 +198,19 @@ export default function SpeciesDetailScreen() {
               <StatTile
                 icon="resize"
                 label={t.species.size}
-                value={`${species.sizeMm} mm`}
+                value={species.sizeMm ? `${species.sizeMm} mm` : '—'}
                 colors={colors}
               />
               <StatTile
                 icon="happy"
-                label={t.species.behavior}
-                value={species.behavior}
+                label={t.species.temperament}
+                value={t.temperament[species.temperament] ?? ''}
                 colors={colors}
               />
               <StatTile
                 icon="home"
                 label={t.species.nestType}
-                value={species.nest.split(',')[0].trim()}
+                value={species.nest.split(';')[0].trim()}
                 colors={colors}
               />
             </Animated.View>
@@ -262,6 +263,31 @@ export default function SpeciesDetailScreen() {
                 </DetailSection>
               </Animated.View>
             )}
+
+            {/* Conservação */}
+            {conservationLabel ? (
+              <Animated.View entering={FadeInDown.delay(325)}>
+                <DetailSection
+                  icon="shield-checkmark-outline"
+                  title={t.species.conservationStatus}
+                  colors={colors}
+                >
+                  <Text selectable style={[styles.bodyText, { color: colors.text }]}>
+                    {conservationLabel}
+                  </Text>
+                  {species.conservationSource ? (
+                    <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                      {`${t.species.conservationSource}: ${species.conservationSource}`}
+                    </Text>
+                  ) : null}
+                  {species.conservationNote ? (
+                    <Text selectable style={[styles.bodyText, { color: colors.textMuted }]}>
+                      {species.conservationNote}
+                    </Text>
+                  ) : null}
+                </DetailSection>
+              </Animated.View>
+            ) : null}
 
             {/* Nidificação */}
             <Animated.View entering={FadeInDown.delay(350)}>
@@ -381,9 +407,18 @@ export default function SpeciesDetailScreen() {
                       ]}
                     >
                       <Ionicons name="document-text" size={22} color={colors.primary} />
-                      <Text style={[styles.articleTitle, { color: colors.text }]} selectable>
-                        {article.title}
-                      </Text>
+                      <View style={styles.articleBody}>
+                        <Text style={[styles.articleTitle, { color: colors.text }]} selectable>
+                          {article.title}
+                        </Text>
+                        {article.authors || article.year || article.source ? (
+                          <Text style={[styles.articleMeta, { color: colors.textMuted }]}>
+                            {[article.authors, article.year, article.source]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </Text>
+                        ) : null}
+                      </View>
                       <Ionicons name="open-outline" size={18} color={colors.textFaint} />
                     </Pressable>
                   ))}
@@ -781,10 +816,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: Spacing.sm,
   },
+  articleBody: {
+    flex: 1,
+    gap: Spacing.xs,
+  },
   articleTitle: {
     fontSize: FontSize.md,
     fontWeight: FontWeight.medium,
-    flex: 1,
+  },
+  articleMeta: {
+    fontSize: FontSize.xs,
   },
 
   // Sheet names (selecionáveis)

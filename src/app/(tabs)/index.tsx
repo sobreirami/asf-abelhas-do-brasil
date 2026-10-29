@@ -272,7 +272,8 @@ export default function HomeScreen() {
       filtered = filtered.filter(
         (s) =>
           s.commonName.toLowerCase().includes(search) ||
-          s.scientificName.toLowerCase().includes(search)
+          s.scientificName.toLowerCase().includes(search) ||
+          (s.otherNames ?? []).some((name) => name.toLowerCase().includes(search))
       );
     }
     if (activeFilters.biomes && activeFilters.biomes.length > 0) {
@@ -280,8 +281,11 @@ export default function HomeScreen() {
         activeFilters.biomes!.some((biome) => s.biomes?.includes(biome))
       );
     }
-    if (activeFilters.behavior) {
-      filtered = filtered.filter((s) => s.behavior === activeFilters.behavior);
+    if (activeFilters.temperament) {
+      filtered = filtered.filter((s) => s.temperament === activeFilters.temperament);
+    }
+    if (activeFilters.sociality) {
+      filtered = filtered.filter((s) => s.sociality === activeFilters.sociality);
     }
     if (activeFilters.regions && activeFilters.regions.length > 0) {
       filtered = filtered.filter((s) =>
@@ -351,7 +355,8 @@ export default function HomeScreen() {
     });
 
   const activeFilterCount = [
-    activeFilters.behavior,
+    activeFilters.temperament,
+    activeFilters.sociality,
     activeFilters.regions?.length,
     activeFilters.biomes?.length,
     activeFilters.conservationStatus,
