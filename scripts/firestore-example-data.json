@@ -1,150 +1,148 @@
 {
   "instructions": {
     "collectionName": "species",
-    "documentId": "Use o campo 'id' de cada objeto como ID do documento no Firestore",
-    "steps": [
-      "1. Acesse console.firebase.google.com → seu projeto → Firestore Database",
-      "2. Clique em 'Iniciar coleção' e nomeie como 'species'",
-      "3. Para cada objeto abaixo, crie um documento usando o 'id' como ID do documento",
-      "4. Campos booleanos (ex: featured) devem ser criados com tipo 'boolean', não string",
-      "5. Para as fotos, faça upload no Firebase Storage e substitua as URLs de exemplo",
-      "6. ATENÇÃO: Não use espaços nos nomes dos campos, 'featured ' (com espaço) ≠ 'featured'"
-    ],
+    "documentId": "The 'id' field of each object is the Firestore document ID",
+    "import": "node scripts/import-species.js --write --force",
+    "regions": ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"],
+    "biomes": ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal", "Pampa"],
+    "temperamentValues": ["caustic", "defensive", "docile"],
+    "socialityValues": ["communal", "eusocial", "solitary"],
     "conservationStatusValues": [
       "least-concern",
       "vulnerable",
       "endangered",
       "critically-endangered",
-      "extinct-in-wild",
-      "extinct"
+      "data-deficient",
+      "not-evaluated"
     ],
-    "behaviorValues": ["Muito Mansa", "Mansa", "Agressiva"],
-    "imageUrlNote": "Use URLs HTTPS públicas do Firebase Storage (começando com https://firebasestorage.googleapis.com/). Nunca use o formato gs://"
+    "conservationPolicy": "National category (Portaria MMA 148/2022) when listed; otherwise IUCN when assessed; otherwise not-evaluated. Always fill conservationSource.",
+    "tagVocabulary": [
+      "meliponicultura",
+      "iniciantes",
+      "urbana",
+      "mel-medicinal",
+      "polinizadora",
+      "polinização-por-vibração",
+      "coletora-de-óleo",
+      "orquídeas",
+      "cleptobiótica",
+      "ninho-no-solo",
+      "ninho-em-madeira",
+      "ninho-em-cupinzeiro",
+      "ninho-exposto",
+      "endêmica",
+      "praga-agrícola",
+      "bioindicadora",
+      "defesa-cáustica"
+    ],
+    "nestFormat": "Short nest type (<= 30 chars) before ';' — shown in the detail tile — then details"
   },
   "exampleSpecies": [
     {
       "id": "jatai",
       "commonName": "Jataí",
+      "otherNames": ["Jati", "Jataí-amarelo", "Três-portas"],
       "scientificName": "Tetragonisca angustula",
-      "shortDescription": "Pequena, dócil e ideal para iniciantes na meliponicultura",
-      "longDescription": "A Jataí é uma das menores abelhas sem ferrão do Brasil e também uma das mais populares para criação urbana. Extremamente mansa, raramente ataca mesmo quando manipulada. Constrói ninhos característicos com entrada tubular de cerume. Apesar do tamanho pequeno, é uma polinizadora eficiente de flores pequenas. Seu mel é ácido e muito valorizado por propriedades medicinais.",
+      "taxonomy": {
+        "family": "Apidae",
+        "tribe": "Meliponini",
+        "genus": "Tetragonisca"
+      },
+      "shortDescription": "Pequena abelha sem ferrão com tubo de cera na entrada, guardada por soldados que pairam no ar",
+      "longDescription": "A Jataí é uma abelha sem ferrão pequena, com ampla distribuição do México à Argentina e registros em quase todos os estados brasileiros. Nidifica em cavidades pré-existentes, como ocos de árvores e frestas em muros, e constrói na entrada um tubo de cerume. A defesa do ninho é feita por dois tipos de guardas: uns pousados no tubo de entrada e outros que pairam em voo diante dele. Esses guardas são cerca de 30% mais pesados que as campeiras e formam uma subcasta de soldados, a primeira descrita em abelhas. Diante do sopro humano, os guardas recuam para dentro do ninho em vez de atacar. Algumas colônias fecham a entrada à noite. É uma das espécies mais criadas pelos meliponicultores brasileiros e visita grande variedade de flores.",
       "regions": ["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul"],
-      "biomes": ["Mata Atlântica", "Cerrado", "Caatinga", "Amazônia"],
-      "sizeMm": 5,
-      "behavior": "Muito Mansa",
-      "nest": "Cavidades pequenas, entrada tubular",
-      "conservationStatus": "least-concern",
+      "biomes": ["Amazônia", "Mata Atlântica", "Cerrado", "Caatinga", "Pantanal"],
+      "temperament": "docile",
+      "sociality": "eusocial",
+      "nest": "Cavidades pré-existentes; ocos de árvores, frestas de muros, com tubo de cerume na entrada",
+      "conservationStatus": "not-evaluated",
+      "conservationSource": "Não consta da Portaria MMA 148/2022; sem avaliação na IUCN Red List",
       "featured": true,
-      "tags": ["semFerrão", "pequena", "urbana", "iniciantes"],
-      "favoredPlants": ["Manjericão", "Astrapeia"],
+      "tags": ["meliponicultura", "iniciantes", "urbana", "polinizadora"],
+      "favoredPlants": ["Cafeeiro", "Jabuticabeira", "Aroeira-pimenteira", "Jerivá", "Abacateiro"],
       "photos": {
-        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fthumb.jpg?alt=media",
-        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fmedia.jpg?alt=media",
-        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Foriginal.jpg?alt=media"
+        "thumbnail": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/square.jpeg",
+        "media": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/medium.jpeg",
+        "original": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/large.jpeg"
       },
-      "photoGallery": [
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery1.jpg?alt=media",
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fjatai%2Fgallery2.jpg?alt=media"
-      ],
-      "scientificArticles": [
+      "iNaturalistPhotos": [
         {
-          "title": "Tetragonisca angustula: biologia e manejo",
-          "url": "https://scholar.google.com/scholar?q=Tetragonisca+angustula"
-        }
-      ]
-    },
-    {
-      "id": "mandacaia",
-      "commonName": "Mandaçaia",
-      "scientificName": "Melipona quadrifasciata",
-      "shortDescription": "Abelha de porte médio, muito produtiva e dócil",
-      "longDescription": "A Mandaçaia é uma das abelhas sem ferrão mais conhecidas e criadas no Brasil. Possui corpo robusto com faixas amarelas e pretas bem definidas. É uma espécie muito produtiva, chegando a produzir de 2 a 4 litros de mel por ano. Seu mel é muito apreciado por suas propriedades medicinais e sabor suave. Constrói ninhos em cavidades de árvores e é uma excelente polinizadora de diversas culturas agrícolas.",
-      "regions": ["Sul", "Sudeste", "Centro-Oeste"],
-      "biomes": ["Mata Atlântica", "Cerrado"],
-      "sizeMm": 10,
-      "behavior": "Mansa",
-      "nest": "Cavidade em árvores",
-      "conservationStatus": "vulnerable",
-      "featured": true,
-      "tags": ["semFerrão", "meliponini", "produtiva", "medicinal"],
-      "favoredPlants": ["Jabuticabeira", "Laranjeira"],
-      "photos": {
-        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fthumb.jpg?alt=media",
-        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fmedia.jpg?alt=media",
-        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Foriginal.jpg?alt=media"
-      },
-      "photoGallery": [
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery1.jpg?alt=media",
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery2.jpg?alt=media",
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmandacaia%2Fgallery3.jpg?alt=media"
-      ],
-      "scientificArticles": [
-        {
-          "title": "Produção de mel e manejo de Melipona quadrifasciata",
-          "url": "https://scholar.google.com/scholar?q=Melipona+quadrifasciata"
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/155397688/large.jpeg",
+          "attribution": "(c) Carlos Alexandre Mattos Raposo, some rights reserved (CC BY-SA)",
+          "photographerName": "Carlos Alexandre Mattos Raposo",
+          "photographerLogin": "carlosalexandreraposo",
+          "licenseCode": "cc-by-sa",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+          "iNaturalistPhotoId": 155397688,
+          "observationId": 93735785
         },
         {
-          "title": "Polinização por abelhas sem ferrão em culturas agrícolas",
-          "url": "https://scholar.google.com/scholar?q=stingless+bees+pollination"
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/151637508/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/151637508/large.jpg",
+          "attribution": "(c) Grete Pasch, some rights reserved (CC BY)",
+          "photographerName": "Grete Pasch",
+          "photographerLogin": "gpasch",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 151637508,
+          "observationId": 91651137
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/23623301/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/23623301/large.jpeg",
+          "attribution": "(c) Alex Rebelo, some rights reserved (CC BY-NC)",
+          "photographerName": "Alex Rebelo",
+          "photographerLogin": "alexanderr",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 23623301,
+          "observationId": 15804788
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/255035322/medium.jpeg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/255035322/large.jpeg",
+          "attribution": "(c) yuleidy_00, some rights reserved (CC BY-NC)",
+          "photographerName": "yuleidy_00",
+          "photographerLogin": "yuleidy_00",
+          "licenseCode": "cc-by-nc",
+          "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+          "iNaturalistPhotoId": 255035322,
+          "observationId": 148133931
+        },
+        {
+          "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/155349314/medium.jpg",
+          "urlLarge": "https://inaturalist-open-data.s3.amazonaws.com/photos/155349314/large.jpg",
+          "attribution": "(c) Federico Figueroa Cabezas, some rights reserved (CC BY)",
+          "photographerName": "Federico Figueroa Cabezas",
+          "photographerLogin": "fedecrc",
+          "licenseCode": "cc-by",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "iNaturalistPhotoId": 155349314,
+          "observationId": 93707882
         }
-      ]
-    },
-    {
-      "id": "mirim",
-      "commonName": "Mirim",
-      "scientificName": "Plebeia droryana",
-      "shortDescription": "Pequena abelha urbana, muito adaptável",
-      "longDescription": "A Mirim é uma pequena abelha sem ferrão, muito comum em áreas urbanas. Constrói ninhos em cavidades pequenas, inclusive em muros e construções. Extremamente mansa e adaptável, é ideal para criação em espaços reduzidos. Seu mel é produzido em pequenas quantidades mas é muito apreciado. É excelente polinizadora de hortas e jardins.",
-      "regions": ["Sudeste", "Sul", "Centro-Oeste"],
-      "biomes": ["Mata Atlântica", "Cerrado"],
-      "sizeMm": 4,
-      "behavior": "Muito Mansa",
-      "nest": "Pequenas cavidades, muros, construções",
-      "conservationStatus": "least-concern",
-      "tags": ["semFerrão", "pequena", "urbana", "adaptável"],
-      "favoredPlants": ["Jabuticabeira"],
-      "photos": {
-        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fthumb.jpg?alt=media",
-        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fmedia.jpg?alt=media",
-        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Foriginal.jpg?alt=media"
-      },
-      "photoGallery": [
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Fmirim%2Fgallery1.jpg?alt=media"
       ],
       "scientificArticles": [
         {
-          "title": "Plebeia droryana em ambientes urbanos",
-          "url": "https://scholar.google.com/scholar?q=Plebeia+droryana"
-        }
-      ]
-    },
-    {
-      "id": "urucu",
-      "commonName": "Uruçu-Amarela",
-      "scientificName": "Melipona rufiventris",
-      "shortDescription": "Grande produtora de mel, encontrada na Mata Atlântica",
-      "longDescription": "A Uruçu-Amarela é uma abelha de médio porte, robusta, com abdômen amarelado característico. É nativa da Mata Atlântica e constrói ninhos grandes em ocos de árvores. Produz mel de excelente qualidade, claro e saboroso. É uma polinizadora importante de espécies nativas como jabuticaba, pitanga e outras frutíferas. Requer cavidades grandes para nidificação.",
-      "regions": ["Sudeste", "Sul"],
-      "biomes": ["Mata Atlântica"],
-      "sizeMm": 11,
-      "behavior": "Mansa",
-      "nest": "Grandes cavidades em árvores",
-      "conservationStatus": "vulnerable",
-      "tags": ["semFerrão", "atlântica", "frutíferas", "mel-claro"],
-      "favoredPlants": ["Jabuticabeira", "Pitangueira", "Fruto do Sabiá"],
-      "photos": {
-        "thumbnail": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fthumb.jpg?alt=media",
-        "media": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fmedia.jpg?alt=media",
-        "original": "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Foriginal.jpg?alt=media"
-      },
-      "photoGallery": [
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fgallery1.jpg?alt=media",
-        "https://firebasestorage.googleapis.com/v0/b/asf-abelhas-brasil.firebasestorage.app/o/species%2Furucu%2Fgallery2.jpg?alt=media"
-      ],
-      "scientificArticles": [
+          "title": "A morphologically specialized soldier caste improves colony defense in a neotropical eusocial bee",
+          "authors": "Grüter C, Menezes C, Imperatriz-Fonseca VL, Ratnieks FLW",
+          "year": 2012,
+          "source": "Proceedings of the National Academy of Sciences 109: 1182–1186",
+          "url": "https://doi.org/10.1073/pnas.1113398109"
+        },
         {
-          "title": "Melipona rufiventris na Mata Atlântica: conservação e manejo",
-          "url": "https://scholar.google.com/scholar?q=Melipona+rufiventris"
+          "title": "The natural history of nest defence in a stingless bee, Tetragonisca angustula (Latreille) (Hymenoptera: Apidae), with two distinct types of entrance guards",
+          "authors": "Grüter C, Kärcher MH, Ratnieks FLW",
+          "year": 2011,
+          "source": "Neotropical Entomology 40: 55–61",
+          "url": "https://doi.org/10.1590/S1519-566X2011000100008"
+        },
+        {
+          "title": "Tetragonisca angustula (Latreille, 1811) — Moure's Bee Catalogue (Meliponini Lepeletier, 1836)",
+          "authors": "Camargo JMF, Pedro SRM, Melo GAR",
+          "year": 2023,
+          "source": "Catalogue of Bees (Hymenoptera, Apoidea) in the Neotropical Region – online version",
+          "url": "https://moure.cria.org.br/catalogue?id=117791"
         }
       ]
     }

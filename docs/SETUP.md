@@ -51,21 +51,26 @@ Collection: `species`
 ```
 species/{id}
   commonName: string
+  otherNames?: string[]               // alternative common names — searchable
   scientificName: string
+  taxonomy?: { family, tribe, genus }
   shortDescription: string
   longDescription: string
   regions: string[]
   biomes: string[]
   sizeMm: number
-  behavior: string
-  nest: string
-  conservationStatus: string
+  temperament: 'docile' | 'defensive' | 'caustic'
+  sociality: 'eusocial' | 'solitary' | 'communal'
+  nest: string                        // '<short type ≤ 30 chars>; <details>'
+  conservationStatus: string          // least-concern … not-evaluated
+  conservationSource: string          // e.g. 'Portaria MMA 148/2022'
+  conservationNote?: string
   tags: string[]
   favoredPlants: string[]
   photos: { thumbnail, media, original }
   photoGallery?: string[]
   iNaturalistPhotos?: PhotoCredit[]   // enriched via scripts/fetch-inaturalist-photos.js
-  scientificArticles?: { title, url }[]
+  scientificArticles?: { title, url, authors?, year?, source? }[]   // real, DOI-backed references
   rationalBox?: string
   trapNest?: string
   featured?: boolean
@@ -85,20 +90,18 @@ All scripts live in `scripts/` and run with Node.js directly (no transpilation n
 # 1. Place your Firebase Admin SDK key (gitignored)
 cp <downloaded-key>.json serviceAccountKey.json
 
-# 2. Import base species data
-node scripts/import-species.js
+# 2. Fetch iNaturalist photos for species that have none (no token needed)
+node scripts/fetch-inaturalist-photos.js --missing        # or --ids=jatai,tiuba
 
-# 3. Enrich with meliponiculture fields (rationalBox, trapNest)
-node scripts/enrich-meliponiculture.js
+# 3. Fill photos.thumbnail/media/original from the first iNaturalist photo
+node scripts/backfill-covers.js            # dry-run; --write also pushes to Firestore
 
-# 4. Fetch iNaturalist photos and attach to each species
-node scripts/fetch-inaturalist-photos.js
-
-# 5. Backfill cover photos on existing documents
-node scripts/backfill-covers.js
+# 4. Import / overwrite species in Firestore
+node scripts/import-species.js             # dry-run
+node scripts/import-species.js --write --force
 ```
 
-`scripts/species-data.json` — consolidated dataset with all species data and iNaturalist photos, used by the import scripts.
+`scripts/species-data.json` is the source of truth for species content. Edit it directly; every factual claim should be backed by an entry in `scientificArticles` (real references, no search links) and `conservationStatus` must cite `conservationSource`.
 
 > `serviceAccountKey.json` is gitignored. Never commit it.
 
@@ -114,7 +117,6 @@ Queries in use:
 | ------------------------------------------------------ | ---------------------- |
 | `orderBy('commonName') + limit(20)`                    | Default (auto-created) |
 | `where('regions', 'array-contains', v) + orderBy(...)` | Composite              |
-| `where('behavior', '==', v) + orderBy(...)`            | Composite              |
 | `where('featured', '==', true) + limit(10)`            | Single field           |
 
 ---

@@ -3,7 +3,11 @@
  * for each species in scripts/species-data.json.
  *
  * Usage:
- *   INAT_TOKEN=<your_jwt> node scripts/fetch-inaturalist-photos.js
+ *   node scripts/fetch-inaturalist-photos.js                 # all species
+ *   node scripts/fetch-inaturalist-photos.js --missing       # only species without photos
+ *   node scripts/fetch-inaturalist-photos.js --ids=a,b       # only the given species ids
+ *
+ * INAT_TOKEN=<jwt> is optional — public observations do not require auth.
  *
  * Output: scripts/species-data.json (updated in place)
  *
@@ -14,12 +18,13 @@
 import { readFileSync, writeFileSync } from 'fs';
 
 const TOKEN = process.env.INAT_TOKEN;
-if (!TOKEN) {
-  console.error(
-    'Missing INAT_TOKEN env variable. Run as:\n  INAT_TOKEN=<jwt> node scripts/fetch-inaturalist-photos.js'
-  );
-  process.exit(1);
-}
+const args = process.argv.slice(2);
+const ONLY_MISSING = args.includes('--missing');
+const ONLY_IDS = args
+  .find((a) => a.startsWith('--ids='))
+  ?.slice('--ids='.length)
+  .split(',')
+  .filter(Boolean);
 
 const PHOTOS_PER_SPECIES = 5;
 const DELAY_MS = 600;
@@ -59,7 +64,7 @@ async function fetchPhotos(scientificName) {
 
   const res = await fetch(`${INAT_V2}/observations?${params}`, {
     headers: {
-      Authorization: TOKEN,
+      ...(TOKEN ? { Authorization: TOKEN } : {}),
       Accept: 'application/json',
       'User-Agent': 'ASF-Abelhas-do-Brasil/1.0 (sobreira.michel@gmail.com)',
     },
@@ -111,7 +116,11 @@ async function fetchPhotos(scientificName) {
 async function main() {
   const raw = readFileSync(new URL('./species-data.json', import.meta.url), 'utf-8');
   const data = JSON.parse(raw);
-  const species = data.species ?? [];
+  const species = (data.species ?? []).filter((s) => {
+    if (ONLY_IDS) return ONLY_IDS.includes(s.id);
+    if (ONLY_MISSING) return !s.iNaturalistPhotos?.length;
+    return true;
+  });
 
   console.log(`iNaturalist API v2 — fetching photos for ${species.length} species...\n`);
 
