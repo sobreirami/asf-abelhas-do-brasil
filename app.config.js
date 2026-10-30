@@ -7,7 +7,7 @@ module.exports = {
   expo: {
     name: 'AbelhasDoBrasil',
     slug: 'asf-abelhas-do-brasil',
-    version: '1.0.0-rc1',
+    version: '1.0.0-rc2',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'asfabelhasdobrasil',

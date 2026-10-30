@@ -1,7 +1,7 @@
 {
   "name": "asf-abelhas-do-brasil",
   "main": "expo-router/entry",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-rc2",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
